@@ -1,9 +1,14 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
   --max-width: 1100px;
   --border-radius: 12px;
-  --font-mono: ui-monospace, Menlo, Monaco, 'Cascadia Mono', 'Segoe UI Mono',
-    'Roboto Mono', 'Oxygen Mono', 'Ubuntu Monospace', 'Source Code Pro',
-    'Fira Mono', 'Droid Sans Mono', 'Courier New', monospace;
+  --font-mono: ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono",
+    "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro",
+    "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
 
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
@@ -104,4 +109,41 @@ a {
   html {
     color-scheme: dark;
   }
+}
+
+input[type="checkbox"] {
+  position: relative;
+  width: 35px;
+  height: 16px;
+  -webkit-appearance: none;
+  background: transparent;
+  outline: none;
+  border-radius: 20px;
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+  border: 1px solid #fff;
+  cursor: pointer;
+  /* transition: .5s; */
+}
+input[type="checkbox"]::before {
+  content: "";
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-radius: 20px;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  background: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  transition: 0.3s;
+}
+
+input:checked[type="checkbox"]::before {
+  left: 20px;
+  background: #006eb8;
+}
+
+input:checked[type="checkbox"] {
+  background: transparent;
+  border: 1px solid #006eb8;
 }
