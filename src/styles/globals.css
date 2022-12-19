@@ -111,7 +111,7 @@ a {
   }
 }
 
-input[type="checkbox"] {
+.switch {
   position: relative;
   width: 35px;
   height: 16px;
@@ -124,7 +124,7 @@ input[type="checkbox"] {
   cursor: pointer;
   /* transition: .5s; */
 }
-input[type="checkbox"]::before {
+.switch::before {
   content: "";
   position: absolute;
   width: 14px;
@@ -138,12 +138,17 @@ input[type="checkbox"]::before {
   transition: 0.3s;
 }
 
-input:checked[type="checkbox"]::before {
+.switch:checked::before {
   left: 20px;
   background: #006eb8;
 }
 
-input:checked[type="checkbox"] {
+.switch:checked {
   background: transparent;
   border: 1px solid #006eb8;
+}
+
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
 }
