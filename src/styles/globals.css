@@ -43,6 +43,8 @@
   --callout-border-rgb: 172, 175, 176;
   --card-rgb: 180, 185, 188;
   --card-border-rgb: 131, 134, 135;
+
+  --background-end-rgb: 255, 255, 255;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -151,4 +153,22 @@ a {
 input[type="password"]::-ms-reveal,
 input[type="password"]::-ms-clear {
   display: none;
+}
+
+#lane {
+  position: absolute;
+  width: 1%;
+  height: 100%;
+  background: #fff;
+  transform: rotate(90deg);
+  top: 0;
+  left: 50%;
+  /* transform: translate(100%, 0); */
+  /* background: linear-gradient(
+    0deg,
+    rgba(255, 255, 255, 0.5),
+    rgba(255, 255, 255, 0.5)
+  ); */
+  opacity: 0.5;
+  z-index: 2;
 }
