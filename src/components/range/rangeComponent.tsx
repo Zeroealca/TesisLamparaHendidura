@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 // import "flowbite";
 
 interface rangeComponentProps {
@@ -8,8 +8,8 @@ interface rangeComponentProps {
   reference: React.RefObject<HTMLDivElement>;
   max?: number;
   min?: number;
-  defaultValue?: number;
-  value?: number;
+  value: number;
+  disabled?: boolean;
   state: {
     orientation: number;
     width: number;
@@ -33,78 +33,91 @@ const rangeComponent = (props: rangeComponentProps) => {
     type,
     reference,
     max,
-    defaultValue,
     state,
     setState,
     value,
     min,
+    disabled,
   } = props;
+
+  useEffect(() => {
+    if (reference.current) {
+      reference.current.style.opacity = !(state.intensity / 100)
+        ? "0.1"
+        : state.intensity / 100 == 1
+        ? "0.8"
+        : `${state.intensity / 100}`;
+    }
+  }, [state.intensity]);
+
+  useEffect(() => {
+    if (reference.current) {
+      reference.current.style.width = !state.width ? "1%" : `${state.width}%`;
+    }
+  }, [state.width]);
+
+  useEffect(() => {
+    if (reference.current) {
+      if (state.orientation == 90) {
+        if (state.width != 100) {
+          if (state.movement + state.width < 100) {
+            console.log(Math.ceil(-50 + state.movement + state.width / 2));
+            reference.current.style.top = `${
+              -50 + state.movement + state.width / 2
+            }%`;
+          }
+        }
+      }
+      if (state.orientation == 180 || state.orientation == 1) {
+        reference.current.style.top = "0%";
+        if (state.movement - state.width < 0) {
+          reference.current.style.left = `0%`;
+        } else {
+          reference.current.style.left = `${state.movement - state.width / 2}%`;
+        }
+      }
+    }
+  }, [state.movement]);
+
+  useEffect(() => {
+    if (reference.current) {
+      reference.current.style.top = "0%";
+      if (state.width > 50 || state.width < 50) {
+        reference.current.style.left = `${50 - state.width / 2}%`;
+      } else {
+        reference.current.style.left = "25%";
+      }
+      reference.current.style.transform = `rotate(${state.orientation}deg)`;
+    }
+  }, [state.orientation]);
 
   const handleChange = (value: number) => {
     switch (type) {
       case "orientation":
-        if (reference.current) {
-          setState({ ...state, orientation: value });
-          reference.current.style.top = "0%";
-          if (state.width > 50 || state.width < 50) {
-            reference.current.style.left = `${50 - state.width / 2}%`;
-          } else {
-            reference.current.style.left = "25%";
-          }
-          reference.current.style.transform = `rotate(${value}deg)`;
-        }
+        setState({
+          ...state,
+          orientation: value,
+          movement: 50,
+        });
         break;
       case "width":
-        if (reference.current) {
-          setState({ ...state, width: value });
-          reference.current.style.width = !value ? "1%" : `${value}%`;
-          reference.current.style.left = `${50 - value / 2}%`;
-        }
+        setState({
+          ...state,
+          width: value,
+          movement:
+            state.movement > 50
+              ? Math.ceil(-50 + value / 2)
+              : Math.ceil(50 - value / 2),
+        });
         break;
       case "movement":
-        if (reference.current) {
-          setState({ ...state, movement: value });
-          console.log(value - state.width);
-          if (state.orientation == 90) {
-            if (state.width != 100) {
-              if (value - state.width > 50) {
-                reference.current.style.top = `${-50 + state.width / 2}%`;
-                // alert("No se puede pasar de 50%");
-              } else {
-                alert("No se puede pasar de 50%");
-                reference.current.style.top = `${
-                  -50 + value + state.width / 2
-                }%`;
-              }
-            }
-          }
-          if (state.orientation == 180) {
-            reference.current.style.top = "0%";
-            if (value - state.width < 0) {
-              reference.current.style.left = `0%`;
-            } else {
-              reference.current.style.left = `${value - state.width}%`;
-            }
-          }
-          if (state.orientation < 90 && state.orientation > 0) {
-            reference.current.style.top = "0%";
-            if (value - state.width < 0) {
-              reference.current.style.left = `0%`;
-            } else {
-              reference.current.style.left = `${value - state.width}%`;
-            }
-          }
-        }
+        setState({
+          ...state,
+          movement: value,
+        });
         break;
       case "intensity":
-        if (reference.current) {
-          setState({ ...state, intensity: value });
-          reference.current.style.opacity = !(value / 100)
-            ? "0.1"
-            : value / 100 == 1
-            ? "0.8"
-            : `${value / 100}`;
-        }
+        setState({ ...state, intensity: value });
         break;
     }
   };
@@ -118,17 +131,16 @@ const rangeComponent = (props: rangeComponentProps) => {
             type="range"
             className="range my-6 w-full rounded-lg cursor-pointer"
             step={step || 1}
-            onChange={(e) => {
-              handleChange(Number(e.target.value));
-            }}
+            onChange={(e) => handleChange(Number(e.target.value))}
             min={min || 0}
             max={max || 100}
-            defaultValue={defaultValue || 0}
+            value={value}
+            disabled={disabled}
             // maxLength={max || 100}
           />
-          <label id="hola" htmlFor="">
-            {value}
-          </label>
+          <div className="max-w-[30px] w-full">
+            <label>{value}</label>
+          </div>
         </div>
       </div>
     </>

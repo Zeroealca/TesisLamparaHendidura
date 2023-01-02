@@ -9,9 +9,9 @@ const simulatorComponent = () => {
   const lane = useRef<HTMLDivElement>(null);
   const [state, setState] = useState({
     orientation: 90,
-    width: 1,
+    width: 5,
     movement: 50,
-    intensity: 1,
+    intensity: 0,
   });
 
   return (
@@ -20,18 +20,20 @@ const simulatorComponent = () => {
         <title>Simulador - Lámpara Hendidura</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="flex p-24 min-h-screen bg-blackprimary">
+      <main className="flex justify-center p-24 min-h-screen bg-blackprimary">
         <SimulatorCard>
           <div className="flex items-center flex-col my-2">
             <div className="relative flex items-center justify-center max-w-[200px] w-full max-h-[200px] min-h-[200px] rounded-full">
               <Image src={eye} alt="logo" className=" w-full h-full" />
               <div
                 id="lane"
-                className="rounded-xl max-w-[200px] max-h-[200px]"
+                className="flex items-center justify-center text-black rounded-xl max-w-[200px] max-h-[200px]"
                 ref={lane}
-              />
+              >
+                <div className="bg-red-600 w-4 h-4 rounded-full " />
+              </div>
             </div>
-            <div className="justify-center ml-5 text-center my-11 rounded-2xl bg-blacktertiary">
+            <div className="flex justify-center ml-5 text-center my-11 rounded-2xl bg-blacktertiary">
               <div className="m-12">
                 <RangeComponent
                   reference={lane}
@@ -40,7 +42,6 @@ const simulatorComponent = () => {
                   type="orientation"
                   step={1}
                   max={180}
-                  defaultValue={90}
                   text="ORIENTACIÓN DE LA HENDIDURA"
                   value={state.orientation}
                   min={1}
@@ -59,9 +60,9 @@ const simulatorComponent = () => {
                   state={state}
                   setState={setState}
                   type="movement"
-                  defaultValue={50}
                   text="MOVIMIENTO"
                   value={state.movement}
+                  disabled={state.width === 100}
                   min={1}
                 />
                 <RangeComponent
