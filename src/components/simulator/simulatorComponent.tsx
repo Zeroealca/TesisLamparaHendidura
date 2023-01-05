@@ -11,7 +11,7 @@ const simulatorComponent = () => {
     orientation: 90,
     width: 5,
     movement: 50,
-    intensity: 0,
+    intensity: 100,
   });
 
   return (
@@ -24,14 +24,16 @@ const simulatorComponent = () => {
         <SimulatorCard>
           <div className="flex items-center flex-col my-2">
             <div className="relative flex items-center justify-center max-w-[200px] w-full max-h-[200px] min-h-[200px] rounded-full">
-              <Image src={eye} alt="logo" className=" w-full h-full" />
+              <Image
+                src={eye}
+                alt="logo"
+                className=" w-full h-full rounded-md"
+              />
               <div
                 id="lane"
                 className="flex items-center justify-center text-black rounded-xl max-w-[200px] max-h-[200px]"
                 ref={lane}
-              >
-                <div className="bg-red-600 w-4 h-4 rounded-full " />
-              </div>
+              />
             </div>
             <div className="flex justify-center ml-5 text-center my-11 rounded-2xl bg-blacktertiary">
               <div className="m-12">
@@ -44,7 +46,6 @@ const simulatorComponent = () => {
                   max={180}
                   text="ORIENTACIÓN DE LA HENDIDURA"
                   value={state.orientation}
-                  min={1}
                 />
                 <RangeComponent
                   reference={lane}

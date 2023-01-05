@@ -52,41 +52,45 @@ const rangeComponent = (props: rangeComponentProps) => {
 
   useEffect(() => {
     if (reference.current) {
-      reference.current.style.width = !state.width ? "1%" : `${state.width}%`;
+      const step = (100 - state.width) / 100;
+      if (!state.orientation || state.orientation == 180) {
+        reference.current.style.width = !state.width ? "1%" : `${state.width}%`;
+        const maxLeft = 100 - state.width;
+        const position = maxLeft - (100 - state.movement) * step;
+        reference.current.style.left = `${position}%`;
+      }
+      if (state.orientation == 90) {
+        const maxLeft = 100 - state.width;
+        const position = maxLeft - (100 - state.movement) * step;
+        reference.current.style.width = !state.width ? "1%" : `${state.width}%`;
+        reference.current.style.top = `${position}%`;
+        reference.current.style.left = `${state.width - 100}%`;
+      }
     }
   }, [state.width]);
 
   useEffect(() => {
     if (reference.current) {
-      if (state.orientation == 90) {
-        if (state.width != 100) {
-          if (state.movement + state.width < 100) {
-            console.log(Math.ceil(-50 + state.movement + state.width / 2));
-            reference.current.style.top = `${
-              -50 + state.movement + state.width / 2
-            }%`;
-          }
-        }
+      const step = (100 - state.width) / 100;
+      // horizontal
+      if (state.orientation == 90 && state.width != 100) {
+        reference.current.style.left = "98px";
+        reference.current.style.top = `${state.movement}%`;
       }
-      if (state.orientation == 180 || state.orientation == 1) {
-        reference.current.style.top = "0%";
-        if (state.movement - state.width < 0) {
-          reference.current.style.left = `0%`;
-        } else {
-          reference.current.style.left = `${state.movement - state.width / 2}%`;
-        }
+      if (
+        state.orientation == 180 ||
+        (!state.orientation && state.width != 100)
+      ) {
+        reference.current.style.top = "0px";
+        const maxLeft = 100 - state.width;
+        const position = maxLeft - (100 - state.movement) * step;
+        reference.current.style.left = `${position}%`;
       }
     }
-  }, [state.movement]);
+  }, [state.movement, state.orientation]);
 
   useEffect(() => {
     if (reference.current) {
-      reference.current.style.top = "0%";
-      if (state.width > 50 || state.width < 50) {
-        reference.current.style.left = `${50 - state.width / 2}%`;
-      } else {
-        reference.current.style.left = "25%";
-      }
       reference.current.style.transform = `rotate(${state.orientation}deg)`;
     }
   }, [state.orientation]);
@@ -104,10 +108,6 @@ const rangeComponent = (props: rangeComponentProps) => {
         setState({
           ...state,
           width: value,
-          movement:
-            state.movement > 50
-              ? Math.ceil(-50 + value / 2)
-              : Math.ceil(50 - value / 2),
         });
         break;
       case "movement":
@@ -129,7 +129,7 @@ const rangeComponent = (props: rangeComponentProps) => {
         <div className="flex items-center justify-center w-full gap-2">
           <input
             type="range"
-            className="range my-6 w-full rounded-lg cursor-pointer"
+            className="range my-6 w-full half-lg cursor-pointer"
             step={step || 1}
             onChange={(e) => handleChange(Number(e.target.value))}
             min={min || 0}
