@@ -8,10 +8,10 @@ import RangeComponent from "../range/rangeComponent";
 const simulatorComponent = () => {
   const lane = useRef<HTMLDivElement>(null);
   const [state, setState] = useState({
-    orientation: 90,
-    width: 5,
+    orientation: 0,
+    width: 1,
     movement: 50,
-    intensity: 100,
+    intensity: 50,
   });
 
   return (
@@ -42,7 +42,7 @@ const simulatorComponent = () => {
                   state={state}
                   setState={setState}
                   type="orientation"
-                  step={1}
+                  step={90}
                   max={180}
                   text="ORIENTACIÓN DE LA HENDIDURA"
                   value={state.orientation}

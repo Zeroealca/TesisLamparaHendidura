@@ -60,11 +60,10 @@ const rangeComponent = (props: rangeComponentProps) => {
         reference.current.style.left = `${position}%`;
       }
       if (state.orientation == 90) {
-        const maxLeft = 100 - state.width;
-        const position = maxLeft - (100 - state.movement) * step;
+        const position = (state.movement - 50) * step;
         reference.current.style.width = !state.width ? "1%" : `${state.width}%`;
         reference.current.style.top = `${position}%`;
-        reference.current.style.left = `${state.width - 100}%`;
+        reference.current.style.left = `${50 - state.width / 2}%`;
       }
     }
   }, [state.width]);
@@ -72,10 +71,10 @@ const rangeComponent = (props: rangeComponentProps) => {
   useEffect(() => {
     if (reference.current) {
       const step = (100 - state.width) / 100;
-      // horizontal
       if (state.orientation == 90 && state.width != 100) {
-        reference.current.style.left = "98px";
-        reference.current.style.top = `${state.movement}%`;
+        const position = (state.movement - 50) * step;
+        reference.current.style.top = `${position}%`;
+        reference.current.style.left = `${50 - state.width / 2}%`;
       }
       if (
         state.orientation == 180 ||
