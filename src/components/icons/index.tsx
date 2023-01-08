@@ -16,12 +16,11 @@ const icons = (props: iconsProps) => {
   const { children, className, viewBox, ...other } = props;
   return (
     <svg
-      {...other}
       viewBox={`0 0 ${viewBox}`}
       xmlns="http://www.w3.org/2000/svg"
+      {...other}
     >
-      {" "}
-      {children}{" "}
+      {children}
     </svg>
   );
 };
