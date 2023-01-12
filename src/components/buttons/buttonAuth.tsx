@@ -3,18 +3,19 @@ import React from "react";
 interface ButtonAuthProps {
   text: string;
   type: "button" | "submit" | "reset" | undefined;
-  onClick: () => void;
+  className?: string;
+  disabled?: boolean;
 }
 
 const ButtonAuth = (props: ButtonAuthProps) => {
-  const { text, type, onClick } = props;
+  const { text, type, disabled, className } = props;
 
   return (
     <div className="flex justify-center mt-10 mb-3">
       <button
         type={type}
-        onClick={onClick}
-        className="rounded-md p-2 bg-bluebutton uppercase text-white hover:bg-blue-700 max-w-[200px] w-full font-bold"
+        className={`rounded-md p-2 bg-bluebutton uppercase text-white max-w-[200px] w-full font-bold ${className}`}
+        disabled={disabled}
       >
         {text}
       </button>

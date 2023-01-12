@@ -1,9 +1,9 @@
 create database TesisEye;
 use TesisEye;
 create table Users(
-	name VARCHAR(75) not null, 
-	email VARCHAR(100) primary key, 
-	password VARCHAR(250) not null,
+	email VARCHAR(100) primary key,
+	name VARCHAR(75) not null,
+	password VARCHAR(250) not null
 );
 create table Images(
 	id_image VARCHAR(100) primary key,
