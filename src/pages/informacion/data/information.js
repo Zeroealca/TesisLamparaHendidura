@@ -1,0 +1,41 @@
+export default [
+  {
+    id: 1,
+    name: "Afecciones de la córnea",
+    symptoms: [
+      "Dolor ocular",
+      "Visón borrosa",
+      "Ojos rojos o llorosos",
+      "Sensibilidad a la luz",
+    ],
+    diagnosis: ["Examen de los ojos"],
+    treatment: [
+      "Medicamento",
+      "Cirugía láser",
+      "Transplante de córnea",
+      "Córnea artificial afasfasfdasf afdafdafas fasfasfasfas",
+      "Córnea artificial",
+      "Córnea artificial",
+      "Córnea artificial",
+      "Córnea artificial",
+      "Córnea artificial",
+      "Córnea artificial",
+      "Córnea artificial",
+      "Córnea artificial",
+      "Córnea artificial",
+      "Córnea artificial",
+      "Córnea artificial",
+      "Córnea artificial",
+      "Córnea artificial",
+      "Córnea artificial",
+    ],
+    image: "",
+  },
+  {
+    id: 2,
+    title: "test2",
+    description: "descripcion 2",
+    image:
+      "https://www.eltiempo.com/files/image_640_428/uploads/2019/09/11/5d78b0b5b7b5a.jpeg",
+  },
+];

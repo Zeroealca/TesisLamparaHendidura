@@ -12,6 +12,7 @@ const simulatorComponent = () => {
     width: 1,
     movement: 50,
     intensity: 50,
+    color: "#FFFFFF",
   });
 
   return (
@@ -23,15 +24,15 @@ const simulatorComponent = () => {
       <main className="flex justify-center p-24 min-h-screen bg-blackprimary">
         <SimulatorCard>
           <div className="flex items-center flex-col my-2">
-            <div className="relative flex items-center justify-center max-w-[200px] w-full max-h-[200px] min-h-[200px] rounded-full">
+            <div className="relative flex items-center justify-center max-w-[325px] w-full max-h-[325px] min-h-[325px] rounded-full">
               <Image
                 src={eye}
                 alt="logo"
-                className=" w-full h-full rounded-md"
+                className="w-full h-full rounded-md"
               />
               <div
                 id="lane"
-                className="flex items-center justify-center text-black rounded-xl max-w-[200px] max-h-[200px]"
+                className="flex items-center justify-center text-black rounded-xl max-w-[325px] max-h-[325px]"
                 ref={lane}
               />
             </div>
@@ -75,6 +76,21 @@ const simulatorComponent = () => {
                   text="INTENSIDAD DE LA LUZ"
                   value={state.intensity}
                 />
+                <div className="flex flex-col items-center">
+                  <label htmlFor="color" className="text-white">
+                    COLOR
+                  </label>
+                  <input
+                    className="w-1/2 h-10 rounded-md "
+                    type="color"
+                    id="color"
+                    name="color"
+                    value={state.color}
+                    onChange={(e) => {
+                      setState({ ...state, color: e.target.value });
+                    }}
+                  />
+                </div>
               </div>
             </div>
           </div>

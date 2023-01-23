@@ -1,8 +1,7 @@
 import Head from "next/head";
-import Image from "next/image";
-import { Inter } from "@next/font/google";
-import styles from "../styles/Home.module.css";
-const inter = Inter({ subsets: ["latin"] });
+import MenuCards from "src/components/cards/menu/menuCards";
+import Info from "src/public/assets/cards/information.png";
+import Hendidura from "src/public/assets/cards/hendidura.png";
 
 export default function Home() {
   return (
@@ -13,7 +12,20 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className={styles.main}></main>
+      <main className="w-screen h-screen flex items-center justify-center gap-10">
+        <MenuCards
+          title="Información"
+          description="Aquí podrás encontrar información acerca de las enfermedades que puede sufrir el ojo humano"
+          image={Info}
+          to="/informacion"
+        />
+        <MenuCards
+          title="Simulador"
+          description="Aquí podrás simular la enfermedad de la lámpara de hendidura"
+          image={Hendidura}
+          to="/simulador"
+        />
+      </main>
     </>
   );
 }

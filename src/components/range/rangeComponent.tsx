@@ -15,6 +15,7 @@ interface rangeComponentProps {
     width: number;
     movement: number;
     intensity: number;
+    color: string;
   };
   setState: React.Dispatch<
     React.SetStateAction<{
@@ -22,6 +23,7 @@ interface rangeComponentProps {
       width: number;
       movement: number;
       intensity: number;
+      color: string;
     }>
   >;
 }
@@ -67,6 +69,10 @@ const rangeComponent = (props: rangeComponentProps) => {
       }
     }
   }, [state.width]);
+
+  useEffect(() => {
+    if (reference.current) reference.current.style.background = state.color;
+  }, [state.color]);
 
   useEffect(() => {
     if (reference.current) {

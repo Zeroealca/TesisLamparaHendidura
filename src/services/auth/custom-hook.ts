@@ -56,7 +56,8 @@ export const useServiceRegister = () => {
     const data = await res.json();
 
     if (res.status !== 200) {
-      toast.error(`${data.message}`);
+      console.log(data)
+      toast.error(`${data.errors[0].msg}`);
     } else {
       toast.success(`${data.message}`);
       setCookie("signupSlimpLamp", true);

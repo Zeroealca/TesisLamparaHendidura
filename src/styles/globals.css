@@ -3,7 +3,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 a {
   color: inherit;
   text-decoration: none;
@@ -64,11 +63,16 @@ input[type="password"]::-ms-clear {
   transform: rotate(90deg);
   top: 0;
   left: 50%;
-  background: linear-gradient(90deg,
-      rgba(255, 255, 255, 0.2) 0%,
-      rgba(255, 255, 255, 0.2) 50%,
-      rgba(255, 255, 255, 0.2) 100%);
   opacity: 0;
   z-index: 2;
   transition: 0.2s;
+}
+
+@layer base {
+  .font-outline-2 {
+    -webkit-text-stroke: 1px white;
+  }
+  .font-outline-4 {
+    -webkit-text-stroke: 4px white;
+  }
 }
