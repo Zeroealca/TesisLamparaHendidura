@@ -1,4 +1,4 @@
-import { GETALLINFORMATION } from "./getInformation";
+import { GETALLINFORMATION, GETINFORMATION } from "./getInformation";
 import { useEffect, useState } from "react";
 import { InformationMenuProps } from "src/components/information/InformationMenu";
 export const useGetAllInformation = () => {
@@ -26,5 +26,26 @@ export const useGetAllInformation = () => {
     data,
     dataFilter,
     setFilter,
+  };
+};
+
+export interface INFORMATION {
+  image: string;
+  Enfermedad: string;
+  Tratamiento?: string[];
+  Síntoma?: string[];
+  Diagnostico?: string[];
+  Sintomas_tempranos?: string[];
+  Sintomas_avanzados?: string[];
+}
+
+export const useGetInformation = (id: string) => {
+  const [data, setData] = useState<INFORMATION>();
+  useEffect(() => {
+    const res = GETINFORMATION(id);
+    res.then((res) => res.json()).then((res) => setData(res.data));
+  }, [id]);
+  return {
+    data,
   };
 };
