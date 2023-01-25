@@ -12,7 +12,7 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="w-screen h-screen flex items-center justify-center gap-10">
+      <main className="w-full h-screen flex items-center justify-center lg:gap-10 gap-24 lg:flex-row flex-col lg:my-0 my-20 px-10">
         <MenuCards
           title="Información"
           description="Aquí podrás encontrar información acerca de las enfermedades que puede sufrir el ojo humano"

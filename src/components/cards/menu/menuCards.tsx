@@ -8,12 +8,12 @@ interface MenuCardsProps {
 }
 const MenuCards = ({ title, description, image, to }: MenuCardsProps) => {
   return (
-    <main>
+    <div>
       <a
         href={to}
-        className="w-[30rem] h-96 flex flex-col items-center justify-center bg-blacksecondary rounded-xl cursor-pointer group hover:h-[30rem] transition-all ease-in-out duration-300"
+        className="max-w-[30rem] w-full lg:h-96 h-60 flex flex-col items-center justify-center bg-blacksecondary rounded-xl cursor-pointer group lg:hover:h-[30rem] md:hover:h-[21rem] hover:h-[23rem] transition-all ease-in-out duration-300"
       >
-        <section className="bg-blacktertiary mx-auto w-96 -mt-32 rounded-xl shadow-lg z-10">
+        <section className="bg-blacktertiary mx-auto lg:w-96 w-60 lg:-mt-32 -mt-12 rounded-xl shadow-lg z-10">
           <Image
             src={image}
             alt="Picture of the author"
@@ -27,7 +27,7 @@ const MenuCards = ({ title, description, image, to }: MenuCardsProps) => {
           </div>
         </section>
       </a>
-    </main>
+    </div>
   );
 };
 export default MenuCards;
