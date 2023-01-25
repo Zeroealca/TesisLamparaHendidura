@@ -13,7 +13,7 @@ interface iconsProps {
 }
 
 const icons = (props: iconsProps) => {
-  const { children, className, viewBox, ...other } = props;
+  const { children, viewBox, ...other } = props;
   return (
     <svg
       viewBox={`0 0 ${viewBox}`}
