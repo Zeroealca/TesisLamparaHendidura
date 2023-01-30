@@ -1,11 +1,8 @@
 import Icon, { UserIcon, CaretDown } from "../icons";
-import { useState } from "react";
 import { Menu } from "@headlessui/react";
 const Navbar = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-
   return (
-    <section className="flex justify-end px-36">
+    <section className="flex justify-end lg:px-36 px-10 md:px-24">
       <div className="p-4">
         <Menu>
           <Menu.Button className="bg-black p-1 pr-3 rounded-full flex items-center hover:bg-blacksecondary shadow">
@@ -24,7 +21,7 @@ const Navbar = () => {
               </Icon>
             </div>
           </Menu.Button>
-          <Menu.Items className="absolute z-50 my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-black dark:divide-gray-600 lg:top-14 top-[3.3rem] right-40">
+          <Menu.Items className="absolute z-50 my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-black dark:divide-gray-600 top-12 lg:right-40 right-16 md:right-28">
             <Menu.Items className="px-4 py-3">
               <Menu.Item disabled>
                 <p
