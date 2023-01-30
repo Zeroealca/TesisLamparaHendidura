@@ -1,12 +1,14 @@
 import Head from "next/head";
 import InputWithLabel from "../components/inputs/inputWithLabel";
 import { useState, useEffect } from "react";
-import ButtonAuth from "src/components/buttons/buttonAuth";
+import { useSession } from "next-auth/react";
 
 const MiPerfil = () => {
+  const { data: session } = useSession();
+
   const [data] = useState({
-    name: "Juan",
-    email: "juan@gmail.como",
+    name: session?.user?.name,
+    email: session?.user?.email,
   });
   const [state, setState] = useState({
     ...data,
@@ -65,7 +67,7 @@ const MiPerfil = () => {
                 name="name"
                 type="text"
                 onChange={(e) => handleChange(e)}
-                value={state.name}
+                value={state.name || ""}
                 className="flex flex-col lg:w-1/2"
               />
               <InputWithLabel
@@ -73,7 +75,7 @@ const MiPerfil = () => {
                 name="email"
                 type="text"
                 onChange={(e) => handleChange(e)}
-                value={state.email}
+                value={state.email || ""}
                 className="flex flex-col lg:w-1/2"
               />
             </div>
