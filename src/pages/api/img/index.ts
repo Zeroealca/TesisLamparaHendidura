@@ -33,7 +33,6 @@ apiRout.use(upload.single('file'));
 
 apiRout.post(async (req: any, res: NextApiResponse) => {
     const { file } = req;
-    console.log(file)
     const uploadedFile = await uploadFile(file) as { id: string, name: string };
     if (!uploadedFile) {
         return res.status(500).json({
