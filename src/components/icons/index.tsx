@@ -1,6 +1,8 @@
 import React from "react";
 import EyeClose from "./eyeClose";
 import EyeOpen from "./eyeOpen";
+import UserIcon from "./user";
+import CaretDown from "./caretDown";
 
 interface iconsProps {
   width: number;
@@ -25,4 +27,4 @@ const icons = (props: iconsProps) => {
   );
 };
 
-export { icons as default, EyeClose, EyeOpen };
+export { icons as default, EyeClose, EyeOpen, UserIcon, CaretDown };

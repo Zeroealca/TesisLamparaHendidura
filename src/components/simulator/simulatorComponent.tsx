@@ -24,7 +24,7 @@ const simulatorComponent = () => {
         <title>Simulador - Lámpara Hendidura</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="flex justify-center p-24 min-h-screen bg-blackprimary">
+      <main className="flex justify-center p-24 min-h-screen">
         <SimulatorCard>
           <div className="w-1/4">
             <a
@@ -76,7 +76,7 @@ const simulatorComponent = () => {
                 </div>
               </label>
             </div>
-            <div className="flex justify-center ml-5 text-center my-11 rounded-2xl bg-blacktertiary">
+            <div className="flex justify-center ml-5 text-center my-11 rounded-2xl  bg-blackprimary">
               <div className="m-12">
                 <RangeComponent
                   reference={lane}

@@ -6,3 +6,7 @@ const Register = () => {
 };
 
 export default Register;
+
+Register.getLayout = function PageLayout(page: React.ReactNode) {
+  return <>{page}</>;
+};
