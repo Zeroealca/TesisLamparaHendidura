@@ -1,5 +1,7 @@
 import Icon, { UserIcon, CaretDown } from "../icons";
 import { Menu } from "@headlessui/react";
+import Link from "next/link";
+
 const Navbar = () => {
   return (
     <section className="flex justify-end lg:px-36 px-10 md:px-24">
@@ -42,9 +44,12 @@ const Navbar = () => {
             </Menu.Items>
             <Menu.Items className="py-1">
               <Menu.Item>
-                <div className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-grayprimary dark:hover:bg-blacksecondary dark:hover:text-white">
+                <Link
+                  href="mi-perfil"
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-grayprimary dark:hover:bg-blacksecondary dark:hover:text-white"
+                >
                   Mi perfil
-                </div>
+                </Link>
               </Menu.Item>
               <Menu.Item>
                 <div className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-grayprimary dark:hover:bg-blacksecondary dark:hover:text-white">
