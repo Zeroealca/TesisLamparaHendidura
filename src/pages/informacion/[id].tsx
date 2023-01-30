@@ -5,179 +5,63 @@ import Diagnostico from "../../public/diagnostico.jpg";
 import Tratamiento from "../../public/tratamiento.jpg";
 
 import { useGetInformation } from "../../services/information/custom-hooks";
+import InformationSelected from "src/components/information/informationSelected";
 
 const about = () => {
   const router = useRouter();
   const id = router.query.id as string;
-  /* const newdata = data_information.find((item) => item.id === id); */
-
   const { data } = useGetInformation(id);
 
   return (
     <main className="w-screen h-screen flex items-center justify-center">
-      <div className="w-3/5 h-4/5 bg-blacksecondary rounded-xl flex flex-col items-center">
-        <section className="-mt-20 flex flex-col items-center">
+      <div className="w-full h-full lg:w-3/5 lg:h-4/5 bg-blacksecondary md:rounded-xl flex flex-col items-center">
+        <section className="w-full lg:-mt-20 flex flex-col items-center">
           {data?.image ? (
             <img
               className="w-full h-full object-cover max-w-[24rem] max-h-[24rem]"
               src={data?.image}
             />
           ) : null}
-          <span className="font-bold text-4xl w-full py-5">
+          <span className="font-bold text-4xl w-full py-5 text-center">
             {data?.Enfermedad}
           </span>
         </section>
-        <section className="w-full overflow-auto grid grid-cols-3 gap-8 px-10">
+        <section className="w-full h-full overflow-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 my-4 px-10 justify-start">
           {data?.Tratamiento?.length ? (
-            <div className="h-full w-full flex flex-col justify-center group">
-              <div className="h-44 w-full relative rounded-xl flex flex-col items-center justify-center cursor-pointer">
-                <Image
-                  src={Tratamiento}
-                  alt={"404"}
-                  className="absolute w-full h-full object-cover blur-sm"
-                />
-                <span className="z-10 text-black/75 text-4xl font-bold text-center">
-                  Tratamientos
-                </span>
-              </div>
-              <div className="w-full mt-10 h-48 overflow-auto bg-blacktertiary rounded-lg py-3 hidden group-hover:block">
-                {data.Tratamiento.map((item, index) => {
-                  return (
-                    <div className="mb-2 px-8 text-grayprimary overflow-auto">
-                      <span className="text-xl font-bold capitalize">
-                        {index + 1}. {item}
-                      </span>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
+            <InformationSelected
+              name="Tratamientos"
+              img={Tratamiento}
+              data={data.Tratamiento}
+            />
           ) : null}
           {data?.Síntoma?.length ? (
-            <div className="h-full w-full flex flex-col justify-center group">
-              <div className="h-44 w-full relative rounded-xl flex flex-col items-center justify-center cursor-pointer">
-                <Image
-                  src={Sintomas}
-                  alt={"404"}
-                  className="absolute w-full h-full object-cover blur-sm"
-                />
-                <span className="z-10 text-black/75 text-4xl font-bold text-center">
-                  Síntomas
-                </span>
-              </div>
-              <div className="w-full mt-10 h-48 overflow-auto bg-blacktertiary rounded-lg py-3 hidden group-hover:block">
-                {data.Síntoma.map((item, index) => {
-                  return (
-                    <div className="mb-2 px-8 text-grayprimary overflow-auto">
-                      <span className="text-xl font-bold capitalize">
-                        {index + 1}. {item}
-                      </span>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
+            <InformationSelected
+              name="Sintomas"
+              img={Sintomas}
+              data={data.Síntoma}
+            />
           ) : null}
           {data?.Diagnostico?.length ? (
-            <div className="h-full w-full flex flex-col justify-center group">
-              <div className="h-44 w-full relative rounded-xl flex flex-col items-center justify-center cursor-pointer">
-                <Image
-                  src={Diagnostico}
-                  alt={"404"}
-                  className="absolute w-full h-full object-cover blur-sm"
-                />
-                <span className="z-10 text-black/75 text-4xl font-bold text-center">
-                  Diagnosticos
-                </span>
-              </div>
-              <div className="w-full mt-10 h-48 overflow-auto bg-blacktertiary rounded-lg py-3 hidden group-hover:block">
-                {data.Diagnostico.map((item, index) => {
-                  return (
-                    <div className="mb-2 px-8 text-grayprimary overflow-auto">
-                      <span className="text-xl font-bold capitalize">
-                        {index + 1}. {item}
-                      </span>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
+            <InformationSelected
+              name="Diagnosticos"
+              img={Diagnostico}
+              data={data.Diagnostico}
+            />
           ) : null}
           {data?.Sintomas_tempranos?.length ? (
-            <div className="h-full w-full flex flex-col justify-center group">
-              <div className="h-44 w-full relative rounded-xl flex flex-col items-center justify-center cursor-pointer">
-                <Image
-                  src={Tratamiento}
-                  alt={"404"}
-                  className="absolute w-full h-full object-cover blur-sm"
-                />
-                <span className="z-10 text-black/75 text-4xl font-bold text-center">
-                  Sintomas tempranos
-                </span>
-              </div>
-              <div className="w-full mt-10 h-48 overflow-auto bg-blacktertiary rounded-lg py-3 hidden group-hover:block">
-                {data.Sintomas_tempranos.map((item, index) => {
-                  return (
-                    <div className="mb-2 px-8 text-grayprimary overflow-auto">
-                      <span className="text-xl font-bold capitalize">
-                        {index + 1}. {item}
-                      </span>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
+            <InformationSelected
+              name="Sintomas tempranos"
+              img={Sintomas}
+              data={data.Sintomas_tempranos}
+            />
           ) : null}
           {data?.Sintomas_avanzados?.length ? (
-            <div className="h-full w-full flex flex-col justify-center group">
-              <div className="h-44 w-full relative rounded-xl flex flex-col items-center justify-center cursor-pointer">
-                <Image
-                  src={Tratamiento}
-                  alt={"404"}
-                  className="absolute w-full h-full object-cover blur-sm"
-                />
-                <span className="z-10 text-black/75 text-4xl font-bold text-center">
-                  Sintomas avanzados
-                </span>
-              </div>
-              <div className="w-full mt-10 h-48 overflow-auto bg-blacktertiary rounded-lg py-3 hidden group-hover:block">
-                {data.Sintomas_avanzados.map((item, index) => {
-                  return (
-                    <div className="mb-2 px-8 text-grayprimary overflow-auto">
-                      <span className="text-xl font-bold capitalize">
-                        {index + 1}. {item}
-                      </span>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
+            <InformationSelected
+              name="Sintomas avanzados"
+              img={Sintomas}
+              data={data.Sintomas_avanzados}
+            />
           ) : null}
-
-          {/* <div className="h-full bg-blacktertiary rounded-xl flex flex-col items-center justify-center">
-            <Image
-              src={Diagnostico}
-              alt={"404"}
-              className="w-full h-full object-cover blur-sm"
-            />
-          </div>
-          <div className="h-full bg-blacktertiary rounded-xl flex flex-col items-center justify-center">
-            <Image
-              src={Tratamiento}
-              alt={"404"}
-              className="w-full h-full object-cover blur-sm"
-            />
-            <div className="absolute flex flex-col">
-              <span className="font-bold text-2xl">Tratamiento</span>
-            </div>
-          </div>
-          <div className="h-full bg-blacktertiary rounded-xl flex flex-col items-center justify-center">
-            <Image
-              src={Tratamiento}
-              alt={"404"}
-              className="w-full h-full object-cover blur-sm"
-            />
-          </div> */}
         </section>
       </div>
     </main>
