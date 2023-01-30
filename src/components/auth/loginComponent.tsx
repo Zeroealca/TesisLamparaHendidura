@@ -22,7 +22,7 @@ const loginComponent = () => {
       <Head>
         <title>Iniciar sesión</title>
       </Head>
-      <main className="flex justify-center items-center p-24 min-h-screen bg-blackprimary">
+      <main className="flex justify-center items-center p-24 min-h-screen">
         <AuthCard>
           <AuthHeader text="Iniciar sesión" />
           <form

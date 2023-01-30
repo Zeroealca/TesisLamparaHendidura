@@ -9,13 +9,23 @@ interface InputWithLabelProps {
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   required?: boolean;
   value: string | number | readonly string[] | undefined;
+  className?: string;
 }
 const InputWithLabel = (props: InputWithLabelProps) => {
-  const { label, name, type, onChange, isPassword, required, value } = props;
+  const {
+    label,
+    name,
+    type,
+    onChange,
+    isPassword,
+    required,
+    value,
+    className,
+  } = props;
   const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <div className="flex flex-col gap-1 my-2">
+    <div className={`flex flex-col gap-1 my-2 ${className}`}>
       <label htmlFor={name} className="font-light text-md">
         {label}
       </label>

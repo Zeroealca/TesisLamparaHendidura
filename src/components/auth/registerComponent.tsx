@@ -25,7 +25,7 @@ const registerComponent = () => {
       <Head>
         <title>Registro</title>
       </Head>
-      <main className="flex justify-center items-center p-24 min-h-screen bg-blackprimary">
+      <main className="flex justify-center items-center p-24 min-h-screen">
         <AuthCard>
           <AuthHeader text="Registro" />
           <form
