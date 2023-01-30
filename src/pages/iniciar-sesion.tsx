@@ -6,3 +6,7 @@ const Login = () => {
 };
 
 export default Login;
+
+Login.getLayout = function PageLayout(page: React.ReactNode) {
+  return <>{page}</>;
+};
