@@ -1,8 +1,12 @@
 import Icon, { UserIcon, CaretDown } from "../icons";
 import { Menu } from "@headlessui/react";
 import Link from "next/link";
+import { signOut, useSession } from "next-auth/react";
+import React from "react";
 
 const Navbar = () => {
+  const { data: session } = useSession();
+
   return (
     <section className="flex justify-end lg:px-36 px-10 md:px-24">
       <div className="p-4">
@@ -15,7 +19,9 @@ const Navbar = () => {
               </Icon>
             </div>
             <div className="flex flex-col ml-2">
-              <span className="text-white font-medium">John Doe</span>
+              <span className="text-white font-medium capitalize">
+                {session?.user?.name}
+              </span>
             </div>
             <div className="flex items-center ml-2">
               <Icon width={15} height={15} fill="white" viewBox="16 16">
@@ -38,23 +44,26 @@ const Navbar = () => {
                   className="text-sm font-medium text-gray-900 truncate dark:text-grayprimary"
                   role="none"
                 >
-                  John Doe
+                  {session?.user?.email}
                 </p>
               </Menu.Item>
             </Menu.Items>
             <Menu.Items className="py-1">
               <Menu.Item>
                 <Link
-                  href="mi-perfil"
+                  href="/mi-perfil"
                   className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-grayprimary dark:hover:bg-blacksecondary dark:hover:text-white"
                 >
                   Mi perfil
                 </Link>
               </Menu.Item>
               <Menu.Item>
-                <div className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-grayprimary dark:hover:bg-blacksecondary dark:hover:text-white">
+                <button
+                  onClick={() => signOut()}
+                  className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-grayprimary dark:hover:bg-blacksecondary dark:hover:text-white text-left"
+                >
                   Cerrar sesión
-                </div>
+                </button>
               </Menu.Item>
             </Menu.Items>
           </Menu.Items>

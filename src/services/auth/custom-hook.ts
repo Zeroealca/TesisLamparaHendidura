@@ -2,7 +2,7 @@ import { LOGIN } from "./login";
 import { SIGNUP } from "./signup";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
-import { setCookie } from "@/node/utils/cookies";
+
 export interface returnLogin {
   message: string;
   data: {
@@ -19,23 +19,9 @@ export const useServiceLogin = () => {
     RememberMe: boolean;
   }) => {
     const res = await LOGIN(props);
-    const data = (await res.json()) as returnLogin;
-
-    if (res.status !== 200) {
-      toast.error(`${data.message}`);
-    } else {
-      const { RememberMe } = props;
-
-      if (RememberMe) {
-        setCookie("sessionSlimpLamp", data.data);
-      } else {
-        setCookie(
-          "sessionSlimpLamp",
-          data.data,
-          new Date(Date.now() + 3600000)
-        );
-      }
-      toast.success(`${data.message}`);
+    if (res && !res.ok) {
+      toast.error("Error al iniciar sesión");
+    } else if (res && res.ok) {
       router.push("/");
     }
   };
@@ -56,11 +42,9 @@ export const useServiceRegister = () => {
     const data = await res.json();
 
     if (res.status !== 200) {
-      console.log(data)
       toast.error(`${data.errors[0].msg}`);
     } else {
       toast.success(`${data.message}`);
-      setCookie("signupSlimpLamp", true);
       router.push("/iniciar-sesion");
     }
   };
