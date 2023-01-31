@@ -8,7 +8,7 @@ interface InformationSelectedProps {
 const InformationSelected = ({ name, img, data }: InformationSelectedProps) => {
   return (
     <div className="w-full flex flex-col group">
-      <div className="w-full h-full relative rounded-xl flex flex-col items-center justify-center cursor-pointer transition delay-75">
+      <div className="w-full h-1/2 relative rounded-xl flex flex-col items-center justify-center cursor-pointer transition delay-75">
         <Image
           src={img}
           alt={"404"}
@@ -18,7 +18,7 @@ const InformationSelected = ({ name, img, data }: InformationSelectedProps) => {
           {name}
         </span>
       </div>
-      <div className="w-full h-full mt-10 overflow-auto bg-blacktertiary rounded-lg py-3 hidden group-hover:block transition delay-75">
+      <div className="w-full mt-10 overflow-auto bg-blacktertiary rounded-lg py-3 hidden group-hover:block transition delay-75">
         {data.map((item, index) => (
           <div className="mb-2 px-8 text-grayprimary overflow-auto">
             <span className="text-xl font-bold capitalize">

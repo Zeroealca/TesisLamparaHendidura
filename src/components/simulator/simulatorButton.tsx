@@ -2,7 +2,7 @@ import Icon from "../icons";
 
 interface SimulatorButtonProps {
   name: string;
-  icon: React.ReactNode;
+  icon?: React.ReactNode;
   onClick: () => void;
 }
 const SimulatorButton = ({ name, onClick, icon }: SimulatorButtonProps) => {

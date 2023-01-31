@@ -5,6 +5,8 @@ import Tratamiento from "../../public/tratamiento.jpg";
 
 import { useGetInformation } from "../../services/information/custom-hooks";
 import InformationSelected from "src/components/information/informationSelected";
+import ButtonAuth from "src/components/buttons/buttonAuth";
+import SimulatorButton from "src/components/simulator/simulatorButton";
 
 const about = () => {
   const router = useRouter();
@@ -12,7 +14,7 @@ const about = () => {
   const { data } = useGetInformation(id);
 
   return (
-    <main className="w-screen h-screen flex items-center justify-center">
+    <main className="h-screen flex items-center justify-center">
       <div className="w-full h-full lg:w-3/5 lg:h-4/5 bg-blacksecondary md:rounded-xl flex flex-col items-center">
         <section className="w-full lg:-mt-20 flex flex-col items-center">
           {data?.image ? (
@@ -25,7 +27,7 @@ const about = () => {
             {data?.Enfermedad}
           </span>
         </section>
-        <section className="w-full h-full overflow-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 my-4 px-10 justify-start">
+        <section className="w-full h-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 row-span-2 gap-8 my-4 px-10">
           {data?.Tratamiento?.length ? (
             <InformationSelected
               name="Tratamientos"
@@ -61,6 +63,13 @@ const about = () => {
               data={data.Sintomas_avanzados}
             />
           ) : null}
+        </section>
+        <section className="flex justify-between gap-10 w-10/12 mb-10">
+          <SimulatorButton name="Regresar" onClick={() => router.back} />
+          <SimulatorButton
+            name="Ir al simulador"
+            onClick={() => router.push("/simulador")}
+          />
         </section>
       </div>
     </main>
