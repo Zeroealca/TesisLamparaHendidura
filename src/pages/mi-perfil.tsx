@@ -36,7 +36,6 @@ const MiPerfil = () => {
   useEffect(() => {
     data.id && getImage();
   }, [data]);
-  console.log(images);
 
   useEffect(() => {
     if (data.email === state.email && data.name === state.name) {
@@ -62,9 +61,6 @@ const MiPerfil = () => {
     e.preventDefault();
     if (state.password === "" && state.confirmPassword === "") {
       const { password, confirmPassword, ...rest } = state;
-      console.log(rest);
-    } else {
-      console.log(state);
     }
   };
 
@@ -128,21 +124,22 @@ const MiPerfil = () => {
           <div className="flex flex-col gap-3 w-full">
             <h1 className="text-xl font-bold text-left">Mis imágenes</h1>
             <div className="flex flex-wrap gap-3">
-              {images.map((image: any) => (
-                <div
-                  key={image.id}
-                  className="flex flex-col items-center justify-center gap-1"
-                >
-                  <img
-                    src={image.url}
-                    alt={image.name}
-                    className="w-32 h-32 object-cover rounded-md"
-                  />
-                  <button className="bg-red-500 rounded-md p-2 text-white font-bold">
-                    Eliminar
-                  </button>
-                </div>
-              ))}
+              {images &&
+                images.map((image: any) => (
+                  <div
+                    key={image.id}
+                    className="flex flex-col items-center justify-center gap-1"
+                  >
+                    <img
+                      src={image.url}
+                      alt={image.name}
+                      className="w-32 h-32 object-cover rounded-md"
+                    />
+                    <button className="bg-red-500 rounded-md p-2 text-white font-bold">
+                      Eliminar
+                    </button>
+                  </div>
+                ))}
             </div>
           </div>
         </div>
