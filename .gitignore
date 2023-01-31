@@ -8,6 +8,10 @@
 # testing
 /coverage
 
+
+# upload only folder temp, not all temp files
+/!temp/.gitkeep 
+
 # next.js
 /.next/
 /out/
