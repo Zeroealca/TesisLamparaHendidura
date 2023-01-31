@@ -1,18 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import Head from "next/head";
 import InputWithLabel from "../components/inputs/inputWithLabel";
-import { useSession } from "next-auth/react";
+import UserContext from "../context/context";
 
 const MiPerfil = () => {
-  const { data: session } = useSession();
-  const [images, setImages] = useState([]);
-  const [data] = useState({
-    id: session?.user?.id,
-    name: session?.user?.name,
-    email: session?.user?.email,
-  });
+  const { user } = useContext(UserContext);
+
+  const { id, images, ...other } = user;
+
   const [state, setState] = useState({
-    ...data,
+    ...other,
     password: "",
     confirmPassword: "",
   });
@@ -22,24 +19,8 @@ const MiPerfil = () => {
     setState({ ...state, [e.target.name]: e.target.value });
   };
 
-  const getImage = async () => {
-    await fetch(process.env.API_URL + `img/user/${data.id}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => setImages(data.data));
-  };
-
   useEffect(() => {
-    data.id && getImage();
-  }, [data]);
-  console.log(images);
-
-  useEffect(() => {
-    if (data.email === state.email && data.name === state.name) {
+    if (user.email === state.email && user.name === state.name) {
       setIsChange(false);
     } else {
       setIsChange(true);
@@ -128,7 +109,7 @@ const MiPerfil = () => {
           <div className="flex flex-col gap-3 w-full">
             <h1 className="text-xl font-bold text-left">Mis imágenes</h1>
             <div className="flex flex-wrap gap-3">
-              {images.map((image: any) => (
+              {user.images.map((image: any) => (
                 <div
                   key={image.id}
                   className="flex flex-col items-center justify-center gap-1"

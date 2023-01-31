@@ -44,17 +44,16 @@ export default NextAuth({
 
   session: {
     maxAge: 2592000, /// 30d
-    strategy: 'jwt',
+    strategy: "jwt",
     updateAge: 86400, // cada día
   },
-
 
   callbacks: {
     async jwt({ token, account, user }) {
       if (account) {
         token.accessToken = account.access_token;
         switch (account.type) {
-          case 'credentials':
+          case "credentials":
             token.user = user;
             break;
         }
@@ -64,8 +63,8 @@ export default NextAuth({
     async session({ session, token, user }) {
       session.user = token.user as any;
       return session;
-    }
-  }
+    },
+  },
 });
 
 const checkUserEmailPassword = async (email: string, password: string) => {
@@ -77,10 +76,15 @@ const checkUserEmailPassword = async (email: string, password: string) => {
   const validPassword = await comparePassword(password, result[0].password);
   if (!validPassword) return null;
 
+  const images = await pool.query(
+    "SELECT name, url FROM images WHERE externalId = ? ",
+    [`user_${result[0].id}_disaeses`]
+  );
   const { name, id } = result[0];
   return {
     id,
     name,
     email,
+    images,
   };
 };

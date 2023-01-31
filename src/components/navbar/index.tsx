@@ -1,11 +1,12 @@
+import React, { useContext } from "react";
 import Icon, { UserIcon, CaretDown } from "../icons";
 import { Menu } from "@headlessui/react";
 import Link from "next/link";
-import { signOut, useSession } from "next-auth/react";
-import React from "react";
+import { signOut } from "next-auth/react";
+import UserContext from "../../context/context";
 
 const Navbar = () => {
-  const { data: session } = useSession();
+  const { user } = useContext(UserContext);
 
   return (
     <section className="flex justify-end lg:px-36 px-10 md:px-24">
@@ -20,7 +21,7 @@ const Navbar = () => {
             </div>
             <div className="flex flex-col ml-2">
               <span className="text-white font-medium capitalize">
-                {session?.user?.name}
+                {user?.name}
               </span>
             </div>
             <div className="flex items-center ml-2">
@@ -44,7 +45,7 @@ const Navbar = () => {
                   className="text-sm font-medium text-gray-900 truncate dark:text-grayprimary"
                   role="none"
                 >
-                  {session?.user?.email}
+                  {user?.email}
                 </p>
               </Menu.Item>
             </Menu.Items>
