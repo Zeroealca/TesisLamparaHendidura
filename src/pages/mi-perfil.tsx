@@ -1,29 +1,30 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import Head from "next/head";
 import InputWithLabel from "../components/inputs/inputWithLabel";
-import { useSession } from "next-auth/react";
+import UserContext from "../context/context";
 
 const MiPerfil = () => {
-  const { data: session } = useSession();
-  const [images, setImages] = useState([]);
-  const [data] = useState({
-    id: session?.user?.id,
-    name: session?.user?.name,
-    email: session?.user?.email,
-  });
+  const { user } = useContext(UserContext);
+
+  const { id, ...other } = user;
+
+  const [images, setImages] = useState<any>([]);
+
   const [state, setState] = useState({
-    ...data,
+    name: "",
+    email: "",
     password: "",
     confirmPassword: "",
   });
+
   const [isChange, setIsChange] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setState({ ...state, [e.target.name]: e.target.value });
-  };
+  useEffect(() => {
+    setState({ ...state, ...other });
+  }, [user]);
 
   const getImage = async () => {
-    await fetch(process.env.API_URL + `img/user/${data.id}`, {
+    await fetch(process.env.API_URL + `img/user/${user.id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -33,12 +34,16 @@ const MiPerfil = () => {
       .then((data) => setImages(data.data));
   };
 
-  useEffect(() => {
-    data.id && getImage();
-  }, [data]);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setState({ ...state, [e.target.name]: e.target.value });
+  };
 
   useEffect(() => {
-    if (data.email === state.email && data.name === state.name) {
+    user.id && getImage();
+  }, [user]);
+
+  useEffect(() => {
+    if (user.email === state.email && user.name === state.name) {
       setIsChange(false);
     } else {
       setIsChange(true);
@@ -125,9 +130,9 @@ const MiPerfil = () => {
             <h1 className="text-xl font-bold text-left">Mis imágenes</h1>
             <div className="flex flex-wrap gap-3">
               {images &&
-                images.map((image: any) => (
+                images.map((image: any, index: number) => (
                   <div
-                    key={image.id}
+                    key={index}
                     className="flex flex-col items-center justify-center gap-1"
                   >
                     <img

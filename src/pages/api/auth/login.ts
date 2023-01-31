@@ -12,10 +12,13 @@ export interface Usuario {
   password: string;
 }
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   switch (req.method) {
     case "POST":
-      await validateBody(loginValidation, req, res)
+      await validateBody(loginValidation, req, res);
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         return res.status(422).json({ errors: errors.array() });
@@ -27,12 +30,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 }
 
 const handlerLogin = async (req: NextApiRequest, res: NextApiResponse) => {
-  console.log("ENTRANDO A LOGIN")
-  const result = await pool.query(
-    "SELECT * FROM users WHERE email = ? ",
-    [req.body.email]
-  ) as Usuario[];
-  console.log("RESULTADOOOOOOOOOOOO" + result);
+  const result = (await pool.query("SELECT * FROM users WHERE email = ? ", [
+    req.body.email,
+  ])) as Usuario[];
   if (result.length === 0) {
     return res.status(404).json({
       message: "Usuario no encontrado",
@@ -40,8 +40,7 @@ const handlerLogin = async (req: NextApiRequest, res: NextApiResponse) => {
     });
   }
   const validPassword = await comparePassword(
-    req.body
-      .password as string,
+    req.body.password as string,
     result[0].password
   );
   if (!validPassword) {
