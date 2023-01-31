@@ -3,6 +3,7 @@ import { uploadFile, deleteFile, generatePublicUrl } from '@/node/drive/driveCon
 import nextConnect from 'next-connect';
 import multer from 'multer';
 import pool from "@/node/config/db";
+import { Usuario } from '../auth/login';
 
 const upload = multer({
     storage: multer.diskStorage({
@@ -10,7 +11,6 @@ const upload = multer({
             cb(null, 'temp');
         },
         filename: (req, file, cb) => {
-            console.log("FILENAME", file)
             cb(null, file.originalname);
         },
     }),
@@ -33,6 +33,7 @@ apiRout.use(upload.single('file'));
 
 apiRout.post(async (req: any, res: NextApiResponse) => {
     const { file } = req;
+    const { user } = req.body;
     const uploadedFile = await uploadFile(file) as { id: string, name: string };
     if (!uploadedFile) {
         return res.status(500).json({
@@ -45,9 +46,13 @@ apiRout.post(async (req: any, res: NextApiResponse) => {
             message: 'Error generating public url'
         });
     }
+    const result = await pool.query(
+        "SELECT * FROM users WHERE email = ? ",
+        [user]
+    ) as Usuario[];
     await pool.query(
         "INSERT INTO images SET ?",
-        { name: file.originalname, url: publicUrl, id_image: uploadedFile.id, externalId: uploadedFile.id }
+        { name: file.originalname, url: publicUrl, id_image: uploadedFile.id, externalId: `user_${result[0].id}_disaeses` }
     );
     return res.status(200).json({
         message: 'File uploaded successfully',

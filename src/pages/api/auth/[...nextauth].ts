@@ -37,19 +37,35 @@ export default NextAuth({
     newUser: "/registro",
   },
 
+  // Callbacks
+  jwt: {
+    // secret: process.env.JWT_SECRET_SEED, // deprecated
+  },
+
   session: {
     maxAge: 2592000, /// 30d
-    strategy: "jwt",
+    strategy: 'jwt',
     updateAge: 86400, // cada día
   },
-  events: {
-    signIn: async (message) => {
-      console.log("signIn", message);
+
+
+  callbacks: {
+    async jwt({ token, account, user }) {
+      if (account) {
+        token.accessToken = account.access_token;
+        switch (account.type) {
+          case 'credentials':
+            token.user = user;
+            break;
+        }
+      }
+      return token;
     },
-    updateUser: async () => {
-      console.log("updateUser");
-    },
-  },
+    async session({ session, token, user }) {
+      session.user = token.user as any;
+      return session;
+    }
+  }
 });
 
 const checkUserEmailPassword = async (email: string, password: string) => {
@@ -61,9 +77,9 @@ const checkUserEmailPassword = async (email: string, password: string) => {
   const validPassword = await comparePassword(password, result[0].password);
   if (!validPassword) return null;
 
-  const { name } = result[0];
+  const { name, id } = result[0];
   return {
-    id: "",
+    id,
     name,
     email,
   };

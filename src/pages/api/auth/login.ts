@@ -6,6 +6,7 @@ import { validationResult } from "express-validator";
 import { comparePassword } from "@/node/utils/auth";
 
 export interface Usuario {
+  id: number;
   name: string;
   email: string;
   password: string;
@@ -26,10 +27,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 }
 
 const handlerLogin = async (req: NextApiRequest, res: NextApiResponse) => {
+  console.log("ENTRANDO A LOGIN")
   const result = await pool.query(
     "SELECT * FROM users WHERE email = ? ",
     [req.body.email]
   ) as Usuario[];
+  console.log("RESULTADOOOOOOOOOOOO" + result);
   if (result.length === 0) {
     return res.status(404).json({
       message: "Usuario no encontrado",

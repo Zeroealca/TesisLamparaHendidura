@@ -2,9 +2,11 @@ drop database if exists TesisEye;
 create database TesisEye;
 use TesisEye;
 create table Users(
-	email VARCHAR(100) primary key,
+	id INT NOT NULL AUTO_INCREMENT,
+	email VARCHAR(100),
 	name VARCHAR(75) not null,
-	password VARCHAR(250) not null
+	password VARCHAR(250) not null,
+	primary key (id, email)
 );
 create table Images(
 	id_image VARCHAR(100) primary key,

@@ -1,12 +1,13 @@
+import { useState, useEffect } from "react";
 import Head from "next/head";
 import InputWithLabel from "../components/inputs/inputWithLabel";
-import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 
 const MiPerfil = () => {
   const { data: session } = useSession();
-
+  const [images, setImages] = useState([]);
   const [data] = useState({
+    id: session?.user?.id,
     name: session?.user?.name,
     email: session?.user?.email,
   });
@@ -15,12 +16,27 @@ const MiPerfil = () => {
     password: "",
     confirmPassword: "",
   });
-
   const [isChange, setIsChange] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setState({ ...state, [e.target.name]: e.target.value });
   };
+
+  const getImage = async () => {
+    await fetch(process.env.API_URL + `img/user/${data.id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => setImages(data.data));
+  };
+
+  useEffect(() => {
+    data.id && getImage();
+  }, [data]);
+  console.log(images);
 
   useEffect(() => {
     if (data.email === state.email && data.name === state.name) {
@@ -109,6 +125,26 @@ const MiPerfil = () => {
               Guardar
             </button>
           </form>
+          <div className="flex flex-col gap-3 w-full">
+            <h1 className="text-xl font-bold text-left">Mis imágenes</h1>
+            <div className="flex flex-wrap gap-3">
+              {images.map((image: any) => (
+                <div
+                  key={image.id}
+                  className="flex flex-col items-center justify-center gap-1"
+                >
+                  <img
+                    src={image.url}
+                    alt={image.name}
+                    className="w-32 h-32 object-cover rounded-md"
+                  />
+                  <button className="bg-red-500 rounded-md p-2 text-white font-bold">
+                    Eliminar
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </main>
     </>

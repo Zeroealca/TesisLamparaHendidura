@@ -1,5 +1,4 @@
 import { useRouter } from "next/router";
-import Image from "next/image";
 import Sintomas from "../../public/sintomas.jpg";
 import Diagnostico from "../../public/diagnostico.jpg";
 import Tratamiento from "../../public/tratamiento.jpg";

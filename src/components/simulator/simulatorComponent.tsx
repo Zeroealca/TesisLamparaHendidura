@@ -9,8 +9,10 @@ import ReturnArrow from "../icons/returnArrow";
 import Upload from "../icons/upload";
 import Save from "../icons/save";
 import SimulatorButton from "./simulatorButton";
+import { useSession } from "next-auth/react";
 
 const simulatorComponent = () => {
+  const { data } = useSession();
   const router = useRouter();
   const lane = useRef<HTMLDivElement>(null);
   const [state, setState] = useState({
@@ -26,10 +28,10 @@ const simulatorComponent = () => {
   });
 
   const uploadImage = () => {
-    console.log(image.imageFile);
     const fd = new FormData();
-    fd.append("image", image.imageFile as File);
-    fetch(process.env.API_URL + "api/img", {
+    fd.append("file", image.imageFile as File);
+    fd.append("user", data?.user?.email as string);
+    fetch(process.env.API_URL + "img", {
       method: "POST",
       body: fd,
     })
@@ -70,8 +72,6 @@ const simulatorComponent = () => {
                   id="upload-image"
                   onChange={(e) => {
                     if (e.target.files && e.target.files[0]) {
-                      //setImage(URL.createObjectURL(e.target.files[0]));
-                      const reader = new FileReader();
                       setImage({
                         imageUrl: URL.createObjectURL(e.target.files[0]),
                         imageFile: e.target.files[0] as File,
