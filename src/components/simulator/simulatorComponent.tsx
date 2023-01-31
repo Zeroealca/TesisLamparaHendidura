@@ -10,6 +10,7 @@ import Upload from "../icons/upload";
 import Save from "../icons/save";
 import SimulatorButton from "./simulatorButton";
 import { useSession } from "next-auth/react";
+import { toast } from "react-toastify";
 
 const simulatorComponent = () => {
   const { data } = useSession();
@@ -31,12 +32,15 @@ const simulatorComponent = () => {
     const fd = new FormData();
     fd.append("file", image.imageFile as File);
     fd.append("user", data?.user?.email as string);
-    fetch(process.env.API_URL + "img", {
+    const res = fetch(process.env.API_URL + "img", {
       method: "POST",
       body: fd,
-    })
-      .then((res) => res.json())
-      .then((data) => console.log(data));
+    });
+    toast.promise(res, {
+      pending: "Subiendo imagen",
+      success: "Imagen subida",
+      error: "Error al subir la imagen",
+    });
   };
   return (
     <>
