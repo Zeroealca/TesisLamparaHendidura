@@ -16,11 +16,13 @@ const simulatorComponent = () => {
   const { data } = useSession();
   const router = useRouter();
   const lane = useRef<HTMLDivElement>(null);
+  const imageRef = useRef<HTMLImageElement>(null);
   const [state, setState] = useState({
     orientation: 0,
     width: 1,
     movement: 50,
-    intensity: 50,
+    intensity: 25,
+    zoom: 1,
     color: "#FFFFFF",
   });
   const [image, setImage] = useState<{ imageUrl: string; imageFile?: File }>({
@@ -57,12 +59,13 @@ const simulatorComponent = () => {
               onClick={() => router.push("/")}
             />
           </div>
-          <div className="flex items-center flex-col my-2 gap-5">
-            <div className="relative flex items-center justify-center max-w-[325px] w-full max-h-[325px] min-h-[325px] rounded-full">
+          <div className="flex items-center lg:flex-row flex-col my-2 lg:gap-10 gap-5">
+            <div className="relative flex items-center justify-center max-w-[325px] w-full max-h-[325px] min-h-[325px] overflow-hidden">
               <img
                 src={image.imageUrl ? image.imageUrl : eye.src}
                 alt="logo"
                 className="w-full h-full rounded-md"
+                ref={imageRef}
               />
               <div
                 id="lane"
@@ -109,7 +112,8 @@ const simulatorComponent = () => {
             <div className="flex justify-center ml-5 text-center my-11 rounded-2xl bg-blackprimary">
               <div className="m-12">
                 <RangeComponent
-                  reference={lane}
+                  lane={lane}
+                  imageRef={imageRef}
                   state={state}
                   setState={setState}
                   type="orientation"
@@ -119,7 +123,8 @@ const simulatorComponent = () => {
                   value={state.orientation}
                 />
                 <RangeComponent
-                  reference={lane}
+                  lane={lane}
+                  imageRef={imageRef}
                   state={state}
                   setState={setState}
                   type="width"
@@ -128,7 +133,8 @@ const simulatorComponent = () => {
                   min={1}
                 />
                 <RangeComponent
-                  reference={lane}
+                  lane={lane}
+                  imageRef={imageRef}
                   state={state}
                   setState={setState}
                   type="movement"
@@ -137,13 +143,26 @@ const simulatorComponent = () => {
                   disabled={state.width === 100}
                 />
                 <RangeComponent
-                  reference={lane}
+                  lane={lane}
+                  imageRef={imageRef}
                   state={state}
                   setState={setState}
                   type="intensity"
                   step={25}
                   text="INTENSIDAD DE LA LUZ"
                   value={state.intensity}
+                />
+                <RangeComponent
+                  lane={lane}
+                  imageRef={imageRef}
+                  state={state}
+                  setState={setState}
+                  type="zoom"
+                  step={0.01}
+                  max={5}
+                  min={1}
+                  text="Zoom"
+                  value={state.zoom}
                 />
                 <div className="flex flex-col items-center">
                   <label htmlFor="color" className="text-white">
