@@ -110,6 +110,12 @@ const rangeComponent = (props: rangeComponentProps) => {
     }
   }, [state.zoom]);
 
+  useEffect(() => {
+    if (imageRef.current && lane.current) {
+      imageRef.current.style.transform = `scale(${(state.zoom * 100) / 100})`;
+    }
+  }, [state.zoom]);
+
   const handleChange = (value: number) => {
     switch (type) {
       case "orientation":
