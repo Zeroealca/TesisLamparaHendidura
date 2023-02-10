@@ -4,10 +4,11 @@ import React, { useEffect, useState } from "react";
 interface rangeComponentProps {
   step?: number;
   text: string;
-  type: "orientation" | "width" | "movement" | "intensity";
-  reference: React.RefObject<HTMLDivElement>;
+  type: "orientation" | "width" | "movement" | "intensity" | "zoom";
+  lane: React.RefObject<HTMLDivElement>;
   max?: number;
   min?: number;
+  imageRef: React.RefObject<HTMLImageElement>;
   value: number;
   disabled?: boolean;
   state: {
@@ -15,6 +16,7 @@ interface rangeComponentProps {
     width: number;
     movement: number;
     intensity: number;
+    zoom: number;
     color: string;
   };
   setState: React.Dispatch<
@@ -23,6 +25,7 @@ interface rangeComponentProps {
       width: number;
       movement: number;
       intensity: number;
+      zoom: number;
       color: string;
     }>
   >;
@@ -33,7 +36,8 @@ const rangeComponent = (props: rangeComponentProps) => {
     step,
     text,
     type,
-    reference,
+    lane,
+    imageRef,
     max,
     state,
     setState,
@@ -43,8 +47,8 @@ const rangeComponent = (props: rangeComponentProps) => {
   } = props;
 
   useEffect(() => {
-    if (reference.current) {
-      reference.current.style.opacity = !(state.intensity / 100)
+    if (lane.current) {
+      lane.current.style.opacity = !(state.intensity / 100)
         ? "0.1"
         : state.intensity / 100 == 1
         ? "0.8"
@@ -53,52 +57,58 @@ const rangeComponent = (props: rangeComponentProps) => {
   }, [state.intensity]);
 
   useEffect(() => {
-    if (reference.current) {
+    if (lane.current) {
       const step = (100 - state.width) / 100;
       if (!state.orientation || state.orientation == 180) {
-        reference.current.style.width = !state.width ? "1%" : `${state.width}%`;
+        lane.current.style.width = !state.width ? "1%" : `${state.width}%`;
         const maxLeft = 100 - state.width;
         const position = maxLeft - (100 - state.movement) * step;
-        reference.current.style.left = `${position}%`;
+        lane.current.style.left = `${position}%`;
       }
       if (state.orientation == 90) {
         const position = (state.movement - 50) * step;
-        reference.current.style.width = !state.width ? "1%" : `${state.width}%`;
-        reference.current.style.top = `${position}%`;
-        reference.current.style.left = `${50 - state.width / 2}%`;
+        lane.current.style.width = !state.width ? "1%" : `${state.width}%`;
+        lane.current.style.top = `${position}%`;
+        lane.current.style.left = `${50 - state.width / 2}%`;
       }
     }
   }, [state.width]);
 
   useEffect(() => {
-    if (reference.current) reference.current.style.background = state.color;
+    if (lane.current) lane.current.style.background = state.color;
   }, [state.color]);
 
   useEffect(() => {
-    if (reference.current) {
+    if (lane.current) {
       const step = (100 - state.width) / 100;
       if (state.orientation == 90 && state.width != 100) {
         const position = (state.movement - 50) * step;
-        reference.current.style.top = `${position}%`;
-        reference.current.style.left = `${50 - state.width / 2}%`;
+        lane.current.style.top = `${position}%`;
+        lane.current.style.left = `${50 - state.width / 2}%`;
       }
       if (
         state.orientation == 180 ||
         (!state.orientation && state.width != 100)
       ) {
-        reference.current.style.top = "0px";
+        lane.current.style.top = "0px";
         const maxLeft = 100 - state.width;
         const position = maxLeft - (100 - state.movement) * step;
-        reference.current.style.left = `${position}%`;
+        lane.current.style.left = `${position}%`;
       }
     }
   }, [state.movement, state.orientation]);
 
   useEffect(() => {
-    if (reference.current) {
-      reference.current.style.transform = `rotate(${state.orientation}deg)`;
+    if (lane.current) {
+      lane.current.style.transform = `rotate(${state.orientation}deg)`;
     }
   }, [state.orientation]);
+
+  useEffect(() => {
+    if (imageRef.current && lane.current) {
+      imageRef.current.style.transform = `scale(${(state.zoom * 100) / 100})`;
+    }
+  }, [state.zoom]);
 
   const handleChange = (value: number) => {
     switch (type) {
@@ -123,6 +133,9 @@ const rangeComponent = (props: rangeComponentProps) => {
         break;
       case "intensity":
         setState({ ...state, intensity: value });
+        break;
+      case "zoom":
+        setState({ ...state, zoom: value });
         break;
     }
   };
