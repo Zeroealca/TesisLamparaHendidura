@@ -1,6 +1,8 @@
 import { google } from "googleapis";
 import fs from "fs";
 import path from "path";
+const { ImgurClient } = require("imgur");
+require("dotenv").config();
 
 const oauth2Client = new google.auth.GoogleAuth({
   credentials: {
@@ -17,6 +19,11 @@ const drive = google.drive({
   auth: oauth2Client,
 });
 
+/* const client = new ImgurClient({
+  clientId: process.env.IMGUR_CLIENTID,
+  clientSecret: process.env.IMGUR_SECRET
+}) */
+
 const uploadFile = async (file: any) => {
   const filepath = path.join("src/" + file.filename);
   try {
@@ -31,6 +38,11 @@ const uploadFile = async (file: any) => {
         body: fs.createReadStream(filepath),
       },
     });
+    /* const res = await client.upload({
+      image: fs.createReadStream(filepath),
+      type: 'stream',
+      name: file.originalname
+    }) */
     fs.unlinkSync(filepath);
     return res.data;
   } catch (error) {

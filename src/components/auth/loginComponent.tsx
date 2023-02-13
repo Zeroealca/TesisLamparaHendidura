@@ -48,14 +48,11 @@ const loginComponent = () => {
               value={state.password}
               onChange={(e) => setState({ ...state, password: e.target.value })}
             />
-            <div className="flex justify-between items-center">
-              <RememberMe
-                rememberMe={state.RememberMe}
-                onChange={() =>
-                  setState({ ...state, RememberMe: !state.RememberMe })
-                }
-              />
-              <a href="" className="font-light text-sm underline">
+            <div className="flex justify-end items-center">
+              <a
+                href="recuperar-contrasena"
+                className="font-light text-sm underline"
+              >
                 Olvidé mi contraseña
               </a>
             </div>

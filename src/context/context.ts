@@ -13,6 +13,7 @@ export interface IMAGE {
 
 export type userContextType = {
   user: USER;
+  setUser: (user: USER) => void;
 };
 
 const UserContext = createContext<userContextType>({} as userContextType);
