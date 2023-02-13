@@ -98,7 +98,10 @@ const MiPerfil = () => {
       })
       .then((data) => {
         setUser(data);
-        setState({ ...state, password: "", confirmPassword: "" });
+        setState({ email: "", name: "", password: "", confirmPassword: "" });
+      })
+      .catch((err) => {
+        console.log(err);
       });
   };
 
@@ -161,11 +164,11 @@ const MiPerfil = () => {
               </button>
             </div>
           </form>
-          <div className="flex flex-col gap-3 w-full">
-            <h1 className="text-xl font-bold text-left">Mis imágenes</h1>
-            <div className="flex flex-wrap gap-3">
-              {images &&
-                images.map((image: any, index: number) => (
+          {images?.length ? (
+            <div className="flex flex-col gap-3 w-full">
+              <h1 className="text-xl font-bold text-left">Mis imágenes</h1>
+              <div className="flex flex-wrap gap-3">
+                {images?.map((image: any, index: number) => (
                   <div
                     key={index}
                     className="flex flex-col items-center justify-center gap-1"
@@ -180,8 +183,9 @@ const MiPerfil = () => {
                     </button>
                   </div>
                 ))}
+              </div>
             </div>
-          </div>
+          ) : null}
         </div>
       </main>
     </>
