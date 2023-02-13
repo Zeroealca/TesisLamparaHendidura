@@ -9,7 +9,7 @@ const Navbar = () => {
   const { user } = useContext(UserContext);
 
   return (
-    <section className="flex justify-end lg:px-36 px-10 md:px-24">
+    <section className="lg:px-20 px-10 md:px-24 fixed right-0 z-10">
       <div className="p-4">
         <Menu>
           <Menu.Button className="bg-black p-1 pr-3 rounded-full flex items-center hover:bg-blacksecondary shadow">
@@ -30,7 +30,7 @@ const Navbar = () => {
               </Icon>
             </div>
           </Menu.Button>
-          <Menu.Items className="absolute z-50 my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-black dark:divide-gray-600 top-12 lg:right-40 right-16 md:right-28">
+          <Menu.Items className="absolute z-10 my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-black dark:divide-gray-600 top-12 lg:right-24 right-16 md:right-28">
             <Menu.Items className="px-4 py-3">
               <Menu.Item disabled>
                 <p

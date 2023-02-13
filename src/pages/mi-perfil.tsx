@@ -1,14 +1,35 @@
 import { useState, useEffect, useContext } from "react";
-import Head from "next/head";
 import InputWithLabel from "../components/inputs/inputWithLabel";
 import UserContext from "../context/context";
+import Icon from "../components/icons";
+import Images from "../components/icons/images";
+import PersonCard from "../components/icons/personCard";
 
+interface OptionsProfileProps {
+  options: string;
+  icon?: JSX.Element;
+}
+const OptionsProfile = ({ options, icon }: OptionsProfileProps) => {
+  return (
+    <li className="flex items-center gap-8 p-3 rounded-xl cursor-pointer hover:bg-gray-500 font-semibold text-lg">
+      <Icon
+        width={20}
+        height={20}
+        fill="currentColor"
+        viewBox="16 16"
+        children={icon}
+      />
+      {options}
+    </li>
+  );
+};
 const MiPerfil = () => {
   const { user } = useContext(UserContext);
 
   const { id, ...other } = user;
 
   const [images, setImages] = useState<any>([]);
+  const [tabs, setTabs] = useState(1);
 
   const [state, setState] = useState({
     name: "",
@@ -71,12 +92,15 @@ const MiPerfil = () => {
 
   return (
     <>
-      <Head>
-        <title>Iniciar sesión</title>
-      </Head>
-      <main className="px-10 min-h-screen">
+      <main className="px-8 min-h-screen h-full flex items-start gap-28 pt-32">
+        <section className="w-96 h-full">
+          <ul className="flex flex-col gap-10">
+            <OptionsProfile options="Mis datos" icon={<PersonCard />} />
+            <OptionsProfile options="Mis imágenes" icon={<Images />} />
+          </ul>
+        </section>
         <div className="flex flex-col items-start justify-center gap-1 w-full">
-          <form onSubmit={handleSubmit} className="w-full">
+          <form onSubmit={handleSubmit} className="w-full px-10 mx-auto">
             <h1 className="text-xl font-bold text-left">Mis datos</h1>
             <div className="flex flex-col lg:flex-row gap-3 w-full">
               <InputWithLabel
@@ -126,7 +150,7 @@ const MiPerfil = () => {
               Guardar
             </button>
           </form>
-          <div className="flex flex-col gap-3 w-full">
+          {/* <div className="flex flex-col gap-3 w-full">
             <h1 className="text-xl font-bold text-left">Mis imágenes</h1>
             <div className="flex flex-wrap gap-3">
               {images &&
@@ -146,7 +170,7 @@ const MiPerfil = () => {
                   </div>
                 ))}
             </div>
-          </div>
+          </div> */}
         </div>
       </main>
     </>

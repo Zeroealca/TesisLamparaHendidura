@@ -50,7 +50,7 @@ const simulatorComponent = () => {
         <title>Simulador - Lámpara Hendidura</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="flex justify-center p-24 min-h-screen">
+      <main className="flex justify-center p-24">
         <SimulatorCard>
           <div className="flex justify-between">
             <SimulatorButton
@@ -59,8 +59,8 @@ const simulatorComponent = () => {
               onClick={() => router.push("/")}
             />
           </div>
-          <div className="flex items-center lg:flex-row flex-col my-2 lg:gap-10 gap-5">
-            <div className="relative flex items-center justify-center max-w-[325px] w-full max-h-[325px] min-h-[325px] overflow-hidden">
+          <div className="flex items-center justify-center lg:flex-row flex-col my-2 lg:gap-10 gap-5">
+            <div className="relative flex items-center justify-center max-w-[500px] w-full max-h-[500px] min-h-[325px] overflow-hidden">
               <img
                 src={image.imageUrl ? image.imageUrl : eye.src}
                 alt="logo"
@@ -69,7 +69,7 @@ const simulatorComponent = () => {
               />
               <div
                 id="lane"
-                className="flex items-center justify-center text-black rounded-xl max-w-[325px] max-h-[325px]"
+                className="flex items-center justify-center text-black rounded-xl max-w-[500px] max-h-[500px]"
                 ref={lane}
               />
               <label htmlFor="upload-image">
