@@ -4,7 +4,7 @@ import InputWithLabel from "../components/inputs/inputWithLabel";
 import UserContext from "../context/context";
 
 const MiPerfil = () => {
-  const { user } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
 
   const { id, ...other } = user;
 
@@ -64,9 +64,42 @@ const MiPerfil = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (state.password === "" && state.confirmPassword === "") {
-      const { password, confirmPassword, ...rest } = state;
+    const data: {
+      name?: string;
+      email?: string;
+      password?: string;
+    } = {};
+    if (state.password !== "" && state.confirmPassword !== "") {
+      data.password = state.password;
     }
+    if (state.name !== user.name) {
+      data.name = state.name;
+    }
+    if (state.email !== user.email) {
+      data.email = state.email;
+    }
+    Object.keys(data).length > 0 && updateUser(data);
+  };
+
+  const updateUser = async (data: {
+    name?: string;
+    email?: string;
+    password?: string;
+  }) => {
+    fetch(process.env.API_URL + `user/${user.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        setUser(data);
+        setState({ ...state, password: "", confirmPassword: "" });
+      });
   };
 
   return (
@@ -116,15 +149,17 @@ const MiPerfil = () => {
                 isPassword
               />
             </div>
-            <button
-              type="submit"
-              disabled={!isChange}
-              className={`${
-                !isChange ? "opacity-50" : "hover:bg-blue-700"
-              } rounded-md p-2 bg-bluebutton uppercase text-white max-w-[200px] w-full font-bold`}
-            >
-              Guardar
-            </button>
+            <div className="flex justify-center mt-5">
+              <button
+                type="submit"
+                disabled={!isChange}
+                className={`${
+                  !isChange ? "opacity-50" : "hover:bg-blue-700"
+                } rounded-md p-2 bg-bluebutton uppercase text-white max-w-[200px] w-full font-bold`}
+              >
+                Actualizar datos
+              </button>
+            </div>
           </form>
           <div className="flex flex-col gap-3 w-full">
             <h1 className="text-xl font-bold text-left">Mis imágenes</h1>

@@ -76,10 +76,8 @@ const checkUserEmailPassword = async (email: string, password: string) => {
   const validPassword = await comparePassword(password, result[0].password);
   if (!validPassword) return null;
 
-  const { name, id } = result[0];
+  const { id } = result[0];
   return {
     id,
-    name,
-    email,
   };
 };

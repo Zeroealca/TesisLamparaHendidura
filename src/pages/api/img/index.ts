@@ -39,30 +39,34 @@ apiRout.use(upload.single("file"));
 apiRout.post(async (req: any, res: NextApiResponse) => {
   const { file } = req;
   const { user } = req.body;
-  const uploadedFile = (await uploadFile(file)) as { id: string; name: string };
+  const uploadedFile = (await uploadFile(file)) as {
+    deletehash: string;
+    name: string;
+    link: string;
+  };
   if (!uploadedFile) {
     return res.status(500).json({
       message: "Error uploading file",
     });
   }
-  const publicUrl = await generatePublicUrl(uploadedFile.id);
+  /* const publicUrl = await generatePublicUrl(uploadedFile.id);
   if (!publicUrl) {
     return res.status(500).json({
       message: "Error generating public url",
     });
-  }
+  } */
   const result = (await pool.query("SELECT * FROM users WHERE email = ? ", [
     user,
   ])) as Usuario[];
   await pool.query("INSERT INTO images SET ?", {
     name: file.originalname,
-    url: publicUrl,
-    id_image: uploadedFile.id,
+    url: uploadedFile.link,
+    id_image: uploadedFile.deletehash,
     externalId: `user_${result[0].id}_disaeses`,
   });
   return res.status(200).json({
     message: "File uploaded successfully",
-    data: { publicUrl },
+    data: { publicUrl: uploadedFile.link },
   });
 });
 
