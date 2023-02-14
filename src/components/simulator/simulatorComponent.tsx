@@ -59,35 +59,37 @@ const simulatorComponent = () => {
               onClick={() => router.push("/")}
             />
           </div>
-          <div className="flex items-center justify-center lg:flex-row flex-col my-2 lg:gap-10 gap-5">
-            <div className="relative flex items-center justify-center max-w-[500px] w-full max-h-[500px] min-h-[325px] overflow-hidden">
-              <img
-                src={image.imageUrl ? image.imageUrl : eye.src}
-                alt="logo"
-                className="w-full h-full rounded-md"
-                ref={imageRef}
-              />
-              <div
-                id="lane"
-                className="flex items-center justify-center text-black rounded-xl max-w-[500px] max-h-[500px]"
-                ref={lane}
-              />
-              <label htmlFor="upload-image">
-                <input
-                  type="file"
-                  accept="image/*"
-                  id="upload-image"
-                  onChange={(e) => {
-                    if (e.target.files && e.target.files[0]) {
-                      setImage({
-                        imageUrl: URL.createObjectURL(e.target.files[0]),
-                        imageFile: e.target.files[0] as File,
-                      });
-                    }
-                  }}
-                  className="absolute -right-11 bottom-0 hidden"
+          <div className="flex flex-col items-center justify-center lg:flex-row my-2 lg:gap-10 gap-5">
+            <div className="flex-1 flex flex-col gap-5 items-center h-full max-w-[500px] max-h-[500px]">
+              <section className="relative overflow-hidden h-full">
+                <img
+                  src={image.imageUrl ? image.imageUrl : eye.src}
+                  alt="logo"
+                  className="w-full h-full rounded-md"
+                  ref={imageRef}
                 />
-                <div className="absolute -right-11 bottom-0 cursor-pointer z-10">
+                <div
+                  id="lane"
+                  className="flex items-center justify-center text-black rounded-xl h-full w-full"
+                  ref={lane}
+                />
+              </section>
+              <section className="flex flex-col items-center">
+                <label className="cursor-pointer" htmlFor="upload-image">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    id="upload-image"
+                    onChange={(e) => {
+                      if (e.target.files && e.target.files[0]) {
+                        setImage({
+                          imageUrl: URL.createObjectURL(e.target.files[0]),
+                          imageFile: e.target.files[0] as File,
+                        });
+                      }
+                    }}
+                    className="hidden"
+                  />
                   <Icon
                     children={<Upload />}
                     fill="#FFFFFF"
@@ -95,19 +97,19 @@ const simulatorComponent = () => {
                     height={35}
                     width={35}
                   />
+                </label>
+                <div
+                  className={`${
+                    image.imageUrl ? "block" : "hidden"
+                  } transition-all delay-150`}
+                >
+                  <SimulatorButton
+                    name="Guardar Imagen"
+                    icon={<Save />}
+                    onClick={uploadImage}
+                  />
                 </div>
-              </label>
-            </div>
-            <div
-              className={`${
-                image.imageUrl ? "block" : "hidden"
-              } transition-all delay-150`}
-            >
-              <SimulatorButton
-                name="Guardar Imagen"
-                icon={<Save />}
-                onClick={uploadImage}
-              />
+              </section>
             </div>
             <div className="flex justify-center ml-5 text-center my-11 rounded-2xl bg-blackprimary">
               <div className="m-12">

@@ -4,14 +4,29 @@ import UserContext from "../context/context";
 import Icon from "../components/icons";
 import Images from "../components/icons/images";
 import PersonCard from "../components/icons/personCard";
+import ProfileImage from "src/components/profile/profileImage";
 
 interface OptionsProfileProps {
   options: string;
   icon?: JSX.Element;
+  className?: string;
+  isActive?: boolean;
+  setTabs?: () => void;
 }
-const OptionsProfile = ({ options, icon }: OptionsProfileProps) => {
+const OptionsProfile = ({
+  options,
+  icon,
+  isActive,
+  className,
+  setTabs,
+}: OptionsProfileProps) => {
   return (
-    <li className="flex items-center gap-8 p-3 rounded-xl cursor-pointer hover:bg-gray-500 font-semibold text-lg">
+    <li
+      className={`flex items-center gap-8 p-3 rounded-xl cursor-pointer hover:bg-gray-500 font-semibold text-lg ${
+        isActive ? "bg-gray-500" : ""
+      } ${className}`}
+      onClick={setTabs}
+    >
       <Icon
         width={20}
         height={20}
@@ -126,87 +141,84 @@ const MiPerfil = () => {
   return (
     <>
       <main className="px-8 min-h-screen h-full flex items-start gap-28 pt-32">
-        <section className="w-96 h-full">
-          <ul className="flex flex-col gap-10">
-            <OptionsProfile options="Mis datos" icon={<PersonCard />} />
-            <OptionsProfile options="Mis imágenes" icon={<Images />} />
+        <section className="w-96">
+          <ul className="flex flex-col gap-10 pl-20">
+            <OptionsProfile
+              options="Mis datos"
+              icon={<PersonCard />}
+              isActive={tabs === 1}
+              setTabs={() => setTabs(1)}
+            />
+            <OptionsProfile
+              options="Mis imágenes"
+              icon={<Images />}
+              isActive={tabs === 2}
+              setTabs={() => setTabs(2)}
+            />
           </ul>
         </section>
-        <div className="flex flex-col items-start justify-center gap-1 w-full">
-          <form onSubmit={handleSubmit} className="w-full px-10 mx-auto">
-            <h1 className="text-xl font-bold text-left">Mis datos</h1>
-            <div className="flex flex-col lg:flex-row gap-3 w-full">
-              <InputWithLabel
-                label="Nombre"
-                name="name"
-                type="text"
-                onChange={(e) => handleChange(e)}
-                value={state.name || ""}
-                className="flex flex-col lg:w-1/2"
-              />
-              <InputWithLabel
-                label="Correo electrónico"
-                name="email"
-                type="text"
-                onChange={(e) => handleChange(e)}
-                value={state.email || ""}
-                className="flex flex-col lg:w-1/2"
-              />
+        <section className="w-full">
+          <div className="flex flex-col items-start gap-1 w-full h-[50rem] py-16 px-10 rounded-xl bg-blacksecondary">
+            <form
+              onSubmit={handleSubmit}
+              className={`${tabs === 1 ? "block" : "hidden"} w-full mx-auto`}
+            >
+              <h1 className="text-xl font-bold text-left">Mis datos</h1>
+              <div className="flex flex-col lg:flex-row gap-10 w-full">
+                <InputWithLabel
+                  label="Nombre"
+                  name="name"
+                  type="text"
+                  onChange={(e) => handleChange(e)}
+                  value={state.name || ""}
+                  className="flex flex-col lg:w-1/2"
+                />
+                <InputWithLabel
+                  label="Correo electrónico"
+                  name="email"
+                  type="text"
+                  onChange={(e) => handleChange(e)}
+                  value={state.email || ""}
+                  className="flex flex-col lg:w-1/2"
+                />
+              </div>
+              <div className="flex flex-col lg:flex-row gap-10 w-full">
+                <InputWithLabel
+                  label="Nueva contraseña"
+                  name="password"
+                  type="password"
+                  onChange={(e) => handleChange(e)}
+                  value={state.password}
+                  className="flex flex-col lg:w-1/2"
+                  isPassword
+                />
+                <InputWithLabel
+                  label="Repetir contraseña"
+                  name="confirmPassword"
+                  type="password"
+                  onChange={(e) => handleChange(e)}
+                  value={state.confirmPassword}
+                  className="flex flex-col lg:w-1/2"
+                  isPassword
+                />
+              </div>
+              <div className="flex justify-center mt-20">
+                <button
+                  type="submit"
+                  disabled={!isChange}
+                  className={`${
+                    !isChange ? "opacity-50" : "hover:bg-blue-700"
+                  } rounded-md p-2 bg-bluebutton uppercase text-white max-w-[200px] w-full font-bold`}
+                >
+                  Actualizar datos
+                </button>
+              </div>
+            </form>
+            <div className={`${tabs === 2 ? "block" : "hidden"} w-full`}>
+              <ProfileImage images={images} />
             </div>
-            <div className="flex flex-col lg:flex-row gap-3 w-full">
-              <InputWithLabel
-                label="Nueva contraseña"
-                name="password"
-                type="password"
-                onChange={(e) => handleChange(e)}
-                value={state.password}
-                className="flex flex-col lg:w-1/2"
-                isPassword
-              />
-              <InputWithLabel
-                label="Repetir contraseña"
-                name="confirmPassword"
-                type="password"
-                onChange={(e) => handleChange(e)}
-                value={state.confirmPassword}
-                className="flex flex-col lg:w-1/2"
-                isPassword
-              />
-            </div>
-            <div className="flex justify-center mt-5">
-              <button
-                type="submit"
-                disabled={!isChange}
-                className={`${
-                  !isChange ? "opacity-50" : "hover:bg-blue-700"
-                } rounded-md p-2 bg-bluebutton uppercase text-white max-w-[200px] w-full font-bold`}
-              >
-                Actualizar datos
-              </button>
-            </div>
-          </form>
-          {/* <div className="flex flex-col gap-3 w-full">
-            <h1 className="text-xl font-bold text-left">Mis imágenes</h1>
-            <div className="flex flex-wrap gap-3">
-              {images &&
-                images.map((image: any, index: number) => (
-                  <div
-                    key={index}
-                    className="flex flex-col items-center justify-center gap-1"
-                  >
-                    <img
-                      src={image.url}
-                      alt={image.name}
-                      className="w-32 h-32 object-cover rounded-md"
-                    />
-                    <button className="bg-red-500 rounded-md p-2 text-white font-bold">
-                      Eliminar
-                    </button>
-                  </div>
-                ))}
-            </div>
-          </div> */}
-        </div>
+          </div>
+        </section>
       </main>
     </>
   );
