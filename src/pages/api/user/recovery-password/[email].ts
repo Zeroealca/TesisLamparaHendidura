@@ -61,22 +61,44 @@ const handlerChangePassword = async (
   req: NextApiRequest,
   res: NextApiResponse
 ) => {
-  const { email, token } = req.query as {
+  const { email } = req.query as {
     email: string;
+  };
+  const { password, token } = req.body as {
+    password: string;
     token: string;
   };
-  console.log(token);
-  const verifiedToken = verify(token, process.env.NEXTAUTH_SECRET || "");
-  if (!verifiedToken) {
+
+  try {
+    const verifiedToken = verify(token, process.env.NEXTAUTH_SECRET || "");
+
+    if (!verifiedToken) {
+      return res.status(401).json({
+        message: "Token invalido",
+        data: undefined,
+      });
+    }
+
+    const hashedPassword = await hashPassword(password);
+
+    const updateResult = (await pool.query(
+      "UPDATE users SET password = ? WHERE email = ?",
+      [hashedPassword, email]
+    )) as any;
+    if (updateResult.affectedRows === 0) {
+      return res.status(404).json({
+        message: "Usuario no encontrado",
+        data: undefined,
+      });
+    }
+    res.status(200).json({
+      message: "Contraseña actualizada",
+      data: undefined,
+    });
+  } catch (error) {
     return res.status(401).json({
-      message: "Token invalido",
+      message: error,
       data: undefined,
     });
   }
-
-  return res
-    .writeHead(302, {
-      Location: process.env.FRONT_URL + "recovery-password/" + email,
-    })
-    .end();
 };

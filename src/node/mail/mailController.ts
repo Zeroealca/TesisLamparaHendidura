@@ -49,8 +49,8 @@ const sendRecoveryMail = async (user: User) => {
         name: user.name,
         id: user.id,
         enlace:
-          process.env.API_URL +
-          "user/recovery-password/" +
+          process.env.FRONT_URL +
+          "recuperar-contrasena/" +
           user.email +
           "?token=" +
           user.recovery_token,
