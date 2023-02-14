@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import pool from "@/node/config/db";
 import { hashPassword } from "@/node/utils/auth";
+import { sendRecoveryMail } from "@/node/mail/mailController";
 
 export default async function handler(
   req: NextApiRequest,
@@ -20,7 +21,17 @@ const handlerSendRecoveryMail = async (
   req: NextApiRequest,
   res: NextApiResponse
 ) => {
-  console.log(req);
+  const result = (await pool.query(
+    "SELECT id, name, email FROM users WHERE email = ? ",
+    [req.query.id]
+  )) as any;
+  if (result.length === 0) {
+    return res.status(404).json({
+      message: "Usuario no encontrado",
+      data: undefined,
+    });
+  }
+  sendRecoveryMail(result[0]);
   res.json({ msg: "listo" });
 };
 

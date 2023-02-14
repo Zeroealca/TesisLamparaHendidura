@@ -134,7 +134,10 @@ const MiPerfil = () => {
       })
       .then((data) => {
         setUser(data);
-        setState({ ...state, password: "", confirmPassword: "" });
+        setState({ email: "", name: "", password: "", confirmPassword: "" });
+      })
+      .catch((err) => {
+        console.log(err);
       });
   };
 
