@@ -6,6 +6,7 @@ create table Users(
 	email VARCHAR(100),
 	name VARCHAR(75) not null,
 	password VARCHAR(250) not null,
+	recovery_token TEXT,
 	primary key (id, email)
 );
 create table Images(
