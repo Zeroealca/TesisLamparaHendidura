@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Head from "next/head";
 import InputWithLabel from "../inputs/inputWithLabel";
 import ButtonAuth from "../buttons/buttonAuth";

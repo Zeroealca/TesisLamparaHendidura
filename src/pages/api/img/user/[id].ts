@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import pool from "@/node/config/db";
 
 interface Image {
+  id_image: string;
   name: string;
   url: string;
 }
@@ -21,7 +22,7 @@ export default async function handler(
 const handlerImageId = async (req: NextApiRequest, res: NextApiResponse) => {
   const { id } = req.query;
   const result = (await pool.query(
-    "SELECT name, url FROM images WHERE externalId = ? ",
+    "SELECT id_image, name, url FROM images WHERE externalId = ? ",
     [`user_${id}_disaeses`]
   )) as Image[];
   if (result.length === 0) {

@@ -7,6 +7,7 @@ export interface USER {
 }
 
 export interface IMAGE {
+  id_image: string;
   url: string;
   name: string;
 }

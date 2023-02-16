@@ -1,7 +1,7 @@
 import { google } from "googleapis";
 import fs from "fs";
 import path from "path";
-const { ImgurClient } = require("imgur");
+// const { ImgurClient } = require("imgur");
 // require("dotenv").config();
 
 const oauth2Client = new google.auth.GoogleAuth({

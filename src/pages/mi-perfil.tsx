@@ -5,6 +5,8 @@ import Icon from "../components/icons";
 import Images from "../components/icons/images";
 import PersonCard from "../components/icons/personCard";
 import ProfileImage from "src/components/profile/profileImage";
+import ReturnArrow from "src/components/icons/returnArrow";
+import { useRouter } from "next/router";
 
 interface OptionsProfileProps {
   options: string;
@@ -40,6 +42,7 @@ const OptionsProfile = ({
 };
 const MiPerfil = () => {
   const { user, setUser } = useContext(UserContext);
+  const router = useRouter();
 
   const { id, ...other } = user;
 
@@ -69,7 +72,6 @@ const MiPerfil = () => {
       .then((res) => res.json())
       .then((data) => setImages(data.data));
   };
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setState({ ...state, [e.target.name]: e.target.value });
   };
@@ -157,6 +159,12 @@ const MiPerfil = () => {
               icon={<Images />}
               isActive={tabs === 2}
               setTabs={() => setTabs(2)}
+            />
+            <OptionsProfile
+              options="Regresar"
+              icon={<ReturnArrow />}
+              isActive={tabs === 3}
+              setTabs={() => router.back()}
             />
           </ul>
         </section>
