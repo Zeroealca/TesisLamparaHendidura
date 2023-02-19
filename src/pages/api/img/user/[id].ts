@@ -5,12 +5,12 @@ interface Image {
   id_image: string;
   name: string;
   url: string;
+  details: string;
 }
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  console.log(req.method);
   switch (req.method) {
     case "GET":
       return await handlerImageId(req, res);
@@ -22,7 +22,7 @@ export default async function handler(
 const handlerImageId = async (req: NextApiRequest, res: NextApiResponse) => {
   const { id } = req.query;
   const result = (await pool.query(
-    "SELECT id_image, name, url FROM images WHERE externalId = ? ",
+    "SELECT id_image, name, url, details FROM images WHERE externalId = ? ",
     [`user_${id}_disaeses`]
   )) as Image[];
   if (result.length === 0) {

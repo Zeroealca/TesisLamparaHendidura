@@ -19,7 +19,7 @@ const upload = multer({
     },
   }),
   limits: {
-    fileSize: 5 * 1024 * 1024, // no larger than 5mb
+    fileSize: 5 * 1024 * 1024,
   },
 });
 
@@ -38,37 +38,55 @@ apiRout.use(upload.single("file"));
 
 apiRout.post(async (req: any, res: NextApiResponse) => {
   const { file } = req;
-  const { user } = req.body;
-  const uploadedFile = (await uploadFile(file)) as {
-    deletehash: string;
-    name: string;
-    link: string;
-  };
-  if (!uploadedFile) {
-    return res.status(500).json({
-      message: "Error uploading file",
+  const { id_image, user, details } = req.body;
+  if (!id_image) {
+    const uploadedFile = (await uploadFile(file)) as {
+      id: string;
+      name: string;
+      details: string;
+    };
+    if (!uploadedFile) {
+      return res.status(500).json({
+        message: "Error uploading file",
+      });
+    }
+    const url = await generatePublicUrl(uploadedFile.id);
+    if (!url) {
+      return res.status(500).json({
+        message: "Error generating public url",
+      });
+    }
+    const result = (await pool.query("SELECT * FROM users WHERE id = ? ", [
+      user,
+    ])) as Usuario[];
+    await pool.query("INSERT INTO images SET ?", {
+      name: file.originalname,
+      url,
+      id_image: uploadedFile.id,
+      externalId: `user_${result[0].id}_disaeses`,
+      details,
+    });
+    return res.status(200).json({
+      message: "File uploaded successfully",
+      data: { publicUrl: url },
     });
   }
-  /* const publicUrl = await generatePublicUrl(uploadedFile.id);
-  if (!publicUrl) {
-    return res.status(500).json({
-      message: "Error generating public url",
+  const result = (await pool.query("UPDATE images set details = ? WHERE id_image = ? ", [
+    details, id_image,
+  ]) as any);
+  console.log({ result })
+  if (result.affectedRows === 0) {
+    return res.status(404).json({
+      message: "Imagen no encontrada",
+      data: undefined,
     });
-  } */
-  const result = (await pool.query("SELECT * FROM users WHERE email = ? ", [
-    user,
-  ])) as Usuario[];
-  await pool.query("INSERT INTO images SET ?", {
-    name: file.originalname,
-    url: uploadedFile.link,
-    id_image: uploadedFile.deletehash,
-    externalId: `user_${result[0].id}_disaeses`,
-  });
+  }
   return res.status(200).json({
-    message: "File uploaded successfully",
-    data: { publicUrl: uploadedFile.link },
+    message: "Imagen actualizada",
+    data: undefined,
   });
 });
+
 
 apiRout.delete(async (req: NextApiRequest, res: NextApiResponse) => {
   const { fileId } = req.body;

@@ -1,41 +1,79 @@
+import { toast } from "react-toastify";
+import { useRouter } from "next/router";
+
 const ProfileImage = ({
   images,
+  setImages,
 }: {
-  images: Array<{ id_image: string; name: string; url: string }>;
+  images: Array<{
+    id_image: string;
+    name: string;
+    url: string;
+    details: string;
+  }>;
+  setImages: (
+    images: Array<{
+      id_image: string;
+      name: string;
+      url: string;
+      details: string;
+    }>
+  ) => void;
 }) => {
+  const router = useRouter();
   const deleteImage = async (id: string) => {
-    await fetch(process.env.API_URL + `img/${id}`, {
+    const res = fetch(process.env.API_URL + `img/${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
       },
-    })
-      .then((res) => res.json())
-      .then((data) => console.log(data));
+    });
+    toast
+      .promise(res, {
+        pending: "Eliminando imagen",
+        success: "Imagen eliminada",
+        error: "Error al eliminar la imagen",
+      })
+      .then(() => {
+        setImages(images.filter((image) => image.id_image !== id));
+      });
   };
   return (
     <>
       <h1 className="text-xl font-bold text-left mb-10">Mis imagenes</h1>
-      <div className="flex flex-wrap gap-10 justify-center">
-        {images.length > 0 ? (
+      <div className="grid grid-cols-auto-fit gap-10">
+        {images?.length > 0 ? (
           images.map((image, index: number) => (
-            <div
-              key={index}
-              className="flex flex-col items-center justify-center gap-1"
-            >
-              <div className="w-56 h-56">
+            <div key={index} className="flex flex-col gap-1 max-w-md">
+              <div className="h-72 w-full">
                 <img
                   src={image.url}
                   alt={image.name}
-                  className="w-full h-full object-fill rounded-md"
+                  className="w-full h-full object-cover rounded-md"
                 />
               </div>
-              <button
-                onClick={() => deleteImage(image.id_image)}
-                className="bg-red-500 rounded-md p-2 text-white font-bold"
-              >
-                Eliminar
-              </button>
+              <div className="flex items-center justify-center gap-2">
+                <button
+                  onClick={() =>
+                    router.push(
+                      {
+                        pathname: "/simulador",
+                        query: image,
+                      },
+                      "simulador"
+                    )
+                  }
+                  className="bg-green-500 rounded-md p-2 text-white font-bold w-24"
+                >
+                  Usar
+                </button>
+                <button
+                  onClick={() => deleteImage(image.id_image)}
+                  className="bg-red-500 rounded-md p-2 text-white font-bold w-24"
+                >
+                  Eliminar
+                </button>
+              </div>
             </div>
           ))
         ) : (

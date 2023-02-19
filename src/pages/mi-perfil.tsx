@@ -24,7 +24,7 @@ const OptionsProfile = ({
 }: OptionsProfileProps) => {
   return (
     <li
-      className={`flex items-center gap-8 p-3 rounded-xl cursor-pointer hover:bg-gray-500 font-semibold text-lg ${
+      className={`flex items-center justify-evenly w-full gap-2 p-3 rounded-xl cursor-pointer hover:bg-gray-500 font-semibold text-lg md:justify-start md:gap-8 ${
         isActive ? "bg-gray-500" : ""
       } ${className}`}
       onClick={setTabs}
@@ -36,7 +36,7 @@ const OptionsProfile = ({
         viewBox="16 16"
         children={icon}
       />
-      {options}
+      <span className={`hidden md:block`}>{options}</span>
     </li>
   );
 };
@@ -47,8 +47,8 @@ const MiPerfil = () => {
   const { id, ...other } = user;
 
   const [images, setImages] = useState<any>([]);
-  const [tabs, setTabs] = useState(1);
-
+  const params = Number(router.query.tab);
+  const [tabs, setTabs] = useState<number>(1);
   const [state, setState] = useState({
     name: "",
     email: "",
@@ -61,6 +61,10 @@ const MiPerfil = () => {
   useEffect(() => {
     setState({ ...state, ...other });
   }, [user]);
+
+  useEffect(() => {
+    params && setTabs(params);
+  }, [params]);
 
   const getImage = async () => {
     await fetch(process.env.API_URL + `img/user/${user.id}`, {
@@ -145,9 +149,9 @@ const MiPerfil = () => {
 
   return (
     <>
-      <main className="px-8 min-h-screen h-full flex items-start gap-28 pt-32">
-        <section className="w-96">
-          <ul className="flex flex-col gap-10 pl-20">
+      <main className="px-8 min-h-screen h-full flex flex-col items-start gap-10 md:gap-28 pt-32 md:flex-row">
+        <section className="w-full md:w-96">
+          <ul className="flex justify-center md:flex-col gap-3 pl-0 md:pl-20 md:gap-8">
             <OptionsProfile
               options="Mis datos"
               icon={<PersonCard />}
@@ -169,7 +173,11 @@ const MiPerfil = () => {
           </ul>
         </section>
         <section className="w-full">
-          <div className="flex flex-col items-start gap-1 w-full h-[50rem] py-16 px-10 rounded-xl bg-blacksecondary">
+          <div
+            className={`flex flex-col items-start gap-1 w-full py-16 px-10 rounded-xl bg-blacksecondary ${
+              images?.length > 0 ? "" : "h-[50rem]"
+            }`}
+          >
             <form
               onSubmit={handleSubmit}
               className={`${tabs === 1 ? "block" : "hidden"} w-full mx-auto`}
@@ -182,7 +190,7 @@ const MiPerfil = () => {
                   type="text"
                   onChange={(e) => handleChange(e)}
                   value={state.name || ""}
-                  className="flex flex-col lg:w-1/2"
+                  className="lg:w-1/2"
                 />
                 <InputWithLabel
                   label="Correo electrónico"
@@ -190,7 +198,7 @@ const MiPerfil = () => {
                   type="text"
                   onChange={(e) => handleChange(e)}
                   value={state.email || ""}
-                  className="flex flex-col lg:w-1/2"
+                  className="lg:w-1/2"
                 />
               </div>
               <div className="flex flex-col lg:flex-row gap-10 w-full">
@@ -200,7 +208,7 @@ const MiPerfil = () => {
                   type="password"
                   onChange={(e) => handleChange(e)}
                   value={state.password}
-                  className="flex flex-col lg:w-1/2"
+                  className="lg:w-1/2"
                   isPassword
                 />
                 <InputWithLabel
@@ -209,7 +217,7 @@ const MiPerfil = () => {
                   type="password"
                   onChange={(e) => handleChange(e)}
                   value={state.confirmPassword}
-                  className="flex flex-col lg:w-1/2"
+                  className="lg:w-1/2"
                   isPassword
                 />
               </div>
@@ -226,7 +234,7 @@ const MiPerfil = () => {
               </div>
             </form>
             <div className={`${tabs === 2 ? "block" : "hidden"} w-full`}>
-              <ProfileImage images={images} />
+              <ProfileImage images={images} setImages={setImages} />
             </div>
           </div>
         </section>

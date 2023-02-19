@@ -17,6 +17,16 @@ const simulatorComponent = () => {
   const router = useRouter();
   const lane = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
+  const { id_image, url, details } = router.query as {
+    id_image?: string;
+    url: string;
+    details?: string;
+  };
+  const [show, setShow] = useState(!!details);
+  const [idImage, setIdImage] = useState(id_image);
+  const [description, setDescription] = useState<string>(
+    details ? String(details) : ""
+  );
   const [state, setState] = useState({
     orientation: 0,
     width: 1,
@@ -29,18 +39,38 @@ const simulatorComponent = () => {
     imageUrl: "",
     imageFile: undefined,
   });
+  const image_condition = url ? url : eye.src;
 
   const uploadImage = () => {
     const fd = new FormData();
     fd.append("file", image.imageFile as File);
-    fd.append("user", data?.user?.email as string);
+    fd.append("user", String(data?.user?.id));
+    idImage && fd.append("id_image", idImage);
+    show && fd.append("details", description);
     const res = fetch(process.env.API_URL + "img", {
       method: "POST",
       body: fd,
     });
     toast.promise(res, {
       pending: "Subiendo imagen",
-      success: "Imagen subida",
+      success: {
+        render: () => {
+          return (
+            <div>
+              <span className="block">La imagen se subió de forma exitosa</span>
+              <a
+                href="/mi-perfil?tab=2"
+                className="block text-center underline font-semibold"
+                onClick={() => {
+                  toast.dismiss();
+                }}
+              >
+                Ver Galería
+              </a>
+            </div>
+          );
+        },
+      },
       error: "Error al subir la imagen",
     });
   };
@@ -60,22 +90,24 @@ const simulatorComponent = () => {
             />
           </div>
           <div className="flex flex-col items-center justify-center lg:flex-row my-2 lg:gap-10 gap-5">
-            <div className="flex-1 flex flex-col gap-5 items-center h-full max-w-[500px] max-h-[500px]">
-              <section className="relative overflow-hidden h-full">
+            <div className="flex-1 flex flex-col gap-5 items-center justify-center h-full">
+              <section className="max-w-[450px] max-h-[450px] relative overflow-hidden h-full">
                 <img
-                  src={image.imageUrl ? image.imageUrl : eye.src}
+                  src={
+                    image.imageUrl ? image.imageUrl : String(image_condition)
+                  }
                   alt="logo"
                   className="w-full h-full rounded-md"
                   ref={imageRef}
                 />
                 <div
                   id="lane"
-                  className="flex items-center justify-center text-black rounded-xl h-full w-full"
+                  className="flex items-center justify-center text-black rounded-xl max-w-[450px] max-h-[450px] h-full w-full"
                   ref={lane}
                 />
               </section>
               <section className="flex flex-col items-center">
-                <label className="cursor-pointer" htmlFor="upload-image">
+                <label className="cursor-pointer mb-3" htmlFor="upload-image">
                   <input
                     type="file"
                     accept="image/*"
@@ -86,6 +118,8 @@ const simulatorComponent = () => {
                           imageUrl: URL.createObjectURL(e.target.files[0]),
                           imageFile: e.target.files[0] as File,
                         });
+                        setIdImage(undefined);
+                        setDescription("");
                       }
                     }}
                     className="hidden"
@@ -98,17 +132,40 @@ const simulatorComponent = () => {
                     width={35}
                   />
                 </label>
-                <div
-                  className={`${
-                    image.imageUrl ? "block" : "hidden"
-                  } transition-all delay-150`}
-                >
+              </section>
+              <section
+                className={`
+                w-full flex flex-col items-center gap-3 ${
+                  id_image ? "block" : "hidden"
+                } transition-all delay-150
+              `}
+              >
+                <div>
                   <SimulatorButton
-                    name="Guardar Imagen"
+                    name={idImage ? "Actualizar" : "Subir"}
                     icon={<Save />}
                     onClick={uploadImage}
                   />
                 </div>
+                <div className="flex justify-center items-center gap-2">
+                  <label className="text-sm" htmlFor="save-image">
+                    Agregar Observación
+                  </label>
+                  <input
+                    type="checkbox"
+                    name=""
+                    defaultChecked={show}
+                    id="save-image"
+                    onChange={() => setShow(!show)}
+                  />
+                </div>
+                {show && (
+                  <textarea
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    className="w-full max-h-24 rounded-md p-2"
+                  />
+                )}
               </section>
             </div>
             <div className="flex justify-center ml-5 text-center my-11 rounded-2xl bg-blackprimary">

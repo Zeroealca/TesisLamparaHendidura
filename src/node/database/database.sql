@@ -13,6 +13,7 @@ create table Images(
 	id_image VARCHAR(100) primary key,
 	url VARCHAR(255) not null,
 	name VARCHAR(100) not null,
+	details TEXT,
 	externalId VARCHAR(100) not null
 );
 
