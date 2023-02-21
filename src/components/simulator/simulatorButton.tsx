@@ -9,7 +9,7 @@ const SimulatorButton = ({ name, onClick, icon }: SimulatorButtonProps) => {
   return (
     <button
       onClick={onClick}
-      className="flex items-center justify-center gap-5 py-2 px-10 bg-blacktertiary rounded-lg hover:bg-blacktertiary/60 cursor-pointer"
+      className="flex items-center justify-center gap-5 py-2 px-4 md:px-10 bg-blacktertiary rounded-lg hover:bg-blacktertiary/60 cursor-pointer"
     >
       {icon && (
         <Icon

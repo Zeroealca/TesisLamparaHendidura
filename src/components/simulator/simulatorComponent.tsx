@@ -80,29 +80,29 @@ const simulatorComponent = () => {
         <title>Simulador - Lámpara Hendidura</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="flex justify-center p-24">
+      <main className="flex justify-center md:p-24">
         <SimulatorCard>
-          <div className="flex justify-between">
+          <div className="flex justify-between mx-2 md:mx-0">
             <SimulatorButton
               name="Volver"
               icon={<ReturnArrow />}
               onClick={() => router.push("/")}
             />
           </div>
-          <div className="flex flex-col items-center justify-center lg:flex-row my-2 lg:gap-10 gap-5">
+          <div className="flex flex-col items-center justify-center xl:flex-row my-2 lg:gap-10 gap-5">
             <div className="flex-1 flex flex-col gap-5 items-center justify-center h-full">
-              <section className="max-w-[450px] max-h-[450px] relative overflow-hidden h-full">
+              <section className="max-h-[300px] max-w-[300px] md:max-w-[450px] md:max-h-[450px] relative overflow-hidden h-full">
                 <img
                   src={
                     image.imageUrl ? image.imageUrl : String(image_condition)
                   }
                   alt="logo"
-                  className="w-full h-full rounded-md"
+                  className="w-full h-full rounded-md object-contain relative"
                   ref={imageRef}
                 />
                 <div
                   id="lane"
-                  className="flex items-center justify-center text-black rounded-xl max-w-[450px] max-h-[450px] h-full w-full"
+                  className="flex items-center justify-center text-black rounded-xl max-h-[300px] max-w-[300px] md:max-w-[450px] md:max-h-[450px] h-full w-full"
                   ref={lane}
                 />
               </section>
@@ -168,7 +168,7 @@ const simulatorComponent = () => {
                 )}
               </section>
             </div>
-            <div className="flex justify-center ml-5 text-center my-11 rounded-2xl bg-blackprimary">
+            <div className="flex justify-center mx-2 md:ml-5 text-center my-11 rounded-2xl bg-blackprimary">
               <div className="m-12">
                 <RangeComponent
                   lane={lane}
