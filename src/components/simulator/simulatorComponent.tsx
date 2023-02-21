@@ -136,7 +136,7 @@ const simulatorComponent = () => {
               <section
                 className={`
                 w-full flex flex-col items-center gap-3 ${
-                  id_image ? "block" : "hidden"
+                  id_image || image.imageFile ? "block" : "hidden"
                 } transition-all delay-150
               `}
               >
