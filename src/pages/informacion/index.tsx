@@ -20,7 +20,11 @@ const Informacion = () => {
       </div>
 
       <div className="flex items-center justify-center">
-        <div className="w-9/12 h-full p-5 grid grid-cols-auto-fit gap-10 mb-10">
+        <div
+          className={`h-full p-5 grid grid-cols-auto-fit gap-10 mb-10 ${
+            dataFilter?.length === 1 ? "w-1/4" : "w-9/12"
+          }`}
+        >
           {dataFilter?.map((item) => (
             <InformationMenu
               key={item.id_disease}
