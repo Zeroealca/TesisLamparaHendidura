@@ -97,7 +97,7 @@ const simulatorComponent = () => {
                     image.imageUrl ? image.imageUrl : String(image_condition)
                   }
                   alt="logo"
-                  className="w-full h-full rounded-md object-contain relative"
+                  className="w-full h-full rounded-md object-cover relative"
                   ref={imageRef}
                 />
                 <div
