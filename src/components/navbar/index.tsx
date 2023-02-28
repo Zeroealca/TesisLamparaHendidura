@@ -9,7 +9,7 @@ const Navbar = () => {
   const { user } = useContext(UserContext);
 
   return (
-    <section className="lg:px-20 px-10 md:px-24 fixed right-0 z-10">
+    <section className="lg:px-20 px-10 md:px-24 fixed right-0 z-50">
       <div className="p-4">
         <Menu>
           <Menu.Button className="bg-black p-1 pr-3 rounded-full flex items-center hover:bg-blacksecondary shadow">

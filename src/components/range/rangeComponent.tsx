@@ -59,17 +59,41 @@ const rangeComponent = (props: rangeComponentProps) => {
   useEffect(() => {
     if (lane.current) {
       const step = (100 - state.width) / 100;
+      const maxLeft = 100 - state.width;
       if (!state.orientation || state.orientation == 180) {
         lane.current.style.width = !state.width ? "1%" : `${state.width}%`;
-        const maxLeft = 100 - state.width;
         const position = maxLeft - (100 - state.movement) * step;
         lane.current.style.left = `${position}%`;
+        return;
       }
       if (state.orientation == 90) {
         const position = (state.movement - 50) * step;
         lane.current.style.width = !state.width ? "1%" : `${state.width}%`;
         lane.current.style.top = `${position}%`;
         lane.current.style.left = `${50 - state.width / 2}%`;
+        return;
+      } else if (state.orientation < 90) {
+        lane.current.style.width = !state.width ? "1%" : `${state.width}%`;
+        const step = (100 - state.width) / 100;
+        const radians = state.orientation * (Math.PI / 180);
+        const cos = Math.cos(radians);
+        const sin = Math.sin(radians);
+        const positionX =
+          (100 - state.width) / 2 + (state.movement - 50) * step * cos;
+        const positionY = (state.movement - 50) * step * sin;
+        lane.current.style.top = `${positionY}%`;
+        lane.current.style.left = `${positionX}%`;
+      } else if (state.orientation > 90) {
+        lane.current.style.width = !state.width ? "1%" : `${state.width}%`;
+        const step = (100 - state.width) / 100;
+        const radians = (state.orientation - 180) * (Math.PI / 180);
+        const cos = Math.cos(radians);
+        const sin = Math.sin(radians);
+        const positionX =
+          (100 - state.width) / 2 + (state.movement - 50) * step * cos;
+        const positionY = (state.movement - 50) * step * sin;
+        lane.current.style.top = `${positionY}%`;
+        lane.current.style.left = `${positionX}%`;
       }
     }
   }, [state.width]);
@@ -80,20 +104,36 @@ const rangeComponent = (props: rangeComponentProps) => {
 
   useEffect(() => {
     if (lane.current) {
-      const step = (100 - state.width) / 100;
-      if (state.orientation == 90 && state.width != 100) {
-        const position = (state.movement - 50) * step;
-        lane.current.style.top = `${position}%`;
-        lane.current.style.left = `${50 - state.width / 2}%`;
-      }
-      if (
-        state.orientation == 180 ||
-        (!state.orientation && state.width != 100)
-      ) {
-        lane.current.style.top = "0px";
-        const maxLeft = 100 - state.width;
-        const position = maxLeft - (100 - state.movement) * step;
-        lane.current.style.left = `${position}%`;
+      if (state.width != 100) {
+        const step = (100 - state.width) / 100;
+        if (state.orientation === 90) {
+          const position = (state.movement - 50) * step;
+          lane.current.style.top = `${position}%`;
+          lane.current.style.left = `${50 - state.width / 2}%`;
+        } else if (state.orientation === 180 || !state.orientation) {
+          lane.current.style.top = "0px";
+          const maxLeft = 100 - state.width;
+          const positionX = maxLeft - (100 - state.movement) * step;
+          lane.current.style.left = `${positionX}%`;
+        } else if (state.orientation < 90) {
+          const radians = state.orientation * (Math.PI / 180);
+          const cos = Math.cos(radians);
+          const sin = Math.sin(radians);
+          const positionX =
+            (100 - state.width) / 2 + (state.movement - 50) * step * cos;
+          const positionY = (state.movement - 50) * step * sin;
+          lane.current.style.top = `${positionY}%`;
+          lane.current.style.left = `${positionX}%`;
+        } else if (state.orientation > 90) {
+          const radians = (state.orientation - 180) * (Math.PI / 180);
+          const cos = Math.cos(radians);
+          const sin = Math.sin(radians);
+          const positionX =
+            (100 - state.width) / 2 + (state.movement - 50) * step * cos;
+          const positionY = (state.movement - 50) * step * sin;
+          lane.current.style.top = `${positionY}%`;
+          lane.current.style.left = `${positionX}%`;
+        }
       }
     }
   }, [state.movement, state.orientation]);
@@ -101,14 +141,10 @@ const rangeComponent = (props: rangeComponentProps) => {
   useEffect(() => {
     if (lane.current) {
       lane.current.style.transform = `rotate(${state.orientation}deg)`;
+      lane.current.style.top = "0%";
+      lane.current.style.left = `${state.width / 2 - state.movement}%}`;
     }
   }, [state.orientation]);
-
-  useEffect(() => {
-    if (imageRef.current && lane.current) {
-      imageRef.current.style.transform = `scale(${(state.zoom * 100) / 100})`;
-    }
-  }, [state.zoom]);
 
   useEffect(() => {
     if (imageRef.current && lane.current) {

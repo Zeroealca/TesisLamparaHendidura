@@ -176,7 +176,7 @@ const simulatorComponent = () => {
                   state={state}
                   setState={setState}
                   type="orientation"
-                  step={90}
+                  step={5}
                   max={180}
                   text="ORIENTACIÓN DE LA HENDIDURA"
                   value={state.orientation}
