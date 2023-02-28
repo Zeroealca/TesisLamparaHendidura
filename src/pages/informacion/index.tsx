@@ -14,7 +14,7 @@ const Informacion = () => {
         <input
           type="text"
           onChange={(e) => setFilter(e.target.value)}
-          className="py-2 px-5 rounded-lg max-w-md w-full"
+          className="py-2 px-5 rounded-lg mx-8 md:mx-0  md:max-w-md w-full"
           placeholder="Buscar enfermedad"
         />
       </div>

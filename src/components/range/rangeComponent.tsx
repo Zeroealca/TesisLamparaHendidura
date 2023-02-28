@@ -29,6 +29,7 @@ interface rangeComponentProps {
       color: string;
     }>
   >;
+  setTechnique?: React.Dispatch<React.SetStateAction<string | string[]>>;
 }
 
 const rangeComponent = (props: rangeComponentProps) => {
@@ -40,12 +41,12 @@ const rangeComponent = (props: rangeComponentProps) => {
     imageRef,
     max,
     state,
-    setState,
     value,
     min,
     disabled,
+    setState,
+    setTechnique,
   } = props;
-
   useEffect(() => {
     if (lane.current) {
       lane.current.style.opacity = !(state.intensity / 100)
@@ -151,6 +152,51 @@ const rangeComponent = (props: rangeComponentProps) => {
       imageRef.current.style.transform = `scale(${(state.zoom * 100) / 100})`;
     }
   }, [state.zoom]);
+
+  // useEffect(() => {
+  //   if (state.orientation === 45 && state.intensity === 0) {
+  //     setTechnique("Difusa");
+  //   }
+  //   if (
+  //     (state.orientation === 30 || state.orientation === 45) &&
+  //     state.intensity === 25
+  //   ) {
+  //     return setTechnique(["Directa (Paralelepípedo)", "Indirecta"]);
+  //   }
+  //   if (
+  //     (state.orientation === 30 || state.orientation === 45) &&
+  //     state.intensity === 50
+  //   ) {
+  //     return setTechnique("Directa (Sección óptica)");
+  //   }
+  //   if (
+  //     (state.orientation === 30 || state.orientation === 45) &&
+  //     state.intensity === 75
+  //   ) {
+  //     return setTechnique(["HAZ CÓNICO", "DISPERSIÓN ESCLERAL"]);
+  //   }
+  //   if (state.orientation === 60 && state.intensity === 50) {
+  //     return setTechnique("Retro-iluminación Directa");
+  //   }
+  //   if (state.orientation === 60 && state.intensity === 75) {
+  //     return setTechnique("Reflexión Especular");
+  //   }
+  //   if (state.orientation === 60 && state.intensity === 0) {
+  //     return setTechnique("Técnica de Van Herick");
+  //   }
+  //   if (
+  //     (state.orientation === 70 || state.orientation === 90) &&
+  //     state.intensity === 50
+  //   ) {
+  //     return setTechnique("Iluminación Tangencial");
+  //   }
+  //   if (state.intensity === 50) {
+  //     return setTechnique("Retro-iluminación Indirecta");
+  //   }
+  //   if (state.intensity === 25) {
+  //     return setTechnique("Iluminación filtrada");
+  //   }
+  // }, [state.orientation, state.intensity]);
 
   const handleChange = (value: number) => {
     switch (type) {

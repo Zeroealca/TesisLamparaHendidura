@@ -2,7 +2,6 @@ import Link from "next/link";
 export interface InformationMenuProps {
   id_disease: number;
   name: string;
-  // to: string;
 }
 const InformationMenu = ({ name, id_disease }: InformationMenuProps) => {
   return (

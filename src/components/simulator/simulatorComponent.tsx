@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import eye from "../../public/eye.jpg";
@@ -27,6 +27,7 @@ const simulatorComponent = () => {
   const [description, setDescription] = useState<string>(
     details ? String(details) : ""
   );
+  const [technique, setTechnique] = useState<string | string[]>();
   const [state, setState] = useState({
     orientation: 0,
     width: 1,
@@ -74,6 +75,54 @@ const simulatorComponent = () => {
       error: "Error al subir la imagen",
     });
   };
+  useEffect(() => {
+    if (state.orientation === 45 && state.intensity === 0) {
+      setTechnique("Difusa");
+    }
+    if (
+      (state.orientation === 30 || state.orientation === 45) &&
+      state.intensity === 25
+    ) {
+      return setTechnique(["Directa (Paralelepípedo)", "Indirecta"]);
+    }
+    if (
+      (state.orientation === 30 || state.orientation === 45) &&
+      state.intensity === 50
+    ) {
+      return setTechnique("Directa (Sección óptica)");
+    }
+    if (
+      (state.orientation === 30 || state.orientation === 45) &&
+      state.intensity === 75
+    ) {
+      return setTechnique(["Haz Cónico", "Dispersión Escleral"]);
+    }
+    if (state.orientation === 60 && state.intensity === 50) {
+      return setTechnique("Retro-iluminación Directa");
+    }
+    if (state.orientation === 60 && state.intensity === 75) {
+      return setTechnique("Reflexión Especular");
+    }
+    if (state.orientation === 60 && state.intensity === 0) {
+      return setTechnique("Técnica de Van Herick");
+    }
+    if (
+      (state.orientation === 70 || state.orientation === 90) &&
+      state.intensity === 50
+    ) {
+      return setTechnique("Iluminación Tangencial");
+    }
+    if (state.orientation !== 0 && state.intensity === 25) {
+      return setTechnique("Iluminación filtrada");
+    }
+    if (state.orientation !== 0 && state.intensity === 25) {
+      return setTechnique("Iluminación filtrada");
+    }
+    if (state.orientation !== 0 && state.intensity === 50) {
+      return setTechnique("Retro-iluminación Indirecta");
+    }
+    setTechnique(undefined);
+  }, [state.orientation, state.intensity]);
   return (
     <>
       <Head>
@@ -91,6 +140,18 @@ const simulatorComponent = () => {
           </div>
           <div className="flex flex-col items-center justify-center xl:flex-row my-2 lg:gap-10 gap-5">
             <div className="flex-1 flex flex-col gap-5 items-center justify-center h-full">
+              {technique && (
+                <>
+                  <span className="text-2xl font-semibold">
+                    {Array.isArray(technique) ? "Técnicas" : "Técnica"}:
+                  </span>{" "}
+                  <span className="cursor-pointer text-2xl font-semibold underline decoration-sky-500">
+                    {Array.isArray(technique)
+                      ? technique.join(" o ")
+                      : technique}
+                  </span>
+                </>
+              )}
               <section className="max-h-[300px] max-w-[300px] md:max-w-[450px] md:max-h-[450px] relative overflow-hidden h-full">
                 <img
                   src={
