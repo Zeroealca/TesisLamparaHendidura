@@ -112,9 +112,9 @@ const simulatorComponent = () => {
     ) {
       return setTechnique("Iluminación Tangencial");
     }
-    if (state.orientation !== 0 && state.intensity === 25) {
+    /*     if (state.orientation !== 0 && state.intensity === 25) {
       return setTechnique("Iluminación filtrada");
-    }
+    } */
     if (state.orientation !== 0 && state.intensity === 25) {
       return setTechnique("Iluminación filtrada");
     }
