@@ -11,9 +11,12 @@ import Save from "../icons/save";
 import SimulatorButton from "./simulatorButton";
 import { useSession } from "next-auth/react";
 import { toast } from "react-toastify";
+import { useGetAllTechnique } from "src/services/technique/custom-hooks";
 
 const simulatorComponent = () => {
   const { data } = useSession();
+  const { techniques } = useGetAllTechnique();
+  // techniques?.map((tech) => console.log(tech.name, JSON.parse(tech.assess)));
   const router = useRouter();
   const lane = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
@@ -27,7 +30,7 @@ const simulatorComponent = () => {
   const [description, setDescription] = useState<string>(
     details ? String(details) : ""
   );
-  const [technique, setTechnique] = useState<string | string[]>();
+  const [technique, setTechnique] = useState<object[]>();
   const [state, setState] = useState({
     orientation: 0,
     width: 1,
@@ -76,53 +79,39 @@ const simulatorComponent = () => {
     });
   };
   useEffect(() => {
-    if (state.orientation === 45 && state.intensity === 0) {
-      setTechnique("Difusa");
-    }
-    if (
-      (state.orientation === 30 || state.orientation === 45) &&
-      state.intensity === 25
-    ) {
-      return setTechnique(["Directa (Paralelepípedo)", "Indirecta"]);
-    }
-    if (
-      (state.orientation === 30 || state.orientation === 45) &&
-      state.intensity === 50
-    ) {
-      return setTechnique("Directa (Sección óptica)");
-    }
-    if (
-      (state.orientation === 30 || state.orientation === 45) &&
-      state.intensity === 75
-    ) {
-      return setTechnique(["Haz Cónico", "Dispersión Escleral"]);
-    }
-    if (state.orientation === 60 && state.intensity === 50) {
-      return setTechnique("Retro-iluminación Directa");
-    }
-    if (state.orientation === 60 && state.intensity === 75) {
-      return setTechnique("Reflexión Especular");
-    }
-    if (state.orientation === 60 && state.intensity === 0) {
-      return setTechnique("Técnica de Van Herick");
-    }
-    if (
-      (state.orientation === 70 || state.orientation === 90) &&
-      state.intensity === 50
-    ) {
-      return setTechnique("Iluminación Tangencial");
-    }
-    /*     if (state.orientation !== 0 && state.intensity === 25) {
-      return setTechnique("Iluminación filtrada");
-    } */
-    if (state.orientation !== 0 && state.intensity === 25) {
-      return setTechnique("Iluminación filtrada");
-    }
-    if (state.orientation !== 0 && state.intensity === 50) {
-      return setTechnique("Retro-iluminación Indirecta");
-    }
-    setTechnique(undefined);
+    setTechnique([]);
+    techniques.filter((tech) => {
+      const { orientation, intensity } = JSON.parse(tech.assess);
+      const degrees = [0, 30, 45, 60, 70, 75, 90];
+      if (orientation[0] === 1 && !degrees.includes(state.orientation))
+        return (
+          intensity === state.intensity &&
+          setTechnique([{ id: tech.id_technique, name: tech.name }])
+        );
+      if (orientation.length !== 1) {
+        const orientationFilter = orientation.filter(
+          (o: number) => o === state.orientation
+        );
+        return (
+          orientationFilter.length !== 0 &&
+          intensity === state.intensity &&
+          setTechnique((prev) =>
+            prev
+              ? [...prev, { id: tech.id_technique, name: tech.name }]
+              : [{ id: tech.id_technique, name: tech.name }]
+          )
+        );
+      }
+      return (
+        orientation[0] === state.orientation &&
+        intensity === state.intensity &&
+        setTechnique([{ id: tech.id_technique, name: tech.name }])
+      );
+    });
   }, [state.orientation, state.intensity]);
+  console.log({
+    technique,
+  });
   return (
     <>
       <Head>
@@ -140,16 +129,24 @@ const simulatorComponent = () => {
           </div>
           <div className="flex flex-col items-center justify-center xl:flex-row my-2 lg:gap-10 gap-5">
             <div className="flex-1 flex flex-col gap-5 items-center justify-center h-full">
-              {technique && (
+              {!!technique?.length && (
                 <>
                   <span className="text-2xl font-semibold">
                     {Array.isArray(technique) ? "Técnicas" : "Técnica"}:
                   </span>{" "}
-                  <span className="cursor-pointer text-2xl font-semibold underline decoration-sky-500">
-                    {Array.isArray(technique)
-                      ? technique.join(" o ")
-                      : technique}
-                  </span>
+                  <div className="flex gap-2 text-xl font-semibold">
+                    {technique?.map((tech, index) => (
+                      <div key={index}>
+                        <span
+                          onClick={() => console.log(tech.id)}
+                          className="underline decoration-cyan-500 cursor-pointer"
+                        >
+                          {tech.name}
+                        </span>{" "}
+                        {index !== technique.length - 1 && " o "}
+                      </div>
+                    ))}
+                  </div>
                 </>
               )}
               <section className="max-h-[300px] max-w-[300px] md:max-w-[450px] md:max-h-[450px] relative overflow-hidden h-full">
@@ -214,7 +211,6 @@ const simulatorComponent = () => {
                   </label>
                   <input
                     type="checkbox"
-                    name=""
                     defaultChecked={show}
                     id="save-image"
                     onChange={() => setShow(!show)}
