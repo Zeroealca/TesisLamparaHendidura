@@ -78,6 +78,10 @@ const simulatorComponent = () => {
       error: "Error al subir la imagen",
     });
   };
+
+  const redirectTecnica = async (id: number) => {
+    window.open(`/tecnica?id=${id}`, "_blank");
+  };
   useEffect(() => {
     setTechnique([]);
     techniques.filter((tech) => {
@@ -109,9 +113,6 @@ const simulatorComponent = () => {
       );
     });
   }, [state.orientation, state.intensity]);
-  console.log({
-    technique,
-  });
   return (
     <>
       <Head>
@@ -138,7 +139,7 @@ const simulatorComponent = () => {
                     {technique?.map((tech, index) => (
                       <div key={index}>
                         <span
-                          onClick={() => console.log(tech.id)}
+                          onClick={() => redirectTecnica(tech.id)}
                           className="underline decoration-cyan-500 cursor-pointer"
                         >
                           {tech.name}

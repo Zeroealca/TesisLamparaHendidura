@@ -19,7 +19,7 @@ const handlerGetTechnique = async (
   res: NextApiResponse
 ) => {
   const { name } = req.query;
-  const result = (await pool.query("SELECT * FROM technique WHERE name = ?", [
+  const result = (await pool.query("SELECT * FROM technique WHERE id_technique = ?", [
     name,
   ])) as any;
   if (result.length === 0) {

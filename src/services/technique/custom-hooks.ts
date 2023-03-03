@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import { GETALLTECHNIQUE } from "./getTechnique"
 
-interface Techniques {
+export interface Technique {
     id_technique: number,
     name: string,
     description: string,
@@ -13,7 +13,7 @@ interface Techniques {
     short_description: string,
 }
 export const useGetAllTechnique = () => {
-    const [techniques, setTechniques] = useState<Techniques[]>([])
+    const [techniques, setTechniques] = useState<Technique[]>([])
     useEffect(() => {
         const res = GETALLTECHNIQUE()
         res.then(res => res.json()).then(res => setTechniques(res.data))
