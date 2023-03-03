@@ -16,7 +16,6 @@ import { useGetAllTechnique } from "src/services/technique/custom-hooks";
 const simulatorComponent = () => {
   const { data } = useSession();
   const { techniques } = useGetAllTechnique();
-  // techniques?.map((tech) => console.log(tech.name, JSON.parse(tech.assess)));
   const router = useRouter();
   const lane = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
@@ -51,6 +50,7 @@ const simulatorComponent = () => {
     fd.append("user", String(data?.user?.id));
     idImage && fd.append("id_image", idImage);
     show && fd.append("details", description);
+    state && fd.append("state", JSON.stringify(state));
     const res = fetch(process.env.API_URL + "img", {
       method: "POST",
       body: fd,
@@ -136,7 +136,7 @@ const simulatorComponent = () => {
                     {Array.isArray(technique) ? "Técnicas" : "Técnica"}:
                   </span>{" "}
                   <div className="flex gap-2 text-xl font-semibold">
-                    {technique?.map((tech, index) => (
+                    {technique?.map((tech: any, index) => (
                       <div key={index}>
                         <span
                           onClick={() => redirectTecnica(tech.id)}

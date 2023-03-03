@@ -38,12 +38,13 @@ apiRout.use(upload.single("file"));
 
 apiRout.post(async (req: any, res: NextApiResponse) => {
   const { file } = req;
-  const { id_image, user, details } = req.body;
+  const { id_image, user, details, state } = req.body;
   if (!id_image) {
     const uploadedFile = (await uploadFile(file)) as {
       id: string;
       name: string;
       details: string;
+      state: string;
     };
     if (!uploadedFile) {
       return res.status(500).json({
@@ -65,6 +66,7 @@ apiRout.post(async (req: any, res: NextApiResponse) => {
       id_image: uploadedFile.id,
       externalId: `user_${result[0].id}_disaeses`,
       details,
+      state,
     });
     return res.status(200).json({
       message: "File uploaded successfully",
