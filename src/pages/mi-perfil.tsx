@@ -15,6 +15,15 @@ interface OptionsProfileProps {
   isActive?: boolean;
   setTabs?: () => void;
 }
+export interface Iimage {
+  id_image: string;
+  url: string;
+  name: string;
+  details?: string;
+  state?: string;
+  externalId: string;
+}
+
 const OptionsProfile = ({
   options,
   icon,
@@ -46,7 +55,7 @@ const MiPerfil = () => {
 
   const { id, ...other } = user;
 
-  const [images, setImages] = useState<any>([]);
+  const [images, setImages] = useState<Iimage[]>([]);
   const params = Number(router.query.tab);
   const [tabs, setTabs] = useState<number>(1);
   const [state, setState] = useState({

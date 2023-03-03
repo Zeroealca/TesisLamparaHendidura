@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { state_ } from "../simulator/simulatorComponent";
 // import "flowbite";
 
 interface rangeComponentProps {
@@ -11,24 +12,8 @@ interface rangeComponentProps {
   imageRef: React.RefObject<HTMLImageElement>;
   value: number;
   disabled?: boolean;
-  state: {
-    orientation: number;
-    width: number;
-    movement: number;
-    intensity: number;
-    zoom: number;
-    color: string;
-  };
-  setState: React.Dispatch<
-    React.SetStateAction<{
-      orientation: number;
-      width: number;
-      movement: number;
-      intensity: number;
-      zoom: number;
-      color: string;
-    }>
-  >;
+  state: state_;
+  setState: React.Dispatch<React.SetStateAction<state_>>;
   setTechnique?: React.Dispatch<React.SetStateAction<string | string[]>>;
 }
 

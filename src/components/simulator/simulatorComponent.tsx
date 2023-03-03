@@ -12,6 +12,16 @@ import SimulatorButton from "./simulatorButton";
 import { useSession } from "next-auth/react";
 import { toast } from "react-toastify";
 import { useGetAllTechnique } from "src/services/technique/custom-hooks";
+import { Iimage } from "src/pages/mi-perfil";
+
+export interface state_ {
+  orientation: number;
+  width: number;
+  movement: number;
+  intensity: number;
+  zoom: number;
+  color: string;
+}
 
 const simulatorComponent = () => {
   const { data } = useSession();
@@ -19,10 +29,16 @@ const simulatorComponent = () => {
   const router = useRouter();
   const lane = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
-  const { id_image, url, details } = router.query as {
+  const {
+    id_image,
+    url,
+    details,
+    state: state_,
+  } = router.query as {
     id_image?: string;
     url: string;
     details?: string;
+    state?: string;
   };
   const [show, setShow] = useState(!!details);
   const [idImage, setIdImage] = useState(id_image);
@@ -30,13 +46,14 @@ const simulatorComponent = () => {
     details ? String(details) : ""
   );
   const [technique, setTechnique] = useState<object[]>();
+  const destructuringState: state_ = state_ ? JSON.parse(state_) : undefined;
   const [state, setState] = useState({
-    orientation: 0,
-    width: 1,
-    movement: 50,
-    intensity: 25,
-    zoom: 1,
-    color: "#FFFFFF",
+    orientation: destructuringState ? destructuringState.orientation : 0,
+    width: destructuringState ? destructuringState.width : 1,
+    movement: destructuringState ? destructuringState.movement : 50,
+    intensity: destructuringState ? destructuringState.intensity : 25,
+    zoom: destructuringState ? destructuringState.zoom : 1,
+    color: destructuringState ? destructuringState.color : "#ffffff",
   });
   const [image, setImage] = useState<{ imageUrl: string; imageFile?: File }>({
     imageUrl: "",
@@ -112,7 +129,7 @@ const simulatorComponent = () => {
         setTechnique([{ id: tech.id_technique, name: tech.name }])
       );
     });
-  }, [state.orientation, state.intensity]);
+  }, [state.orientation, state.intensity, techniques]);
   return (
     <>
       <Head>

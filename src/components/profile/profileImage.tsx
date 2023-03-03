@@ -1,24 +1,13 @@
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
+import { Iimage } from "src/pages/mi-perfil";
 
 const ProfileImage = ({
   images,
   setImages,
 }: {
-  images: Array<{
-    id_image: string;
-    name: string;
-    url: string;
-    details: string;
-  }>;
-  setImages: (
-    images: Array<{
-      id_image: string;
-      name: string;
-      url: string;
-      details: string;
-    }>
-  ) => void;
+  images: Iimage[];
+  setImages: (images: Iimage[]) => void;
 }) => {
   const router = useRouter();
   const deleteImage = async (id: string) => {
@@ -58,7 +47,9 @@ const ProfileImage = ({
                     router.push(
                       {
                         pathname: "/simulador",
-                        query: image,
+                        query: {
+                          ...image,
+                        },
                       },
                       "simulador"
                     )
