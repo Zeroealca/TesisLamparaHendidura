@@ -2,6 +2,8 @@ import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import pool from "@/node/config/db";
 import { comparePassword, hashPassword } from "@/node/utils/auth";
+import axios from "axios";
+import https from "https";
 
 export default NextAuth({
   // Configure one or more authentication providers
@@ -67,10 +69,65 @@ export default NextAuth({
   },
 });
 
+interface IUSERUTM {
+  cedula: string;
+  nombres: string;
+  tipo_usuario_array: string[];
+}
+
 const checkUserEmailPassword = async (email: string, password: string) => {
   const result = (await pool.query("SELECT * FROM users WHERE email = ? ", [
     email,
   ])) as any;
+  if (result.length === 0 && email.includes("@utm.edu.ec")) {
+    try {
+      const res: any = await axios.post(
+        process.env.URL_UTM || "",
+        {
+          usuario: email,
+          clave: password,
+        },
+        {
+          headers: {
+            "X-API-KEY": process.env.X_API_KEY,
+          },
+          httpsAgent: new https.Agent({ rejectUnauthorized: false }),
+        }
+      );
+
+      if (res.status === 200) {
+        const { cedula, nombres, tipo_usuario_array } = res.data.value;
+        const new_tipo_usuario_array = tipo_usuario_array.map((tipo: any) => {
+          return tipo.split("|")[1];
+        });
+
+        const isDocente = new_tipo_usuario_array.includes("DOCENTE");
+
+        const encryptpassword = await hashPassword(password);
+
+        await pool.query("INSERT INTO users SET ?", {
+          name: nombres,
+          email,
+          password: encryptpassword,
+          rol: isDocente ? "DOCENTE" : "ESTUDIANTE",
+        });
+
+        const result = (await pool.query(
+          "SELECT * FROM users WHERE email = ? ",
+          [email]
+        )) as any;
+
+        const { id } = result[0];
+        return {
+          id,
+        };
+      }
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
+  }
+
   if (result.length === 0) return null;
 
   const validPassword = await comparePassword(password, result[0].password);
