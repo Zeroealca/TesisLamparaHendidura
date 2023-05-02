@@ -7,7 +7,7 @@ create table Users(
 	name VARCHAR(75) not null,
 	password VARCHAR(250) not null,
 	recovery_token TEXT,
-	rol VARCHAR(100) not null default 'estudiante',
+	rol VARCHAR(100) not null default 'ESTUDIANTE',
 	primary key (id, email)
 );
 

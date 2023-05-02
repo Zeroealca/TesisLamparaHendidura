@@ -120,6 +120,8 @@ const MiPerfil = () => {
     }
   }, [state.email, state.name]);
 
+  console.log({ images });
+
   useEffect(() => {
     if (
       state.password !== "" &&

@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, Fragment } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import eye from "../../public/eye.jpg";
@@ -61,8 +61,8 @@ const simulatorComponent = () => {
   );
   const [newComment, setNewComment] = useState<string>("");
   const [categories] = useState({
-    Simulator: 1,
-    Comments: 2,
+    Simulador: 1,
+    Observaciones: 2,
   });
   const [technique, setTechnique] = useState<object[]>();
   const destructuringState: state_ = state_ ? JSON.parse(state_) : undefined;
@@ -160,6 +160,7 @@ const simulatorComponent = () => {
   const redirectTecnica = async (id: number) => {
     window.open(`/tecnica?id=${id}`, "_blank");
   };
+
   useEffect(() => {
     setTechnique([]);
     techniques.filter((tech) => {
@@ -245,7 +246,7 @@ const simulatorComponent = () => {
                 />
               </section>
               <section className="flex flex-col items-center">
-                <label className="cursor-pointer mb-3" htmlFor="upload-image">
+                <div className="cursor-pointer mb-3">
                   <input
                     type="file"
                     accept="image/*"
@@ -269,7 +270,7 @@ const simulatorComponent = () => {
                     height={35}
                     width={35}
                   />
-                </label>
+                </div>
               </section>
               <section
                 className={`
@@ -278,12 +279,12 @@ const simulatorComponent = () => {
                 } transition-all delay-150
               `}
               >
-                <div>
-                  <SimulatorButton
-                    name={idImage ? "Actualizar" : "Subir"}
-                    icon={<Save />}
-                    onClick={uploadImage}
-                  />
+                <SimulatorButton
+                  name={idImage ? "Actualizar" : "Subir"}
+                  icon={<Save />}
+                  onClick={uploadImage}
+                />
+                {/*  <div>
                 </div>
                 <div className="flex justify-center items-center gap-2">
                   <label className="text-sm" htmlFor="save-image">
@@ -302,30 +303,31 @@ const simulatorComponent = () => {
                     onChange={(e) => setDescription(e.target.value)}
                     className="w-full max-h-24 rounded-md p-2"
                   />
-                )}
+                )} */}
               </section>
             </div>
             <div className="flex justify-center mx-2 md:ml-5 text-center my-11 rounded-2xl bg-blackprimary w-[30rem] h-[45rem]">
-              <div className=" w-full px-2 py-16 sm:px-0">
+              <div className=" w-full px-2 py-8 pb-12 sm:px-0">
                 <Tab.Group>
                   <Tab.List className="flex space-x-1 rounded-xl bg-blue-900/20 p-1">
                     {Object.keys(categories).map((category) => (
-                      <Tab
-                        key={category}
-                        className={({ selected }) =>
-                          `w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-blue-700 ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2 ${
-                            selected
-                              ? "bg-white shadow"
-                              : "text-blue-100 hover:bg-white/[0.12] hover:text-white"
-                          }`
-                        }
-                      >
-                        {category}
+                      <Tab as={Fragment} key={category}>
+                        {({ selected }) => (
+                          <button
+                            className={`w-full rounded-lg py-2.5 text-sm leading-5 text-blue-700 ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none ${
+                              selected
+                                ? "bg-gray-100 shadow font-bold"
+                                : "text-blue-100 hover:bg-white/[0.12] hover:text-white font-medium"
+                            }`}
+                          >
+                            {category}
+                          </button>
+                        )}
                       </Tab>
                     ))}
                   </Tab.List>
-                  <Tab.Panels className="mt-2 h-full">
-                    <Tab.Panel key="1">
+                  <Tab.Panels className="h-full">
+                    <Tab.Panel>
                       <div className="m-12">
                         <RangeComponent
                           lane={lane}
@@ -397,7 +399,7 @@ const simulatorComponent = () => {
                         </div>
                       </div>
                     </Tab.Panel>
-                    <Tab.Panel key="2" className="flex flex-col h-full">
+                    <Tab.Panel className="flex flex-col h-full">
                       <div className="my-12 flex-1 overflow-y-auto">
                         {comment.length > 0 ? (
                           <div className="flex flex-col gap-3">
@@ -413,18 +415,18 @@ const simulatorComponent = () => {
                                 <div
                                   className={`flex flex-col gap-3 w-[75%] ${
                                     c.id_user == data?.user.id
-                                      ? "bg-green-900/20 text-left rounded-r-md"
+                                      ? "bg-green-900/20 text-left rounded-r-lg"
                                       : "bg-blue-900/20 text-right rounded-l-md"
                                   } p-3`}
                                 >
                                   {c.id_user == data?.user.id ? (
                                     <div className="flex justify-between gap-3">
-                                      <p className="text-white font-bold">
+                                      <p className="text-grayprimary font-bold">
                                         {c.id_user == data?.user.id
                                           ? "Tú"
                                           : c.name}
                                       </p>
-                                      <p className="text-white font-bold">
+                                      <p className="text-grayprimary font-bold">
                                         {new Date(
                                           c.created_at
                                         ).toLocaleDateString()}
@@ -432,19 +434,21 @@ const simulatorComponent = () => {
                                     </div>
                                   ) : (
                                     <div className="flex justify-between gap-3">
-                                      <p className="text-white font-bold">
+                                      <p className="text-grayprimary font-bold">
                                         {new Date(
                                           c.created_at
                                         ).toLocaleDateString()}
                                       </p>
-                                      <p className="text-white font-bold">
+                                      <p className="text-grayprimary font-bold">
                                         {c.id_user == data?.user.id
                                           ? "Tú"
                                           : c.name}
                                       </p>
                                     </div>
                                   )}
-                                  <p className="text-white">{c.comment}</p>
+                                  <p className="text-white text-sm">
+                                    {c.comment}
+                                  </p>
                                 </div>
                               </div>
                             ))}
@@ -452,17 +456,17 @@ const simulatorComponent = () => {
                         ) : (
                           <div className="flex flex-col items-center justify-center h-full">
                             <p className="text-white text-2xl font-bold">
-                              No hay comentarios
+                              No hay observaciones
                             </p>
                           </div>
                         )}
                       </div>
                       <div className="flex flex-col items-center">
-                        <div className="flex flex-col gap-3 w-full bg-blue-900/20 p-3">
+                        <div className="flex flex-col gap-3 w-full p-3">
                           <input
                             type="text"
-                            placeholder="Escribe un comentario"
-                            className="w-full h-10 rounded-md"
+                            placeholder="Escribe una observación"
+                            className="w-full h-10 rounded-md px-2"
                             onChange={(e) => setNewComment(e.target.value)}
                             value={newComment}
                           />
@@ -470,7 +474,7 @@ const simulatorComponent = () => {
                             onClick={uploadComment}
                             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                           >
-                            Agregar comentario
+                            Agregar observación
                           </button>
                         </div>
                       </div>
