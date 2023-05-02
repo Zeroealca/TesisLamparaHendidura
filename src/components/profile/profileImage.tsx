@@ -5,9 +5,11 @@ import { Iimage } from "src/pages/mi-perfil";
 const ProfileImage = ({
   images,
   setImages,
+  rol,
 }: {
   images: Iimage[];
   setImages: (images: Iimage[]) => void;
+  rol: string | undefined;
 }) => {
   const router = useRouter();
   const deleteImage = async (id: string) => {
@@ -49,6 +51,7 @@ const ProfileImage = ({
                         pathname: "/simulador",
                         query: {
                           ...image,
+                          comments: JSON.stringify(image.comments),
                         },
                       },
                       "simulador"
@@ -58,12 +61,14 @@ const ProfileImage = ({
                 >
                   Usar
                 </button>
-                <button
-                  onClick={() => deleteImage(image.id_image)}
-                  className="bg-red-500 rounded-md p-2 text-white font-bold w-24"
-                >
-                  Eliminar
-                </button>
+                {rol === "DOCENTE" && (
+                  <button
+                    onClick={() => deleteImage(image.id_image)}
+                    className="bg-red-500 rounded-md p-2 text-white font-bold w-24"
+                  >
+                    Eliminar
+                  </button>
+                )}
               </div>
             </div>
           ))

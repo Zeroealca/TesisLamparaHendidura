@@ -73,10 +73,10 @@ apiRout.post(async (req: any, res: NextApiResponse) => {
       data: { publicUrl: url },
     });
   }
-  const result = (await pool.query("UPDATE images set details = ? WHERE id_image = ? ", [
-    details, id_image,
-  ]) as any);
-  console.log({ result })
+  const result = (await pool.query(
+    "UPDATE images set details = ? WHERE id_image = ? ",
+    [details, id_image]
+  )) as any;
   if (result.affectedRows === 0) {
     return res.status(404).json({
       message: "Imagen no encontrada",
@@ -88,7 +88,6 @@ apiRout.post(async (req: any, res: NextApiResponse) => {
     data: undefined,
   });
 });
-
 
 apiRout.delete(async (req: NextApiRequest, res: NextApiResponse) => {
   const { fileId } = req.body;

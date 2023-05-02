@@ -33,6 +33,18 @@ create table Images(
 	externalId VARCHAR(100) not null
 );
 
+create table Comments(
+	id_comment MEDIUMINT NOT NULL AUTO_INCREMENT,
+	primary key (id_comment),
+	id_image VARCHAR(100) not null,
+	id_user INT not null,
+	comment TEXT not null,
+	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	foreign key (id_image) references Images(id_image),
+	foreign key (id_user) references Users(id)
+);
+
 create table disaeses(
 	id_disease MEDIUMINT NOT NULL AUTO_INCREMENT,
 	primary key (id_disease),

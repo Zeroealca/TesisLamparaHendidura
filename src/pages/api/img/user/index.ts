@@ -28,10 +28,8 @@ export default async function handler(
 }
 
 const handlerImageId = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { id } = req.query;
   const result = (await pool.query(
-    "SELECT * FROM images WHERE externalId = ? ",
-    [`user_${id}_disaeses`]
+    "SELECT * FROM images WHERE externalId LIKE 'user_%_disaeses' "
   )) as Image[];
   if (result.length === 0) {
     return res.status(404).json({

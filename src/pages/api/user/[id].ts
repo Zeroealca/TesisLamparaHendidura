@@ -6,6 +6,7 @@ interface Usuario {
   name: string;
   email: string;
   password: string;
+  rol: string;
 }
 
 export default async function handler(
@@ -25,7 +26,7 @@ export default async function handler(
 const handlerGetUser = async (req: NextApiRequest, res: NextApiResponse) => {
   const { id } = req.query;
   const result = (await pool.query(
-    "SELECT id,name,email FROM users WHERE id = ? ",
+    "SELECT id,name,email, rol FROM users WHERE id = ? ",
     [Number(id)]
   )) as Usuario[];
   if (result.length === 0) {
@@ -57,7 +58,7 @@ const handlerUserData = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   const _user = (await pool.query(
-    "SELECT id,name,email FROM users WHERE id = ? ",
+    "SELECT id,name,email, rol FROM users WHERE id = ? ",
     [Number(id)]
   )) as Usuario[];
 

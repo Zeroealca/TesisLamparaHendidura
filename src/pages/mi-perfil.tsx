@@ -15,6 +15,13 @@ interface OptionsProfileProps {
   isActive?: boolean;
   setTabs?: () => void;
 }
+interface Comments {
+  id: number;
+  comment: string;
+  id_user: number;
+  name: string;
+  date: Date;
+}
 export interface Iimage {
   id_image: string;
   url: string;
@@ -22,6 +29,7 @@ export interface Iimage {
   details?: string;
   state?: string;
   externalId: string;
+  comments: Comments[];
 }
 
 const OptionsProfile = ({
@@ -76,14 +84,25 @@ const MiPerfil = () => {
   }, [params]);
 
   const getImage = async () => {
-    await fetch(process.env.API_URL + `img/user/${user.id}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => setImages(data.data));
+    if (user.rol === "ESTUDIANTE") {
+      await fetch(process.env.API_URL + `img/user/${user.id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => setImages(data.data));
+    } else {
+      await fetch(process.env.API_URL + "img/user", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => setImages(data.data));
+    }
   };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setState({ ...state, [e.target.name]: e.target.value });
@@ -243,7 +262,11 @@ const MiPerfil = () => {
               </div>
             </form>
             <div className={`${tabs === 2 ? "block" : "hidden"} w-full`}>
-              <ProfileImage images={images} setImages={setImages} />
+              <ProfileImage
+                images={images}
+                setImages={setImages}
+                rol={user.rol}
+              />
             </div>
           </div>
         </section>

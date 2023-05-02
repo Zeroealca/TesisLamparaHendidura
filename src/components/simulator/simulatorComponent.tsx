@@ -13,6 +13,15 @@ import { useSession } from "next-auth/react";
 import { toast } from "react-toastify";
 import { useGetAllTechnique } from "src/services/technique/custom-hooks";
 import { Iimage } from "src/pages/mi-perfil";
+import { Tab } from "@headlessui/react";
+
+interface Comments {
+  id: number;
+  comment: string;
+  id_user: number;
+  name: string;
+  created_at: Date;
+}
 
 export interface state_ {
   orientation: number;
@@ -34,17 +43,27 @@ const simulatorComponent = () => {
     url,
     details,
     state: state_,
+    comments,
   } = router.query as {
     id_image?: string;
     url: string;
     details?: string;
     state?: string;
+    comments: string;
   };
   const [show, setShow] = useState(!!details);
   const [idImage, setIdImage] = useState(id_image);
   const [description, setDescription] = useState<string>(
     details ? String(details) : ""
   );
+  const [comment, setComment] = useState<Comments[]>(
+    comments ? JSON.parse(comments) : []
+  );
+  const [newComment, setNewComment] = useState<string>("");
+  const [categories] = useState({
+    Simulator: 1,
+    Comments: 2,
+  });
   const [technique, setTechnique] = useState<object[]>();
   const destructuringState: state_ = state_ ? JSON.parse(state_) : undefined;
   const [state, setState] = useState({
@@ -96,6 +115,48 @@ const simulatorComponent = () => {
     });
   };
 
+  const uploadComment = () => {
+    const res = fetch(process.env.API_URL + "comment", {
+      method: "POST",
+      body: JSON.stringify({
+        id_image,
+        comment: newComment,
+        id_user: data?.user?.id,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    toast.promise(res, {
+      pending: "Subiendo comentario",
+      success: "Comentario subido",
+      error: "Error al subir el comentario",
+    });
+    setComment((prev: any) => {
+      return prev
+        ? [
+            ...prev,
+            {
+              id: prev.length,
+              comment: newComment,
+              id_user: data?.user?.id,
+              name: "Tú",
+              created_at: new Date(),
+            },
+          ]
+        : [
+            {
+              id: 0,
+              comment: newComment,
+              id_user: data?.user?.id,
+              name: "Tú",
+              created_at: new Date(),
+            },
+          ];
+    });
+    setNewComment("");
+  };
+
   const redirectTecnica = async (id: number) => {
     window.open(`/tecnica?id=${id}`, "_blank");
   };
@@ -130,6 +191,7 @@ const simulatorComponent = () => {
       );
     });
   }, [state.orientation, state.intensity, techniques]);
+
   return (
     <>
       <Head>
@@ -148,7 +210,7 @@ const simulatorComponent = () => {
           <div className="flex flex-col items-center justify-center xl:flex-row my-2 lg:gap-10 gap-5">
             <div className="flex-1 flex flex-col gap-5 items-center justify-center h-full">
               {!!technique?.length && (
-                <>
+                <div>
                   <span className="text-2xl font-semibold">
                     {Array.isArray(technique) ? "Técnicas" : "Técnica"}:
                   </span>{" "}
@@ -165,7 +227,7 @@ const simulatorComponent = () => {
                       </div>
                     ))}
                   </div>
-                </>
+                </div>
               )}
               <section className="max-h-[300px] max-w-[300px] md:max-w-[450px] md:max-h-[450px] relative overflow-hidden h-full">
                 <img
@@ -243,76 +305,178 @@ const simulatorComponent = () => {
                 )}
               </section>
             </div>
-            <div className="flex justify-center mx-2 md:ml-5 text-center my-11 rounded-2xl bg-blackprimary">
-              <div className="m-12">
-                <RangeComponent
-                  lane={lane}
-                  imageRef={imageRef}
-                  state={state}
-                  setState={setState}
-                  type="orientation"
-                  step={5}
-                  max={180}
-                  text="ORIENTACIÓN DE LA HENDIDURA"
-                  value={state.orientation}
-                />
-                <RangeComponent
-                  lane={lane}
-                  imageRef={imageRef}
-                  state={state}
-                  setState={setState}
-                  type="width"
-                  text="ANCHURA"
-                  value={state.width}
-                  min={1}
-                />
-                <RangeComponent
-                  lane={lane}
-                  imageRef={imageRef}
-                  state={state}
-                  setState={setState}
-                  type="movement"
-                  text="MOVIMIENTO"
-                  value={state.movement}
-                  disabled={state.width === 100}
-                />
-                <RangeComponent
-                  lane={lane}
-                  imageRef={imageRef}
-                  state={state}
-                  setState={setState}
-                  type="intensity"
-                  step={25}
-                  text="INTENSIDAD DE LA LUZ"
-                  value={state.intensity}
-                />
-                <RangeComponent
-                  lane={lane}
-                  imageRef={imageRef}
-                  state={state}
-                  setState={setState}
-                  type="zoom"
-                  step={0.01}
-                  max={5}
-                  min={1}
-                  text="Zoom"
-                  value={state.zoom}
-                />
-                <div className="flex flex-col items-center">
-                  <label htmlFor="color" className="text-white">
-                    COLOR
-                  </label>
-                  <input
-                    className="w-1/2 h-10 rounded-md "
-                    type="color"
-                    id="color"
-                    name="color"
-                    value={state.color}
-                    onChange={(e) => {
-                      setState({ ...state, color: e.target.value });
-                    }}
-                  />
-                </div>
+            <div className="flex justify-center mx-2 md:ml-5 text-center my-11 rounded-2xl bg-blackprimary w-[30rem] h-[45rem]">
+              <div className=" w-full px-2 py-16 sm:px-0">
+                <Tab.Group>
+                  <Tab.List className="flex space-x-1 rounded-xl bg-blue-900/20 p-1">
+                    {Object.keys(categories).map((category) => (
+                      <Tab
+                        key={category}
+                        className={({ selected }) =>
+                          `w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-blue-700 ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2 ${
+                            selected
+                              ? "bg-white shadow"
+                              : "text-blue-100 hover:bg-white/[0.12] hover:text-white"
+                          }`
+                        }
+                      >
+                        {category}
+                      </Tab>
+                    ))}
+                  </Tab.List>
+                  <Tab.Panels className="mt-2 h-full">
+                    <Tab.Panel key="1">
+                      <div className="m-12">
+                        <RangeComponent
+                          lane={lane}
+                          imageRef={imageRef}
+                          state={state}
+                          setState={setState}
+                          type="orientation"
+                          step={5}
+                          max={180}
+                          text="ORIENTACIÓN DE LA HENDIDURA"
+                          value={state.orientation}
+                        />
+                        <RangeComponent
+                          lane={lane}
+                          imageRef={imageRef}
+                          state={state}
+                          setState={setState}
+                          type="width"
+                          text="ANCHURA"
+                          value={state.width}
+                          min={1}
+                        />
+                        <RangeComponent
+                          lane={lane}
+                          imageRef={imageRef}
+                          state={state}
+                          setState={setState}
+                          type="movement"
+                          text="MOVIMIENTO"
+                          value={state.movement}
+                          disabled={state.width === 100}
+                        />
+                        <RangeComponent
+                          lane={lane}
+                          imageRef={imageRef}
+                          state={state}
+                          setState={setState}
+                          type="intensity"
+                          step={25}
+                          text="INTENSIDAD DE LA LUZ"
+                          value={state.intensity}
+                        />
+                        <RangeComponent
+                          lane={lane}
+                          imageRef={imageRef}
+                          state={state}
+                          setState={setState}
+                          type="zoom"
+                          step={0.01}
+                          max={5}
+                          min={1}
+                          text="Zoom"
+                          value={state.zoom}
+                        />
+                        <div className="flex flex-col items-center">
+                          <label htmlFor="color" className="text-white">
+                            COLOR
+                          </label>
+                          <input
+                            className="w-1/2 h-10 rounded-md "
+                            type="color"
+                            id="color"
+                            name="color"
+                            value={state.color}
+                            onChange={(e) => {
+                              setState({ ...state, color: e.target.value });
+                            }}
+                          />
+                        </div>
+                      </div>
+                    </Tab.Panel>
+                    <Tab.Panel key="2" className="flex flex-col h-full">
+                      <div className="my-12 flex-1 overflow-y-auto">
+                        {comment.length > 0 ? (
+                          <div className="flex flex-col gap-3">
+                            {comment.map((c) => (
+                              <div
+                                key={c.id}
+                                className={`w-full ${
+                                  c.id_user == data?.user.id
+                                    ? ""
+                                    : "justify-end flex"
+                                }`}
+                              >
+                                <div
+                                  className={`flex flex-col gap-3 w-[75%] ${
+                                    c.id_user == data?.user.id
+                                      ? "bg-green-900/20 text-left rounded-r-md"
+                                      : "bg-blue-900/20 text-right rounded-l-md"
+                                  } p-3`}
+                                >
+                                  {c.id_user == data?.user.id ? (
+                                    <div className="flex justify-between gap-3">
+                                      <p className="text-white font-bold">
+                                        {c.id_user == data?.user.id
+                                          ? "Tú"
+                                          : c.name}
+                                      </p>
+                                      <p className="text-white font-bold">
+                                        {new Date(
+                                          c.created_at
+                                        ).toLocaleDateString()}
+                                      </p>
+                                    </div>
+                                  ) : (
+                                    <div className="flex justify-between gap-3">
+                                      <p className="text-white font-bold">
+                                        {new Date(
+                                          c.created_at
+                                        ).toLocaleDateString()}
+                                      </p>
+                                      <p className="text-white font-bold">
+                                        {c.id_user == data?.user.id
+                                          ? "Tú"
+                                          : c.name}
+                                      </p>
+                                    </div>
+                                  )}
+                                  <p className="text-white">{c.comment}</p>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <div className="flex flex-col items-center justify-center h-full">
+                            <p className="text-white text-2xl font-bold">
+                              No hay comentarios
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex flex-col items-center">
+                        <div className="flex flex-col gap-3 w-full bg-blue-900/20 p-3">
+                          <input
+                            type="text"
+                            placeholder="Escribe un comentario"
+                            className="w-full h-10 rounded-md"
+                            onChange={(e) => setNewComment(e.target.value)}
+                            value={newComment}
+                          />
+                          <button
+                            onClick={uploadComment}
+                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                          >
+                            Agregar comentario
+                          </button>
+                        </div>
+                      </div>
+                    </Tab.Panel>
+                  </Tab.Panels>
+                </Tab.Group>
               </div>
             </div>
           </div>

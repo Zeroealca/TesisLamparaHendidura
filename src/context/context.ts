@@ -4,6 +4,7 @@ export interface USER {
   id?: number;
   name?: string;
   email?: string;
+  rol?: string;
 }
 
 export interface IMAGE {
