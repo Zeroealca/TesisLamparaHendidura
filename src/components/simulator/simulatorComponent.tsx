@@ -246,7 +246,7 @@ const simulatorComponent = () => {
                 />
               </section>
               <section className="flex flex-col items-center">
-                <div className="cursor-pointer mb-3">
+                <label className="cursor-pointer mb-3">
                   <input
                     type="file"
                     accept="image/*"
@@ -270,7 +270,7 @@ const simulatorComponent = () => {
                     height={35}
                     width={35}
                   />
-                </div>
+                </label>
               </section>
               <section
                 className={`
