@@ -193,6 +193,12 @@ const simulatorComponent = () => {
     });
   }, [state.orientation, state.intensity, techniques]);
 
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   return (
     <>
       <Head>
@@ -327,158 +333,162 @@ const simulatorComponent = () => {
                     ))}
                   </Tab.List>
                   <Tab.Panels className="h-full">
-                    <Tab.Panel>
-                      <div className="m-12">
-                        <RangeComponent
-                          lane={lane}
-                          imageRef={imageRef}
-                          state={state}
-                          setState={setState}
-                          type="orientation"
-                          step={5}
-                          max={180}
-                          text="ORIENTACIÓN DE LA HENDIDURA"
-                          value={state.orientation}
-                        />
-                        <RangeComponent
-                          lane={lane}
-                          imageRef={imageRef}
-                          state={state}
-                          setState={setState}
-                          type="width"
-                          text="ANCHURA"
-                          value={state.width}
-                          min={1}
-                        />
-                        <RangeComponent
-                          lane={lane}
-                          imageRef={imageRef}
-                          state={state}
-                          setState={setState}
-                          type="movement"
-                          text="MOVIMIENTO"
-                          value={state.movement}
-                          disabled={state.width === 100}
-                        />
-                        <RangeComponent
-                          lane={lane}
-                          imageRef={imageRef}
-                          state={state}
-                          setState={setState}
-                          type="intensity"
-                          step={25}
-                          text="INTENSIDAD DE LA LUZ"
-                          value={state.intensity}
-                        />
-                        <RangeComponent
-                          lane={lane}
-                          imageRef={imageRef}
-                          state={state}
-                          setState={setState}
-                          type="zoom"
-                          step={0.01}
-                          max={5}
-                          min={1}
-                          text="Zoom"
-                          value={state.zoom}
-                        />
-                        <div className="flex flex-col items-center">
-                          <label htmlFor="color" className="text-white">
-                            COLOR
-                          </label>
-                          <input
-                            className="w-1/2 h-10 rounded-md "
-                            type="color"
-                            id="color"
-                            name="color"
-                            value={state.color}
-                            onChange={(e) => {
-                              setState({ ...state, color: e.target.value });
-                            }}
-                          />
-                        </div>
-                      </div>
-                    </Tab.Panel>
-                    <Tab.Panel className="flex flex-col h-full">
-                      <div className="my-12 flex-1 overflow-y-auto">
-                        {comment.length > 0 ? (
-                          <div className="flex flex-col gap-3">
-                            {comment.map((c) => (
-                              <div
-                                key={c.id}
-                                className={`w-full ${
-                                  c.id_user == data?.user.id
-                                    ? ""
-                                    : "justify-end flex"
-                                }`}
-                              >
-                                <div
-                                  className={`flex flex-col gap-3 w-[75%] ${
-                                    c.id_user == data?.user.id
-                                      ? "bg-green-900/20 text-left rounded-r-lg"
-                                      : "bg-blue-900/20 text-right rounded-l-md"
-                                  } p-3`}
-                                >
-                                  {c.id_user == data?.user.id ? (
-                                    <div className="flex justify-between gap-3">
-                                      <p className="text-grayprimary font-bold">
-                                        {c.id_user == data?.user.id
-                                          ? "Tú"
-                                          : c.name}
-                                      </p>
-                                      <p className="text-grayprimary font-bold">
-                                        {new Date(
-                                          c.created_at
-                                        ).toLocaleDateString()}
+                    {isClient && (
+                      <>
+                        <Tab.Panel>
+                          <div className="m-12">
+                            <RangeComponent
+                              lane={lane}
+                              imageRef={imageRef}
+                              state={state}
+                              setState={setState}
+                              type="orientation"
+                              step={5}
+                              max={180}
+                              text="ORIENTACIÓN DE LA HENDIDURA"
+                              value={state.orientation}
+                            />
+                            <RangeComponent
+                              lane={lane}
+                              imageRef={imageRef}
+                              state={state}
+                              setState={setState}
+                              type="width"
+                              text="ANCHURA"
+                              value={state.width}
+                              min={1}
+                            />
+                            <RangeComponent
+                              lane={lane}
+                              imageRef={imageRef}
+                              state={state}
+                              setState={setState}
+                              type="movement"
+                              text="MOVIMIENTO"
+                              value={state.movement}
+                              disabled={state.width === 100}
+                            />
+                            <RangeComponent
+                              lane={lane}
+                              imageRef={imageRef}
+                              state={state}
+                              setState={setState}
+                              type="intensity"
+                              step={25}
+                              text="INTENSIDAD DE LA LUZ"
+                              value={state.intensity}
+                            />
+                            <RangeComponent
+                              lane={lane}
+                              imageRef={imageRef}
+                              state={state}
+                              setState={setState}
+                              type="zoom"
+                              step={0.01}
+                              max={5}
+                              min={1}
+                              text="Zoom"
+                              value={state.zoom}
+                            />
+                            <div className="flex flex-col items-center">
+                              <label htmlFor="color" className="text-white">
+                                COLOR
+                              </label>
+                              <input
+                                className="w-1/2 h-10 rounded-md "
+                                type="color"
+                                id="color"
+                                name="color"
+                                value={state.color}
+                                onChange={(e) => {
+                                  setState({ ...state, color: e.target.value });
+                                }}
+                              />
+                            </div>
+                          </div>
+                        </Tab.Panel>
+                        <Tab.Panel className="flex flex-col h-full">
+                          <div className="my-12 flex-1 overflow-y-auto">
+                            {comment.length > 0 ? (
+                              <div className="flex flex-col gap-3">
+                                {comment.map((c) => (
+                                  <div
+                                    key={c.id}
+                                    className={`w-full ${
+                                      c.id_user == data?.user.id
+                                        ? ""
+                                        : "justify-end flex"
+                                    }`}
+                                  >
+                                    <div
+                                      className={`flex flex-col gap-3 w-[75%] ${
+                                        c.id_user == data?.user.id
+                                          ? "bg-green-900/20 text-left rounded-r-lg"
+                                          : "bg-blue-900/20 text-right rounded-l-md"
+                                      } p-3`}
+                                    >
+                                      {c.id_user == data?.user.id ? (
+                                        <div className="flex justify-between gap-3">
+                                          <p className="text-grayprimary font-bold">
+                                            {c.id_user == data?.user.id
+                                              ? "Tú"
+                                              : c.name}
+                                          </p>
+                                          <p className="text-grayprimary font-bold">
+                                            {new Date(
+                                              c.created_at
+                                            ).toLocaleDateString()}
+                                          </p>
+                                        </div>
+                                      ) : (
+                                        <div className="flex justify-between gap-3">
+                                          <p className="text-grayprimary font-bold">
+                                            {new Date(
+                                              c.created_at
+                                            ).toLocaleDateString()}
+                                          </p>
+                                          <p className="text-grayprimary font-bold">
+                                            {c.id_user == data?.user.id
+                                              ? "Tú"
+                                              : c.name}
+                                          </p>
+                                        </div>
+                                      )}
+                                      <p className="text-white text-sm">
+                                        {c.comment}
                                       </p>
                                     </div>
-                                  ) : (
-                                    <div className="flex justify-between gap-3">
-                                      <p className="text-grayprimary font-bold">
-                                        {new Date(
-                                          c.created_at
-                                        ).toLocaleDateString()}
-                                      </p>
-                                      <p className="text-grayprimary font-bold">
-                                        {c.id_user == data?.user.id
-                                          ? "Tú"
-                                          : c.name}
-                                      </p>
-                                    </div>
-                                  )}
-                                  <p className="text-white text-sm">
-                                    {c.comment}
-                                  </p>
-                                </div>
+                                  </div>
+                                ))}
                               </div>
-                            ))}
+                            ) : (
+                              <div className="flex flex-col items-center justify-center h-full">
+                                <p className="text-white text-2xl font-bold">
+                                  No hay observaciones
+                                </p>
+                              </div>
+                            )}
                           </div>
-                        ) : (
-                          <div className="flex flex-col items-center justify-center h-full">
-                            <p className="text-white text-2xl font-bold">
-                              No hay observaciones
-                            </p>
+                          <div className="flex flex-col items-center">
+                            <div className="flex flex-col gap-3 w-full p-3">
+                              <input
+                                type="text"
+                                placeholder="Escribe una observación"
+                                className="w-full h-10 rounded-md px-2"
+                                onChange={(e) => setNewComment(e.target.value)}
+                                value={newComment}
+                              />
+                              <button
+                                onClick={uploadComment}
+                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                              >
+                                Agregar observación
+                              </button>
+                            </div>
                           </div>
-                        )}
-                      </div>
-                      <div className="flex flex-col items-center">
-                        <div className="flex flex-col gap-3 w-full p-3">
-                          <input
-                            type="text"
-                            placeholder="Escribe una observación"
-                            className="w-full h-10 rounded-md px-2"
-                            onChange={(e) => setNewComment(e.target.value)}
-                            value={newComment}
-                          />
-                          <button
-                            onClick={uploadComment}
-                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                          >
-                            Agregar observación
-                          </button>
-                        </div>
-                      </div>
-                    </Tab.Panel>
+                        </Tab.Panel>
+                      </>
+                    )}
                   </Tab.Panels>
                 </Tab.Group>
               </div>
