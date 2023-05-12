@@ -32,15 +32,15 @@ const ProfileImage = ({
   return (
     <>
       <h1 className="text-xl font-bold text-left mb-10">Mis imagenes</h1>
-      <div className="grid grid-cols-auto-fit gap-10">
+      <div className="flex flex-wrap gap-10">
         {images?.length > 0 ? (
           images.map((image, index: number) => (
-            <div key={index} className="flex flex-col gap-1 h-40 w-40">
+            <div key={index} className="flex flex-col items-center gap-4">
               <div>
                 <img
                   src={image.url}
                   alt={image.name}
-                  className="w-full h-full object-cover rounded-md"
+                  className="h-40 w-40 object-cover rounded-md"
                 />
               </div>
               <div className="flex items-center justify-center gap-2">
