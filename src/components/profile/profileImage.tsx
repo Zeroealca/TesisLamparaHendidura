@@ -35,8 +35,8 @@ const ProfileImage = ({
       <div className="grid grid-cols-auto-fit gap-10">
         {images?.length > 0 ? (
           images.map((image, index: number) => (
-            <div key={index} className="flex flex-col gap-1 max-w-md">
-              <div className="h-72 w-full">
+            <div key={index} className="flex flex-col gap-1 h-40 w-40">
+              <div>
                 <img
                   src={image.url}
                   alt={image.name}

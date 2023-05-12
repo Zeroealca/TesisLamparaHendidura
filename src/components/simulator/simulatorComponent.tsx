@@ -217,16 +217,16 @@ const simulatorComponent = () => {
           <div className="flex flex-col items-center justify-center xl:flex-row my-2 lg:gap-10 gap-5">
             <div className="flex-1 flex flex-col gap-5 items-center justify-center h-full">
               {!!technique?.length && (
-                <div>
-                  <span className="text-2xl font-semibold">
+                <div className="text-center">
+                  <span className="text-3xl font-semibold">
                     {Array.isArray(technique) ? "Técnicas" : "Técnica"}:
                   </span>{" "}
-                  <div className="flex gap-2 text-xl font-semibold">
+                  <div className="flex gap-2 text-2xl font-semibold">
                     {technique?.map((tech: any, index) => (
-                      <div key={index}>
+                      <div key={index} className="text-green-500">
                         <span
                           onClick={() => redirectTecnica(tech.id)}
-                          className="underline decoration-cyan-500 cursor-pointer"
+                          className="underline text-cyan-500 cursor-pointer"
                         >
                           {tech.name}
                         </span>{" "}
