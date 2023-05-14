@@ -78,6 +78,7 @@ const simulatorComponent = () => {
     imageUrl: "",
     imageFile: undefined,
   });
+  const [isReadyToComment, setIsReadyToComment] = useState(url ? true : false);
   const image_condition = url ? url : eye.src;
 
   const uploadImage = () => {
@@ -95,6 +96,7 @@ const simulatorComponent = () => {
       pending: "Subiendo imagen",
       success: {
         render: () => {
+          setIsReadyToComment(true);
           return (
             <div>
               <span className="block">La imagen se subió de forma exitosa</span>
@@ -116,45 +118,47 @@ const simulatorComponent = () => {
   };
 
   const uploadComment = () => {
-    const res = fetch(process.env.API_URL + "comment", {
-      method: "POST",
-      body: JSON.stringify({
-        id_image,
-        comment: newComment,
-        id_user: data?.user?.id,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    toast.promise(res, {
-      pending: "Subiendo comentario",
-      success: "Comentario subido",
-      error: "Error al subir el comentario",
-    });
-    setComment((prev: any) => {
-      return prev
-        ? [
-            ...prev,
-            {
-              id: prev.length,
-              comment: newComment,
-              id_user: data?.user?.id,
-              name: "Tú",
-              created_at: new Date(),
-            },
-          ]
-        : [
-            {
-              id: 0,
-              comment: newComment,
-              id_user: data?.user?.id,
-              name: "Tú",
-              created_at: new Date(),
-            },
-          ];
-    });
-    setNewComment("");
+    if (isReadyToComment) {
+      const res = fetch(process.env.API_URL + "comment", {
+        method: "POST",
+        body: JSON.stringify({
+          id_image,
+          comment: newComment,
+          id_user: data?.user?.id,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      toast.promise(res, {
+        pending: "Subiendo comentario",
+        success: "Comentario subido",
+        error: "Error al subir el comentario",
+      });
+      setComment((prev: any) => {
+        return prev
+          ? [
+              ...prev,
+              {
+                id: prev.length,
+                comment: newComment,
+                id_user: data?.user?.id,
+                name: "Tú",
+                created_at: new Date(),
+              },
+            ]
+          : [
+              {
+                id: 0,
+                comment: newComment,
+                id_user: data?.user?.id,
+                name: "Tú",
+                created_at: new Date(),
+              },
+            ];
+      });
+      setNewComment("");
+    }
   };
 
   const redirectTecnica = async (id: number) => {
@@ -265,6 +269,7 @@ const simulatorComponent = () => {
                         });
                         setIdImage(undefined);
                         setDescription("");
+                        setIsReadyToComment(false);
                       }
                     }}
                     className="hidden"
@@ -316,21 +321,10 @@ const simulatorComponent = () => {
               <div className=" w-full px-2 py-8 pb-12 sm:px-0">
                 <Tab.Group>
                   <Tab.List className="flex space-x-1 rounded-xl bg-blue-900/20 p-1">
-                    {Object.keys(categories).map((category) => (
-                      <Tab as={Fragment} key={category}>
-                        {({ selected }) => (
-                          <button
-                            className={`w-full rounded-lg py-2.5 text-sm leading-5 text-blue-700 ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none ${
-                              selected
-                                ? "bg-gray-100 shadow font-bold"
-                                : "text-blue-100 hover:bg-white/[0.12] hover:text-white font-medium"
-                            }`}
-                          >
-                            {category}
-                          </button>
-                        )}
-                      </Tab>
-                    ))}
+                    <MyTab name="Simulador" />
+                    {image.imageFile || url ? (
+                      <MyTab name="Observaciones" />
+                    ) : null}
                   </Tab.List>
                   <Tab.Panels className="h-full">
                     {isClient && (
@@ -474,13 +468,24 @@ const simulatorComponent = () => {
                               <input
                                 type="text"
                                 placeholder="Escribe una observación"
-                                className="w-full h-10 rounded-md px-2"
-                                onChange={(e) => setNewComment(e.target.value)}
+                                className={`w-full h-10 rounded-md px-2 ${
+                                  isReadyToComment
+                                    ? ""
+                                    : "opacity-50 cursor-not-allowed focus:outline-none focus:border-0"
+                                }}`}
+                                onChange={(e) => {
+                                  if (isReadyToComment)
+                                    setNewComment(e.target.value);
+                                }}
                                 value={newComment}
                               />
                               <button
                                 onClick={uploadComment}
-                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                                className={`bg-blue-500 text-white font-bold py-2 px-4 rounded ${
+                                  isReadyToComment
+                                    ? "hover:bg-blue-700"
+                                    : "opacity-50 cursor-not-allowed"
+                                }`}
                               >
                                 Agregar observación
                               </button>
@@ -497,6 +502,24 @@ const simulatorComponent = () => {
         </SimulatorCard>
       </main>
     </>
+  );
+};
+
+const MyTab = ({ name }: { name: string }) => {
+  return (
+    <Tab as={Fragment}>
+      {({ selected }) => (
+        <button
+          className={`w-full rounded-lg py-2.5 text-sm leading-5 text-blue-700 ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none ${
+            selected
+              ? "bg-gray-100 shadow font-bold"
+              : "text-blue-100 hover:bg-white/[0.12] hover:text-white font-medium"
+          }`}
+        >
+          {name}
+        </button>
+      )}
+    </Tab>
   );
 };
 
