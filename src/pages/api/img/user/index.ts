@@ -1,13 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import pool from "@/node/config/db";
+import { Image } from "./[id]";
 
-interface Image {
-  id_image: string;
-  name: string;
-  url: string;
-  details: string;
-  comments?: Comments[];
-}
 interface Comments {
   id: number;
   comment: string;
@@ -42,7 +36,13 @@ const handlerImageId = async (req: NextApiRequest, res: NextApiResponse) => {
       "SELECT * FROM comments INNER JOIN users ON comments.id_user = users.id WHERE id_image = ? ",
       [image.id_image]
     )) as Comments[];
+    const id_user = image.externalId.split("_")[1];
+    const user = (await pool.query("SELECT * FROM users WHERE id = ? ", [
+      id_user,
+    ])) as any[];
+    image.name_user = user[0].name;
     image.comments.map((comment: any) => {
+      if (comment.rol === "DOCENTE") image.isRevised = true;
       return {
         id: comment.id,
         comment: comment.comment,

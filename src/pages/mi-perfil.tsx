@@ -7,6 +7,7 @@ import PersonCard from "../components/icons/personCard";
 import ProfileImage from "src/components/profile/profileImage";
 import ReturnArrow from "src/components/icons/returnArrow";
 import { useRouter } from "next/router";
+import OtherImage from "src/components/profile/otherImages";
 
 interface OptionsProfileProps {
   options: string;
@@ -30,6 +31,10 @@ export interface Iimage {
   state?: string;
   externalId: string;
   comments: Comments[];
+  created_at: string;
+  updated_at: string;
+  isRevised: boolean;
+  name_user: string;
 }
 
 const OptionsProfile = ({
@@ -64,6 +69,7 @@ const MiPerfil = () => {
   const { id, ...other } = user;
 
   const [images, setImages] = useState<Iimage[]>([]);
+  const [AllImages, setAllImages] = useState<Iimage[]>([]);
   const params = Number(router.query.tab);
   const [tabs, setTabs] = useState<number>(1);
   const [state, setState] = useState({
@@ -84,25 +90,23 @@ const MiPerfil = () => {
   }, [params]);
 
   const getImage = async () => {
-    if (user.rol === "ESTUDIANTE") {
-      await fetch(process.env.API_URL + `img/user/${user.id}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-        .then((res) => res.json())
-        .then((data) => setImages(data.data));
-    } else {
-      await fetch(process.env.API_URL + "img/user", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-        .then((res) => res.json())
-        .then((data) => setImages(data.data));
-    }
+    await fetch(process.env.API_URL + `img/user/${user.id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => setImages(data.data));
+
+    await fetch(process.env.API_URL + "img/user", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => setAllImages(data.data));
   };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setState({ ...state, [e.target.name]: e.target.value });
@@ -119,8 +123,6 @@ const MiPerfil = () => {
       setIsChange(true);
     }
   }, [state.email, state.name]);
-
-  console.log({ images });
 
   useEffect(() => {
     if (
@@ -195,9 +197,15 @@ const MiPerfil = () => {
               setTabs={() => setTabs(2)}
             />
             <OptionsProfile
+              options="Otras imágenes"
+              icon={<Images />}
+              isActive={tabs === 3}
+              setTabs={() => setTabs(3)}
+            />
+            <OptionsProfile
               options="Regresar"
               icon={<ReturnArrow />}
-              isActive={tabs === 3}
+              isActive={tabs === 4}
               setTabs={() => router.back()}
             />
           </ul>
@@ -267,6 +275,13 @@ const MiPerfil = () => {
               <ProfileImage
                 images={images}
                 setImages={setImages}
+                rol={user.rol}
+              />
+            </div>
+            <div className={`${tabs === 3 ? "block" : "hidden"} w-full`}>
+              <OtherImage
+                images={AllImages}
+                setImages={setAllImages}
                 rol={user.rol}
               />
             </div>

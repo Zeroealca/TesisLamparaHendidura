@@ -24,13 +24,15 @@ create table technique (
 	assess TEXT
 );
 
-create table Images(
-	id_image VARCHAR(100) primary key,
-	url VARCHAR(255) not null,
-	name VARCHAR(100) not null,
-	details TEXT,
-	state VARCHAR(255),
-	externalId VARCHAR(100) not null
+CREATE TABLE Images (
+  id_image VARCHAR(100) PRIMARY KEY,
+  url VARCHAR(255) NOT NULL,
+  name VARCHAR(100) NOT NULL,
+  details TEXT,
+  state VARCHAR(255),
+  externalId VARCHAR(100) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
 create table Comments(

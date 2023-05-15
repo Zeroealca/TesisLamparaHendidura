@@ -1,6 +1,7 @@
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 import { Iimage } from "src/pages/mi-perfil";
+import { useState, useEffect } from "react";
 
 const ProfileImage = ({
   images,
@@ -29,49 +30,102 @@ const ProfileImage = ({
         setImages(images.filter((image) => image.id_image !== id));
       });
   };
+
+  const [filter, setFilter] = useState("all");
+  const [imagesFilterd, setImagesFilterd] = useState<Iimage[]>([]);
+
+  useEffect(() => {
+    setImagesFilterd(images);
+  }, [images.length]);
+
+  const filteredImages = images.filter((image) => {
+    switch (filter) {
+      case "all":
+        return image;
+      case "revised":
+        return image.isRevised;
+      case "notRevised":
+        return !image.isRevised;
+      default:
+        return image;
+    }
+  });
+
+  useEffect(() => {
+    setImagesFilterd(filteredImages);
+  }, [filter]);
+
   return (
     <>
-      <h1 className="text-xl font-bold text-left mb-10">Mis imagenes</h1>
+      <h1 className="text-2xl font-bold text-left mb-10">Mis imágenes</h1>
+
+      <div className="mb-4 w-full flex items-center justify-end">
+        <select
+          className="ml-4 px-3 py-2"
+          onChange={(e) => setFilter(e.target.value)}
+        >
+          <option value="all">Todas</option>
+          <option value="revised">Revisadas</option>
+          <option value="notRevised">No revisadas</option>
+        </select>
+      </div>
+
       <div className="flex flex-wrap gap-10">
-        {images?.length > 0 ? (
-          images.map((image, index: number) => (
-            <div key={index} className="flex flex-col items-center gap-4">
-              <div>
+        {imagesFilterd?.length ? (
+          imagesFilterd.map((image, index: number) => {
+            const date = new Date(image.created_at);
+            const formattedDate = date.toLocaleString();
+            return (
+              <div key={index} className="flex flex-col items-center gap-4">
                 <img
                   src={image.url}
                   alt={image.name}
-                  className="h-40 w-40 object-cover rounded-md"
+                  className="h-32 w-32 object-cover rounded-md"
                 />
-              </div>
-              <div className="flex items-center justify-center gap-2">
-                <button
-                  onClick={() =>
-                    router.push(
-                      {
-                        pathname: "/simulador",
-                        query: {
-                          ...image,
-                          comments: JSON.stringify(image.comments),
-                        },
-                      },
-                      "simulador"
-                    )
-                  }
-                  className="bg-green-500 rounded-md p-2 text-white font-bold w-24"
-                >
-                  Usar
-                </button>
-                {rol === "DOCENTE" && (
+                <div className="flex flex-col">
+                  <span className="text-xl font-bold">
+                    Subido el:{" "}
+                    <span className="font-normal text-base">
+                      {formattedDate}
+                    </span>
+                  </span>
+                  <span className="text-xl font-bold">
+                    Estado:{" "}
+                    <span className="font-normal text-base">
+                      {image.isRevised ? "Revisado ✅" : "Pendiente ⌛"}
+                    </span>
+                  </span>
+                </div>
+                <div className="flex items-center justify-center gap-2">
                   <button
-                    onClick={() => deleteImage(image.id_image)}
-                    className="bg-red-500 rounded-md p-2 text-white font-bold w-24"
+                    onClick={() =>
+                      router.push(
+                        {
+                          pathname: "/simulador",
+                          query: {
+                            ...image,
+                            comments: JSON.stringify(image.comments),
+                          },
+                        },
+                        "simulador"
+                      )
+                    }
+                    className="bg-green-500 rounded-md p-2 text-white font-bold w-24"
                   >
-                    Eliminar
+                    Usar
                   </button>
-                )}
+                  {rol === "DOCENTE" && (
+                    <button
+                      onClick={() => deleteImage(image.id_image)}
+                      className="bg-red-500 rounded-md p-2 text-white font-bold w-24"
+                    >
+                      Eliminar
+                    </button>
+                  )}
+                </div>
               </div>
-            </div>
-          ))
+            );
+          })
         ) : (
           <h1>No hay imagenes</h1>
         )}
