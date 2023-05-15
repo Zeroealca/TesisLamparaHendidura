@@ -16,7 +16,6 @@ const Tecnica = () => {
   useEffect(() => {
     id && getTechniqueInformation();
   }, [id]);
-  console.log(data);
 
   return (
     <div className="h-screen w-10/12 2xl:w-1/2 mx-auto pt-20">

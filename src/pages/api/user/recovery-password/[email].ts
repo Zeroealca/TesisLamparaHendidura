@@ -33,7 +33,6 @@ const handlerSendRecoveryMail = async (
       expiresIn: "15m",
     }
   );
-  console.log(recovery_token);
   const updateResult = (await pool.query(
     "UPDATE users SET recovery_token = ? WHERE email = ?",
     [recovery_token, req.query.email]

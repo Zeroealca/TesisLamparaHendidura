@@ -89,7 +89,9 @@ const checkUserEmailPassword = async (email: string, password: string) => {
         },
         {
           headers: {
-            "X-API-KEY": process.env.X_API_KEY,
+            "X-API-KEY":
+              process.env.X_API_KEY ||
+              "3ecbcb4e62a00d2bc58080218a4376f24a8079e1",
           },
           httpsAgent: new https.Agent({ rejectUnauthorized: false }),
         }
@@ -123,7 +125,6 @@ const checkUserEmailPassword = async (email: string, password: string) => {
         };
       }
     } catch (error) {
-      console.log(error);
       return null;
     }
   }

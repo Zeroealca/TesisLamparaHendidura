@@ -94,29 +94,39 @@ const simulatorComponent = () => {
       method: "POST",
       body: fd,
     });
-    toast.promise(res, {
-      pending: "Subiendo imagen",
-      success: {
-        render: () => {
-          setIsReadyToComment(true);
-          return (
-            <div>
-              <span className="block">La imagen se subió de forma exitosa</span>
-              <a
-                href="/mi-perfil?tab=2"
-                className="block text-center underline font-semibold"
-                onClick={() => {
-                  toast.dismiss();
-                }}
-              >
-                Ver Galería
-              </a>
-            </div>
-          );
+    toast
+      .promise(res, {
+        pending: "Subiendo imagen",
+        success: {
+          render: () => {
+            setIsReadyToComment(true);
+            return (
+              <div>
+                <span className="block">
+                  La imagen se subió de forma exitosa
+                </span>
+                <a
+                  href="/mi-perfil?tab=2"
+                  className="block text-center underline font-semibold"
+                  onClick={() => {
+                    toast.dismiss();
+                  }}
+                >
+                  Ver Galería
+                </a>
+              </div>
+            );
+          },
         },
-      },
-      error: "Error al subir la imagen",
-    });
+        error: "Error al subir la imagen",
+      })
+      .then((response) => {
+        new Promise((resolve, reject) => {
+          resolve(response.json());
+        }).then((data: any) => {
+          setIdImage(data.data.id_image);
+        });
+      });
   };
 
   const uploadComment = () => {
@@ -124,7 +134,7 @@ const simulatorComponent = () => {
       const res = fetch(process.env.API_URL + "comment", {
         method: "POST",
         body: JSON.stringify({
-          id_image,
+          id_image: idImage,
           comment: newComment,
           id_user: data?.user?.id,
         }),

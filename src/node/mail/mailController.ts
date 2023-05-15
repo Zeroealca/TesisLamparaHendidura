@@ -58,14 +58,12 @@ const sendRecoveryMail = async (user: User) => {
     };
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
-        console.log(error);
         return error;
       } else {
         return true;
       }
     });
   } catch (err) {
-    console.log(err);
     return err;
   }
 };

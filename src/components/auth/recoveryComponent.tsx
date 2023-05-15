@@ -13,9 +13,7 @@ const recoveryComponent = () => {
   const handlerRecovery = (email: string) => {
     fetch(process.env.API_URL + `user/recovery-password/${email}`, {
       method: "GET",
-    })
-      .then((res) => res.json())
-      .then((data) => console.log(data));
+    }).then((res) => res.json());
   };
 
   return (
