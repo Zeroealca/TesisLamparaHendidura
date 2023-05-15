@@ -1,7 +1,8 @@
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 import { Iimage } from "src/pages/mi-perfil";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import UserContext from "src/context/context";
 
 const OtherImage = ({
   images,
@@ -34,6 +35,7 @@ const OtherImage = ({
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("all");
   const [imagesFilterd, setImagesFilterd] = useState<Iimage[]>([]);
+  const { user } = useContext(UserContext);
 
   useEffect(() => {
     setImagesFilterd(images);
@@ -117,18 +119,20 @@ const OtherImage = ({
                 </div>
                 <div className="flex items-center justify-center gap-2">
                   <button
-                    onClick={() =>
+                    onClick={() => {
+                      const user_id = image.externalId.split("_")[1];
                       router.push(
                         {
                           pathname: "/simulador",
                           query: {
                             ...image,
                             comments: JSON.stringify(image.comments),
+                            isMine: `${Number(user_id) === user?.id}`,
                           },
                         },
                         "simulador"
-                      )
-                    }
+                      );
+                    }}
                     className="bg-green-500 rounded-md p-2 text-white font-bold w-24"
                   >
                     Usar

@@ -70,7 +70,7 @@ apiRout.post(async (req: any, res: NextApiResponse) => {
     });
     return res.status(200).json({
       message: "File uploaded successfully",
-      data: { publicUrl: url },
+      data: { publicUrl: url, id_image: uploadedFile.id },
     });
   }
   const result = (await pool.query(

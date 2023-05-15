@@ -44,12 +44,14 @@ const simulatorComponent = () => {
     details,
     state: state_,
     comments,
+    isMine = "true",
   } = router.query as {
     id_image?: string;
     url: string;
     details?: string;
     state?: string;
     comments: string;
+    isMine: string;
   };
   const [show, setShow] = useState(!!details);
   const [idImage, setIdImage] = useState(id_image);
@@ -255,67 +257,51 @@ const simulatorComponent = () => {
                   ref={lane}
                 />
               </section>
-              <section className="flex flex-col items-center">
-                <label className="cursor-pointer mb-3">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    id="upload-image"
-                    onChange={(e) => {
-                      if (e.target.files && e.target.files[0]) {
-                        setImage({
-                          imageUrl: URL.createObjectURL(e.target.files[0]),
-                          imageFile: e.target.files[0] as File,
-                        });
-                        setIdImage(undefined);
-                        setDescription("");
-                        setIsReadyToComment(false);
-                      }
-                    }}
-                    className="hidden"
-                  />
-                  <Icon
-                    children={<Upload />}
-                    fill="#FFFFFF"
-                    viewBox="16 16"
-                    height={35}
-                    width={35}
-                  />
-                </label>
-              </section>
-              <section
-                className={`
+              {isMine === "true" ? (
+                <section className="flex flex-col items-center">
+                  <label className="cursor-pointer mb-3">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      id="upload-image"
+                      onChange={(e) => {
+                        if (e.target.files && e.target.files[0]) {
+                          setImage({
+                            imageUrl: URL.createObjectURL(e.target.files[0]),
+                            imageFile: e.target.files[0] as File,
+                          });
+                          setIdImage(undefined);
+                          setDescription("");
+                          setIsReadyToComment(false);
+                        }
+                      }}
+                      className="hidden"
+                    />
+                    <Icon
+                      children={<Upload />}
+                      fill="#FFFFFF"
+                      viewBox="16 16"
+                      height={35}
+                      width={35}
+                    />
+                  </label>
+                </section>
+              ) : null}
+              {isMine === "true" ? (
+                <section
+                  className={`
                 w-full flex flex-col items-center gap-3 ${
                   id_image || image.imageFile ? "block" : "hidden"
                 } transition-all delay-150
               `}
-              >
-                <SimulatorButton
-                  name={idImage ? "Actualizar" : "Subir"}
-                  icon={<Save />}
-                  onClick={uploadImage}
-                />
-                {/*  <div>
-                </div>
-                <div className="flex justify-center items-center gap-2">
-                  <label className="text-sm" htmlFor="save-image">
-                    Agregar Observación
-                  </label>
-                  <input
-                    type="checkbox"
-                    defaultChecked={show}
-                    id="save-image"
-                    onChange={() => setShow(!show)}
+                >
+                  <SimulatorButton
+                    name={idImage ? "Actualizar" : "Subir"}
+                    icon={<Save />}
+                    onClick={uploadImage}
                   />
-                </div>
-                {show && (
-                  <textarea
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    className="w-full max-h-24 rounded-md p-2"
-                  />
-                )} */}
-              </section>
+                </section>
+              ) : null}
             </div>
             <div className="flex justify-center mx-2 md:ml-5 text-center my-11 rounded-2xl bg-blackprimary w-[30rem] h-[45rem]">
               <div className=" w-full px-2 py-8 pb-12 sm:px-0">
@@ -468,6 +454,7 @@ const simulatorComponent = () => {
                               <input
                                 type="text"
                                 placeholder="Escribe una observación"
+                                disabled={!isReadyToComment}
                                 className={`w-full h-10 rounded-md px-2 ${
                                   isReadyToComment
                                     ? ""
