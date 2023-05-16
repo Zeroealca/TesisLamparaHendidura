@@ -41,7 +41,7 @@ const OtherImage = ({
     setImagesFilterd(images);
   }, [images?.length]);
 
-  const filteredImages = images.filter((image) => {
+  const filteredImages = images?.filter((image) => {
     switch (filter) {
       case "all":
         return image.name_user.toLowerCase().includes(search.toLowerCase());
