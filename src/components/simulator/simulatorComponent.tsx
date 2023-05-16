@@ -124,7 +124,9 @@ const simulatorComponent = () => {
         new Promise((resolve, reject) => {
           resolve(response.json());
         }).then((data: any) => {
-          setIdImage(data.data.id_image);
+          if (data.data) {
+            setIdImage(data.data.id_image);
+          }
         });
       });
   };
