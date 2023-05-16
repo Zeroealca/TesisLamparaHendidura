@@ -38,7 +38,7 @@ const ProfileImage = ({
 
   useEffect(() => {
     setImagesFilterd(images);
-  }, [images.length]);
+  }, [images?.length]);
 
   const filteredImages = images.filter((image) => {
     switch (filter) {
