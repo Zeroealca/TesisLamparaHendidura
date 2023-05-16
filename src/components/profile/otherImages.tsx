@@ -71,7 +71,7 @@ const OtherImage = ({
       <div className="mb-4 w-full flex items-center justify-end">
         <input
           placeholder="Busca por nombre"
-          className="px-4 py-2 rounded"
+          className="px-4 py-2 rounded w-full"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
@@ -85,13 +85,20 @@ const OtherImage = ({
         </select>
       </div>
 
-      <div className="flex flex-wrap gap-10">
+      <div className="grid grid-cols-auto-fit gap-2">
         {imagesFilterd?.length ? (
           imagesFilterd.map((image, index: number) => {
             const date = new Date(image.created_at);
-            const formattedDate = date.toLocaleString();
+            const formattedDate = date.toLocaleString("es-ES", {
+              day: "numeric",
+              month: "numeric",
+              year: "numeric",
+            });
             return (
-              <div key={index} className="flex flex-col items-center gap-4">
+              <div
+                key={index}
+                className="flex flex-col items-center gap-4 bg-blacktertiary p-3 rounded justify-between"
+              >
                 <img
                   src={image.url}
                   alt={image.name}
