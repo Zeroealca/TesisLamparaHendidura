@@ -11,13 +11,13 @@ const MenuCards = ({ title, description, image, to }: MenuCardsProps) => {
     <div>
       <a
         href={to}
-        className="max-w-[30rem] w-full lg:h-96 h-60 flex flex-col items-center justify-center bg-blacksecondary rounded-xl cursor-pointer group lg:hover:h-[30rem] md:hover:h-[21rem] hover:h-[23rem] transition-all ease-in-out duration-300"
+        className="max-w-[25rem] w-full lg:h-80 h-60 flex flex-col items-center justify-center bg-blacksecondary rounded-xl cursor-pointer group lg:hover:h-[25rem] md:hover:h-[21rem] hover:h-[23rem] transition-all ease-in-out duration-300"
       >
-        <section className="bg-blacktertiary mx-auto lg:w-96 w-60 lg:h-96 h-60 lg:-mt-32 -mt-12 rounded-xl shadow-lg z-10">
+        <section className="bg-blacktertiary mx-auto lg:w-72 w-60 lg:h-72 h-60 lg:-mt-32 -mt-12 rounded-xl shadow-lg z-10">
           <Image
             src={image}
             alt="Picture of the author"
-            className="p-5 mx-auto w-full h-full object-cover"
+            className="p-5 mx-auto w-full h-full object-contain"
           />
         </section>
         <section className="invisible opacity-0 px-10 group-hover:visible group-hover:opacity-100 group-hover:mt-10 transition-all ease-in-out duration-300 group-hover:transition-all group-hover:ease-out group-hover:delay-200">

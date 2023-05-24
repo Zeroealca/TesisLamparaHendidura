@@ -1,13 +1,14 @@
 import { useState, useEffect, useContext } from "react";
 import InputWithLabel from "../components/inputs/inputWithLabel";
 import UserContext from "../context/context";
-import Icon from "../components/icons";
+import Icon, { FolderIcon } from "../components/icons";
 import Images from "../components/icons/images";
 import PersonCard from "../components/icons/personCard";
 import ProfileImage from "src/components/profile/profileImage";
 import ReturnArrow from "src/components/icons/returnArrow";
 import { useRouter } from "next/router";
 import OtherImage from "src/components/profile/otherImages";
+import Resource from "src/components/profile/resources";
 
 interface OptionsProfileProps {
   options: string;
@@ -203,9 +204,15 @@ const MiPerfil = () => {
               setTabs={() => setTabs(3)}
             />
             <OptionsProfile
+              options="Recursos"
+              icon={<FolderIcon />}
+              isActive={tabs === 4}
+              setTabs={() => setTabs(4)}
+            />
+            <OptionsProfile
               options="Regresar"
               icon={<ReturnArrow />}
-              isActive={tabs === 4}
+              isActive={tabs === 5}
               setTabs={() => router.back()}
             />
           </ul>
@@ -284,6 +291,9 @@ const MiPerfil = () => {
                 setImages={setAllImages}
                 rol={user.rol}
               />
+            </div>
+            <div className={`${tabs === 4 ? "block" : "hidden"} w-full`}>
+              <Resource />
             </div>
           </div>
         </section>

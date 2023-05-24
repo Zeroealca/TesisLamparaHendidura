@@ -346,7 +346,7 @@ const simulatorComponent = () => {
                               state={state}
                               setState={setState}
                               type="width"
-                              text="ANCHURA"
+                              text="AMPLITUD DE LA HENDIDURA"
                               value={state.width}
                               min={1}
                             />
@@ -384,7 +384,7 @@ const simulatorComponent = () => {
                             />
                             <div className="flex flex-col items-center">
                               <label htmlFor="color" className="text-white">
-                                COLOR
+                                INTENSIDAD
                               </label>
                               <input
                                 className="w-1/2 h-10 rounded-md "

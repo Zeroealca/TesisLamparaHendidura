@@ -3,6 +3,10 @@ import EyeClose from "./eyeClose";
 import EyeOpen from "./eyeOpen";
 import UserIcon from "./user";
 import CaretDown from "./caretDown";
+import FolderIcon from "./folder";
+import VideoIcon from "./video";
+import ImageIcon from "./image";
+import PasteIcon from "./paste";
 
 interface iconsProps {
   width: number;
@@ -27,4 +31,14 @@ const icons = (props: iconsProps) => {
   );
 };
 
-export { icons as default, EyeClose, EyeOpen, UserIcon, CaretDown };
+export {
+  icons as default,
+  EyeClose,
+  EyeOpen,
+  UserIcon,
+  CaretDown,
+  FolderIcon,
+  VideoIcon,
+  ImageIcon,
+  PasteIcon,
+};

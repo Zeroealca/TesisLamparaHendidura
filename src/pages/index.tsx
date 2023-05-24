@@ -25,6 +25,12 @@ export default function Home() {
           image={Hendidura}
           to="/simulador"
         />
+        <MenuCards
+          title="Partes del simulador"
+          description="Aquí podrás ver las partes del simulador de la lámpara de hendidura"
+          image={Hendidura}
+          to="/simulador/partes"
+        />
       </main>
     </>
   );
