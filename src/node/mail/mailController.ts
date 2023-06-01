@@ -1,8 +1,7 @@
 import nodemailer from "nodemailer";
 import HBS from "handlebars";
 import hbs from "nodemailer-express-handlebars";
-import { resolve, join } from "path";
-import { hashPassword } from "@/node/utils/auth";
+import { resolve } from "path";
 
 interface User {
   id: number;

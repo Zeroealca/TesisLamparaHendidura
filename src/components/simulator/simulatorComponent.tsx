@@ -12,7 +12,6 @@ import SimulatorButton from "./simulatorButton";
 import { useSession } from "next-auth/react";
 import { toast } from "react-toastify";
 import { useGetAllTechnique } from "src/services/technique/custom-hooks";
-import { Iimage } from "src/pages/mi-perfil";
 import { Tab } from "@headlessui/react";
 
 interface Comments {

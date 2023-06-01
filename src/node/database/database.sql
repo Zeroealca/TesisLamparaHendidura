@@ -11,6 +11,25 @@ create table Users(
 	primary key (id, email)
 );
 
+create table parallel(
+	id INT NOT NULL AUTO_INCREMENT,
+	primary key (id),
+	name VARCHAR(100) not null,
+	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+create table parallel_user(
+	id INT NOT NULL AUTO_INCREMENT,
+	primary key (id),
+	id_parallel INT not null,
+	id_user INT not null,
+	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	foreign key (id_parallel) references parallel(id),
+	foreign key (id_user) references Users(id)
+);
+
 create table technique (
 	id_technique MEDIUMINT NOT NULL AUTO_INCREMENT,
 	primary key (id_technique),
@@ -123,7 +142,17 @@ create table disaeses_diagnosis (
 	foreign key (id_diagnosis) references diagnosis(id_diagnosis)
 );
 
+insert into Users (id,email, name, password, rol) values (1,'docente1@localhost.com','Profesor 1', '$2b$10$dQWadZkcGMs9A1XQgL1.kOUs22pRo5co3VxjtlE34H62N.JfpfHPy', 'DOCENTE')
+insert into Users (id,email, name, password, rol) values (2,'docente2@localhost.com','Profesor 2', '$2b$10$dQWadZkcGMs9A1XQgL1.kOUs22pRo5co3VxjtlE34H62N.JfpfHPy', 'DOCENTE')
+insert into Users (id,email, name, password, rol) values (3,'docente3@localhost.com','Profesor 3', '$2b$10$dQWadZkcGMs9A1XQgL1.kOUs22pRo5co3VxjtlE34H62N.JfpfHPy', 'DOCENTE')
 
+insert into parallel (id,name) values (1,'Paralelo A')
+insert into parallel (id,name) values (2,'Paralelo B')
+insert into parallel (id,name) values (3,'Paralelo C')
+
+insert into parallel_user (id_parallel, id_user) values (1, 1)
+insert into parallel_user (id_parallel, id_user) values (2,2)
+insert into parallel_user (id_parallel, id_user) values (3,3)
 
 insert into disaeses (name) values ('Afecciones de la córnea');
 insert into disaeses (name) values ('Agujero macular');
