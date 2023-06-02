@@ -9,6 +9,8 @@ import ReturnArrow from "src/components/icons/returnArrow";
 import { useRouter } from "next/router";
 import OtherImage from "src/components/profile/otherImages";
 import Resource from "src/components/profile/resources";
+import EnrollStudents from "src/components/profile/enrollStudents";
+import EnrollIcon from "src/components/icons/enroll";
 
 interface OptionsProfileProps {
   options: string;
@@ -16,6 +18,7 @@ interface OptionsProfileProps {
   className?: string;
   isActive?: boolean;
   setTabs?: () => void;
+  viewBox?: string;
 }
 interface Comments {
   id: number;
@@ -38,12 +41,21 @@ export interface Iimage {
   name_user: string;
 }
 
+interface Student {
+  id: number;
+  name: string;
+  email: string;
+  rol: string;
+  id_parallel: number;
+}
+
 const OptionsProfile = ({
   options,
   icon,
   isActive,
   className,
   setTabs,
+  viewBox = "16 16",
 }: OptionsProfileProps) => {
   return (
     <li
@@ -56,7 +68,7 @@ const OptionsProfile = ({
         width={20}
         height={20}
         fill="currentColor"
-        viewBox="16 16"
+        viewBox={viewBox}
         children={icon}
       />
       <span className={`hidden md:block`}>{options}</span>
@@ -79,6 +91,7 @@ const MiPerfil = () => {
     password: "",
     confirmPassword: "",
   });
+  const [parrallel, setParrallel] = useState<String>("");
 
   const [isChange, setIsChange] = useState(false);
 
@@ -180,6 +193,33 @@ const MiPerfil = () => {
       });
   };
 
+  const [students, setStudents] = useState<Student[]>([]);
+  const [studentsIP, setStudentsIP] = useState<Student[]>([]);
+
+  const getStudents = async () => {
+    await fetch(process.env.API_URL + "user", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        const aux = data.data.filter(
+          (student: Student) => student.id_parallel == user.parallel_id
+        );
+        setStudentsIP(aux);
+        const lala = data.data2.filter((student: any) => {
+          return !data.data.find((student2: any) => student.id === student2.id);
+        });
+        setStudents(lala);
+      });
+  };
+
+  useEffect(() => {
+    getStudents();
+  }, [user]);
+
   return (
     <>
       <main className="px-8 min-h-screen h-full flex flex-col items-start gap-10 md:gap-28 pt-32 md:flex-row">
@@ -210,9 +250,15 @@ const MiPerfil = () => {
               setTabs={() => setTabs(4)}
             />
             <OptionsProfile
+              options="Matricular"
+              icon={<EnrollIcon />}
+              isActive={tabs === 5}
+              setTabs={() => setTabs(5)}
+            />
+            <OptionsProfile
               options="Regresar"
               icon={<ReturnArrow />}
-              isActive={tabs === 5}
+              isActive={tabs === 6}
               setTabs={() => router.back()}
             />
           </ul>
@@ -294,6 +340,13 @@ const MiPerfil = () => {
             </div>
             <div className={`${tabs === 4 ? "block" : "hidden"} w-full`}>
               <Resource />
+            </div>
+            <div className={`${tabs === 5 ? "block" : "hidden"} w-full`}>
+              <EnrollStudents
+                students={students}
+                getStudents={getStudents}
+                studentsIP={studentsIP}
+              />
             </div>
           </div>
         </section>

@@ -26,7 +26,7 @@ export default async function handler(
 const handlerGetUser = async (req: NextApiRequest, res: NextApiResponse) => {
   const { id } = req.query;
   const result = (await pool.query(
-    "SELECT id,name,email, rol FROM users WHERE id = ? ",
+    "SELECT users.id,users.name as name,users.email, users.rol, parallel_user.id_parallel as parallel_id, parallel.name as parallel_name FROM users INNER JOIN parallel_user on users.id = parallel_user.id_user INNER JOIN parallel on parallel_user.id_parallel = parallel.id WHERE users.id = ? ",
     [Number(id)]
   )) as Usuario[];
   if (result.length === 0) {

@@ -142,17 +142,23 @@ create table disaeses_diagnosis (
 	foreign key (id_diagnosis) references diagnosis(id_diagnosis)
 );
 
-insert into Users (id,email, name, password, rol) values (1,'docente1@localhost.com','Profesor 1', '$2b$10$dQWadZkcGMs9A1XQgL1.kOUs22pRo5co3VxjtlE34H62N.JfpfHPy', 'DOCENTE')
-insert into Users (id,email, name, password, rol) values (2,'docente2@localhost.com','Profesor 2', '$2b$10$dQWadZkcGMs9A1XQgL1.kOUs22pRo5co3VxjtlE34H62N.JfpfHPy', 'DOCENTE')
-insert into Users (id,email, name, password, rol) values (3,'docente3@localhost.com','Profesor 3', '$2b$10$dQWadZkcGMs9A1XQgL1.kOUs22pRo5co3VxjtlE34H62N.JfpfHPy', 'DOCENTE')
+insert into Users (id,email, name, password, rol) values (1,'docente1@localhost.com','Profesor 1', '$2b$10$dQWadZkcGMs9A1XQgL1.kOUs22pRo5co3VxjtlE34H62N.JfpfHPy', 'DOCENTE');
+insert into Users (id,email, name, password, rol) values (2,'docente2@localhost.com','Profesor 2', '$2b$10$dQWadZkcGMs9A1XQgL1.kOUs22pRo5co3VxjtlE34H62N.JfpfHPy', 'DOCENTE');
+insert into Users (id,email, name, password, rol) values (3,'docente3@localhost.com','Profesor 3', '$2b$10$dQWadZkcGMs9A1XQgL1.kOUs22pRo5co3VxjtlE34H62N.JfpfHPy', 'DOCENTE');
+insert into Users (id,email, name, password) values (4,'student1@localhost.com','Estudiante 1', '$2b$10$dQWadZkcGMs9A1XQgL1.kOUs22pRo5co3VxjtlE34H62N.JfpfHPy');
+insert into Users (id,email, name, password) values (5,'student2@localhost.com','Estudiante 2', '$2b$10$dQWadZkcGMs9A1XQgL1.kOUs22pRo5co3VxjtlE34H62N.JfpfHPy');
+insert into Users (id,email, name, password) values (6,'student3@localhost.com','Estudiante 3', '$2b$10$dQWadZkcGMs9A1XQgL1.kOUs22pRo5co3VxjtlE34H62N.JfpfHPy');
+insert into Users (id,email, name, password) values (7,'student4@localhost.com','Estudiante 4', '$2b$10$dQWadZkcGMs9A1XQgL1.kOUs22pRo5co3VxjtlE34H62N.JfpfHPy');
+insert into Users (id,email, name, password) values (8,'student5@localhost.com','Estudiante 5', '$2b$10$dQWadZkcGMs9A1XQgL1.kOUs22pRo5co3VxjtlE34H62N.JfpfHPy');
+insert into Users (id,email, name, password) values (9,'student6@localhost.com','Estudiante 6', '$2b$10$dQWadZkcGMs9A1XQgL1.kOUs22pRo5co3VxjtlE34H62N.JfpfHPy');
 
-insert into parallel (id,name) values (1,'Paralelo A')
-insert into parallel (id,name) values (2,'Paralelo B')
-insert into parallel (id,name) values (3,'Paralelo C')
+insert into parallel (id,name) values (1,'Paralelo A');
+insert into parallel (id,name) values (2,'Paralelo B');
+insert into parallel (id,name) values (3,'Paralelo C');
 
-insert into parallel_user (id_parallel, id_user) values (1, 1)
-insert into parallel_user (id_parallel, id_user) values (2,2)
-insert into parallel_user (id_parallel, id_user) values (3,3)
+insert into parallel_user (id_parallel, id_user) values (1, 1);
+insert into parallel_user (id_parallel, id_user) values (2,2);
+insert into parallel_user (id_parallel, id_user) values (3,3);
 
 insert into disaeses (name) values ('Afecciones de la córnea');
 insert into disaeses (name) values ('Agujero macular');
