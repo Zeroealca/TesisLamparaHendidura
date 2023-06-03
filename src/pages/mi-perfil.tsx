@@ -113,12 +113,15 @@ const MiPerfil = () => {
       .then((res) => res.json())
       .then((data) => setImages(data.data));
 
-    await fetch(process.env.API_URL + "img/user", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
+    await fetch(
+      process.env.API_URL + `img/user?parallel_id=${user.parallel_id}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    )
       .then((res) => res.json())
       .then((data) => setAllImages(data.data));
   };
@@ -209,10 +212,10 @@ const MiPerfil = () => {
           (student: Student) => student.id_parallel == user.parallel_id
         );
         setStudentsIP(aux);
-        const lala = data.data2.filter((student: any) => {
+        const aux2 = data.data2.filter((student: any) => {
           return !data.data.find((student2: any) => student.id === student2.id);
         });
-        setStudents(lala);
+        setStudents(aux2);
       });
   };
 
@@ -249,12 +252,14 @@ const MiPerfil = () => {
               isActive={tabs === 4}
               setTabs={() => setTabs(4)}
             />
-            <OptionsProfile
-              options="Matricular"
-              icon={<EnrollIcon />}
-              isActive={tabs === 5}
-              setTabs={() => setTabs(5)}
-            />
+            {user.rol === "DOCENTE" && (
+              <OptionsProfile
+                options="Matricular"
+                icon={<EnrollIcon />}
+                isActive={tabs === 5}
+                setTabs={() => setTabs(5)}
+              />
+            )}
             <OptionsProfile
               options="Regresar"
               icon={<ReturnArrow />}
