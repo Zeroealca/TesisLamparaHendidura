@@ -21,10 +21,14 @@ apiRout.get(async (req: NextApiRequest, res: NextApiResponse) => {
   const result = (await pool.query(
     "SELECT users.id as id,users.name as name,users.email as email,users.rol as rol, parallel_user.id_parallel as id_parallel FROM users INNER JOIN parallel_user ON users.id = parallel_user.id_user where rol = 'ESTUDIANTE'"
   )) as any;
+  const resul2 = (await pool.query(
+    "SELECT id,name,email,rol FROM users WHERE rol = 'DOCENTE'"
+  )) as any;
   return res.status(200).json({
     message: "No hay estudiantes registrados",
     data: result,
     data2: resul,
+    data3: resul2,
   });
 });
 

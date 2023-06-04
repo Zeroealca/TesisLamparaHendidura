@@ -128,7 +128,11 @@ const EnrollStudents = ({
                 );
               })}
             </select>
-            <button className="ml-2" onClick={handleEnroll}>
+            <button
+              className="ml-2 border py-1 px-2 rounded-xl"
+              onClick={handleEnroll}
+              disabled={!student.length}
+            >
               Agregar
             </button>
           </div>
