@@ -22,14 +22,19 @@ export default async function handler(
 }
 
 const handlerImageId = async (req: NextApiRequest, res: NextApiResponse) => {
-  const result = (await pool.query(
-    "SELECT * FROM images WHERE externalId LIKE 'user_%_disaeses' "
-  )) as Image[];
-  if (result.length === 0) {
-    return res.status(404).json({
-      message: "Imagen no encontrada",
-      data: undefined,
-    });
+  const students = (await pool.query(
+    "SELECT users.id as id, users.rol, parallel_user.id_user FROM users inner join parallel_user on users.id = parallel_user.id_user WHERE users.rol = 'ESTUDIANTE' AND parallel_user.id_parallel = ? ",
+    [req.query.parallel_id]
+  )) as any[];
+  const result = [] as Image[];
+  for (const student of students) {
+    const images = (await pool.query(
+      `SELECT * FROM images WHERE externalId LIKE 'user_${student.id}_disaeses' `
+    )) as Image[];
+
+    if (images.length > 0) {
+      result.push(...images);
+    }
   }
   for (const image of result) {
     image.comments = (await pool.query(

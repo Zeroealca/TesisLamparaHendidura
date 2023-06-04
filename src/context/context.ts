@@ -7,6 +7,10 @@ export interface USER {
   rol?: string;
   parallel_name?: string;
   parallel_id?: number;
+  parallel?: {
+    parallel_name: string;
+    parallel_id: number;
+  }[];
 }
 
 export interface IMAGE {

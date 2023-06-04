@@ -26,16 +26,23 @@ export default async function handler(
 const handlerGetUser = async (req: NextApiRequest, res: NextApiResponse) => {
   const { id } = req.query;
   const result = (await pool.query(
-    "SELECT users.id,users.name as name,users.email, users.rol, parallel_user.id_parallel as parallel_id, parallel.name as parallel_name FROM users INNER JOIN parallel_user on users.id = parallel_user.id_user INNER JOIN parallel on parallel_user.id_parallel = parallel.id WHERE users.id = ? ",
+    "SELECT users.id,users.name as name,users.email, users.rol FROM users WHERE users.id = ? ",
     [Number(id)]
   )) as Usuario[];
+  const parallel = (await pool.query(
+    "SELECT parallel.name as parallel_name, parallel.id as parallel_id FROM parallel_user INNER JOIN parallel on parallel_user.id_parallel = parallel.id WHERE parallel_user.id_user = ? ",
+    [Number(id)]
+  )) as {
+    parallel_name: string;
+    parallel_id: number;
+  }[];
   if (result.length === 0) {
     return res.status(404).json({
       message: "Usuario no encontrado",
       data: undefined,
     });
   }
-  return res.json(result[0]);
+  return res.json({ ...result[0], parallel: parallel });
 };
 
 const handlerUserData = async (req: NextApiRequest, res: NextApiResponse) => {
