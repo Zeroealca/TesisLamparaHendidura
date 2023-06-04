@@ -52,6 +52,14 @@ const Navbar = () => {
             <Menu.Items className="py-1">
               <Menu.Item>
                 <Link
+                  href="/administracion"
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-grayprimary dark:hover:bg-blacksecondary dark:hover:text-white"
+                >
+                  Administración
+                </Link>
+              </Menu.Item>
+              <Menu.Item>
+                <Link
                   href="/mi-perfil"
                   className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-grayprimary dark:hover:bg-blacksecondary dark:hover:text-white"
                 >

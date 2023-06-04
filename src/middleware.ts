@@ -23,5 +23,6 @@ export const config = {
     "/informacion",
     "/informacion/:path*",
     "/simulador/partes",
+    "/administracion",
   ],
 };

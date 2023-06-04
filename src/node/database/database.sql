@@ -151,6 +151,7 @@ insert into Users (id,email, name, password) values (6,'student3@localhost.com',
 insert into Users (id,email, name, password) values (7,'student4@localhost.com','Estudiante 4', '$2b$10$dQWadZkcGMs9A1XQgL1.kOUs22pRo5co3VxjtlE34H62N.JfpfHPy');
 insert into Users (id,email, name, password) values (8,'student5@localhost.com','Estudiante 5', '$2b$10$dQWadZkcGMs9A1XQgL1.kOUs22pRo5co3VxjtlE34H62N.JfpfHPy');
 insert into Users (id,email, name, password) values (9,'student6@localhost.com','Estudiante 6', '$2b$10$dQWadZkcGMs9A1XQgL1.kOUs22pRo5co3VxjtlE34H62N.JfpfHPy');
+insert into Users (id,email, name, password, rol) values (10,'admin@localhost.com','admin', '$2b$10$dQWadZkcGMs9A1XQgL1.kOUs22pRo5co3VxjtlE34H62N.JfpfHPy', 'ADMIN');
 
 insert into parallel (id,name) values (1,'Paralelo A');
 insert into parallel (id,name) values (2,'Paralelo B');
