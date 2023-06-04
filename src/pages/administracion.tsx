@@ -1,10 +1,12 @@
 import { useContext } from "react";
 import UserContext from "../context/context";
+import { useRouter } from "next/router";
 
 const Administracion = () => {
   const { user } = useContext(UserContext);
-  if (user.rol !== "ADMIN")
-    return <h1>No tienes permisos para acceder a esta página</h1>;
+  const router = useRouter();
+
+  if (user.rol !== "ADMIN") return router.back();
 
   return <h1>Administracion</h1>;
 };
