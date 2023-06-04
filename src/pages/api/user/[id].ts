@@ -42,7 +42,7 @@ const handlerGetUser = async (req: NextApiRequest, res: NextApiResponse) => {
       data: undefined,
     });
   }
-  return res.json({ ...result[0], ...parallel[0] });
+  return res.json({ ...result[0], parallel: parallel });
 };
 
 const handlerUserData = async (req: NextApiRequest, res: NextApiResponse) => {

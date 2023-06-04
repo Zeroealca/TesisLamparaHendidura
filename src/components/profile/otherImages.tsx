@@ -8,10 +8,14 @@ const OtherImage = ({
   images,
   setImages,
   rol,
+  setParallel,
+  parallel,
 }: {
   images: Iimage[];
   setImages: (images: Iimage[]) => void;
   rol: string | undefined;
+  setParallel: (id: string) => void;
+  parallel: string;
 }) => {
   const router = useRouter();
   const deleteImage = async (id: string) => {
@@ -39,7 +43,7 @@ const OtherImage = ({
 
   useEffect(() => {
     setImagesFilterd(images);
-  }, [images?.length]);
+  }, [images]);
 
   const filteredImages = images?.filter((image) => {
     switch (filter) {
@@ -66,7 +70,25 @@ const OtherImage = ({
 
   return (
     <>
-      <h1 className="text-2xl font-bold text-left mb-10">Otras imágenes</h1>
+      <div className="flex items-center gap-5 mb-10">
+        <h1 className="text-2xl font-bold text-left">
+          Imágenes de estudiantes
+        </h1>
+        <select
+          onChange={(e) => {
+            setParallel(e.target.value);
+          }}
+        >
+          <option value=""></option>
+          {user.parallel?.map((parallel) => {
+            return (
+              <option value={parallel.parallel_id}>
+                {parallel.parallel_name}
+              </option>
+            );
+          })}
+        </select>
+      </div>
 
       <div className="mb-4 w-full flex items-center justify-end">
         <input

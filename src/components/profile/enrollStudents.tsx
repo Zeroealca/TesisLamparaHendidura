@@ -17,12 +17,17 @@ const EnrollStudents = ({
   students,
   getStudents,
   studentsIP,
+  parallel,
+  setParallel,
 }: {
   students: Student[];
   getStudents: () => void;
   studentsIP: Student[];
+  parallel: string;
+  setParallel: (id: string) => void;
 }) => {
   const [student, setStudent] = useState("");
+
   const { user } = useContext(UserContext);
 
   const columns = [
@@ -71,7 +76,7 @@ const EnrollStudents = ({
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        id_parallel: user.parallel_id,
+        id_parallel: parseInt(parallel),
         id_user: parseInt(student),
       }),
     });
@@ -87,9 +92,23 @@ const EnrollStudents = ({
 
   return (
     <>
-      <h1 className="text-2xl font-bold text-left mb-10">
-        Estudiantes {user.parallel_name}
-      </h1>
+      <div className="flex items-center mb-10 gap-5">
+        <h1 className="text-2xl font-bold text-left">Estudiantes</h1>
+        <select
+          onChange={(e) => {
+            setParallel(e.target.value);
+          }}
+        >
+          <option value=""></option>
+          {user.parallel?.map((parallel) => {
+            return (
+              <option value={parallel.parallel_id}>
+                {parallel.parallel_name}
+              </option>
+            );
+          })}
+        </select>
+      </div>
       <div className="flex flex-row justify-between items-center mb-5">
         <div className="flex flex-row justify-between items-center">
           <div className="flex flex-row justify-between items-center">

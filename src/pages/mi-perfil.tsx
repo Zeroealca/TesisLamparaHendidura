@@ -83,6 +83,7 @@ const MiPerfil = () => {
 
   const [images, setImages] = useState<Iimage[]>([]);
   const [AllImages, setAllImages] = useState<Iimage[]>([]);
+  const [parallel, setParallel] = useState("");
   const params = Number(router.query.tab);
   const [tabs, setTabs] = useState<number>(1);
   const [state, setState] = useState({
@@ -91,10 +92,8 @@ const MiPerfil = () => {
     password: "",
     confirmPassword: "",
   });
-  const [parrallel, setParrallel] = useState<String>("");
 
   const [isChange, setIsChange] = useState(false);
-
   useEffect(() => {
     setState({ ...state, ...other });
   }, [user]);
@@ -113,17 +112,19 @@ const MiPerfil = () => {
       .then((res) => res.json())
       .then((data) => setImages(data.data));
 
-    await fetch(
-      process.env.API_URL + `img/user?parallel_id=${user.parallel_id}`,
-      {
+    if (parallel) {
+      console.log("hola");
+      await fetch(process.env.API_URL + `img/user?parallel_id=${parallel}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
-      }
-    )
-      .then((res) => res.json())
-      .then((data) => setAllImages(data.data));
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setAllImages(data.data);
+        });
+    }
   };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setState({ ...state, [e.target.name]: e.target.value });
@@ -131,7 +132,7 @@ const MiPerfil = () => {
 
   useEffect(() => {
     user.id && getImage();
-  }, [user]);
+  }, [user, parallel]);
 
   useEffect(() => {
     if (user.email === state.email && user.name === state.name) {
@@ -208,20 +209,24 @@ const MiPerfil = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        const aux = data.data.filter(
-          (student: Student) => student.id_parallel == user.parallel_id
-        );
-        setStudentsIP(aux);
-        const aux2 = data.data2.filter((student: any) => {
-          return !data.data.find((student2: any) => student.id === student2.id);
-        });
-        setStudents(aux2);
+        if (parallel) {
+          const aux = data.data?.filter(
+            (student: Student) => student.id_parallel == Number(parallel)
+          );
+          setStudentsIP(aux);
+          const aux2 = data.data2?.filter((student: any) => {
+            return !data.data.find(
+              (student2: any) => student.id === student2.id
+            );
+          });
+          setStudents(aux2);
+        }
       });
   };
 
   useEffect(() => {
     getStudents();
-  }, [user]);
+  }, [user, parallel]);
 
   return (
     <>
@@ -241,7 +246,7 @@ const MiPerfil = () => {
               setTabs={() => setTabs(2)}
             />
             <OptionsProfile
-              options="Otras imágenes"
+              options="Imágenes de estudiantes"
               icon={<Images />}
               isActive={tabs === 3}
               setTabs={() => setTabs(3)}
@@ -341,6 +346,8 @@ const MiPerfil = () => {
                 images={AllImages}
                 setImages={setAllImages}
                 rol={user.rol}
+                parallel={parallel}
+                setParallel={setParallel}
               />
             </div>
             <div className={`${tabs === 4 ? "block" : "hidden"} w-full`}>
@@ -351,6 +358,8 @@ const MiPerfil = () => {
                 students={students}
                 getStudents={getStudents}
                 studentsIP={studentsIP}
+                parallel={parallel}
+                setParallel={setParallel}
               />
             </div>
           </div>
