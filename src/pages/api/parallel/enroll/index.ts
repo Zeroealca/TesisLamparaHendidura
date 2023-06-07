@@ -26,6 +26,10 @@ const handleEnroll = async (req: NextApiRequest, res: NextApiResponse) => {
     id_user: number;
     id_parallel: number;
   };
+  await pool.query(
+    "DELETE FROM parallel_user WHERE id_user = ? and id_parallel = ?",
+    [id_user, id_parallel]
+  );
 
   const result = (await pool.query("INSERT INTO parallel_user SET ? ", {
     id_parallel,
@@ -38,5 +42,8 @@ const handleEnroll = async (req: NextApiRequest, res: NextApiResponse) => {
     });
   }
 
-  return res.json(result);
+  return res.json({
+    message: "Docente asignado",
+    data: true,
+  });
 };

@@ -113,7 +113,6 @@ const MiPerfil = () => {
       .then((data) => setImages(data.data));
 
     if (parallel) {
-      console.log("hola");
       await fetch(process.env.API_URL + `img/user?parallel_id=${parallel}`, {
         method: "GET",
         headers: {
