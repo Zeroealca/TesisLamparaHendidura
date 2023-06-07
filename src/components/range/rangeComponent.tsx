@@ -34,11 +34,7 @@ const rangeComponent = (props: rangeComponentProps) => {
   } = props;
   useEffect(() => {
     if (lane.current) {
-      lane.current.style.opacity = !(state.intensity / 100)
-        ? "0.1"
-        : state.intensity / 100 == 1
-        ? "0.8"
-        : `${state.intensity / 100}`;
+      lane.current.style.opacity = `${state.intensity / 3}%`;
     }
   }, [state.intensity]);
 
