@@ -22,10 +22,16 @@ export default async function handler(
 }
 
 const handlerImageId = async (req: NextApiRequest, res: NextApiResponse) => {
-  const students = (await pool.query(
-    "SELECT users.id as id, users.rol, parallel_user.id_user FROM users inner join parallel_user on users.id = parallel_user.id_user WHERE users.rol = 'ESTUDIANTE' AND parallel_user.id_parallel = ? ",
-    [req.query.parallel_id]
-  )) as any[];
+  const students =
+    req.query.rol == "ESTUDIANTE"
+      ? ((await pool.query(
+          "SELECT  users.id as id, users.rol, parallel_user.id_user FROM users inner join parallel_user on users.id = parallel_user.id_user WHERE users.rol = 'DOCENTE' AND parallel_user.id_parallel = ? ",
+          [req.query.parallel_id]
+        )) as any[])
+      : ((await pool.query(
+          "SELECT users.id as id, users.rol, parallel_user.id_user FROM users inner join parallel_user on users.id = parallel_user.id_user WHERE users.rol = 'ESTUDIANTE' AND parallel_user.id_parallel = ? ",
+          [req.query.parallel_id]
+        )) as any[]);
   const result = [] as Image[];
   for (const student of students) {
     const images = (await pool.query(
