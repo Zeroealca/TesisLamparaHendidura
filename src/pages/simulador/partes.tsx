@@ -94,7 +94,7 @@ const Partes = () => {
           <ReactTooltip
             anchorId="part6"
             place="left"
-            content="Biomicroscopio"
+            content="Lentes oculares"
           />
         </div>
 
@@ -115,11 +115,7 @@ const Partes = () => {
           className="absolute top-[210px] left-[215px] z-10 group-hover:scale-110 transition-all duration-700 cursor-help"
         >
           <img src={Parte8.src} className="w-[20px]" />
-          <ReactTooltip
-            anchorId="part8"
-            place="right"
-            content="Nivelador de la altura de los ojo"
-          />
+          <ReactTooltip anchorId="part8" place="right" content="Mentonera" />
         </div>
 
         <div

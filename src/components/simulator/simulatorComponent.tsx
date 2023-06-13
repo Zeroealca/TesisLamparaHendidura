@@ -366,7 +366,7 @@ const simulatorComponent = () => {
                               setState={setState}
                               type="intensity"
                               step={25}
-                              text="INTENSIDAD DE LA LUZ"
+                              text="FILTRO"
                               value={state.intensity}
                             />
                             <RangeComponent
