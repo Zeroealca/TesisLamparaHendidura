@@ -64,13 +64,15 @@ const OptionsProfile = ({
       } ${className}`}
       onClick={setTabs}
     >
-      <Icon
-        width={20}
-        height={20}
-        fill="currentColor"
-        viewBox={viewBox}
-        children={icon}
-      />
+      <div>
+        <Icon
+          width={20}
+          height={20}
+          fill="currentColor"
+          viewBox={viewBox}
+          children={icon}
+        />
+      </div>
       <span className={`hidden md:block`}>{options}</span>
     </li>
   );
@@ -96,6 +98,11 @@ const MiPerfil = () => {
   const [isChange, setIsChange] = useState(false);
   useEffect(() => {
     setState({ ...state, ...other });
+    if (user.rol === "ESTUDIANTE") {
+      if (user.parallel?.length) {
+        setParallel(user.parallel[0].parallel_id.toString());
+      }
+    }
   }, [user]);
 
   useEffect(() => {
@@ -245,7 +252,11 @@ const MiPerfil = () => {
               setTabs={() => setTabs(2)}
             />
             <OptionsProfile
-              options="Imágenes de estudiantes"
+              options={
+                user.rol == "ESTUDIANTE"
+                  ? "Imágenes del paralelo"
+                  : "Imágenes de estudiantes"
+              }
               icon={<Images />}
               isActive={tabs === 3}
               setTabs={() => setTabs(3)}

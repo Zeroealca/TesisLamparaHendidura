@@ -71,23 +71,31 @@ const OtherImage = ({
   return (
     <>
       <div className="flex items-center gap-5 mb-10">
-        <h1 className="text-2xl font-bold text-left">
-          Imágenes de estudiantes
-        </h1>
-        <select
-          onChange={(e) => {
-            setParallel(e.target.value);
-          }}
-        >
-          <option value=""></option>
-          {user.parallel?.map((parallel) => {
-            return (
-              <option value={parallel.parallel_id}>
-                {parallel.parallel_name}
-              </option>
-            );
-          })}
-        </select>
+        <h1 className="text-2xl font-bold text-left">Imágenes del</h1>
+        {rol === "ESTUDIANTE" ? (
+          <span className="text-2xl font-bold text-left">
+            {
+              user?.parallel?.find((p) => {
+                return p.parallel_id.toString() == parallel;
+              })?.parallel_name
+            }
+          </span>
+        ) : (
+          <select
+            onChange={(e) => {
+              setParallel(e.target.value);
+            }}
+          >
+            <option value=""></option>
+            {user.parallel?.map((parallel) => {
+              return (
+                <option value={parallel.parallel_id}>
+                  {parallel.parallel_name}
+                </option>
+              );
+            })}
+          </select>
+        )}
       </div>
 
       <div className="mb-4 w-full flex items-center justify-end">
