@@ -8,6 +8,7 @@ import nextConnect from "next-connect";
 import multer from "multer";
 import pool from "@/node/config/db";
 import { concat_url_idVideo } from "src/utils/youtube";
+import { PrismaService } from "@/node/prisma/prisma.service";
 
 const upload = multer({
   storage: multer.diskStorage({
@@ -35,9 +36,14 @@ const apiRout = nextConnect({
 });
 
 apiRout.get(async (req: NextApiRequest, res: NextApiResponse) => {
-  const resources = (await pool.query(
-    "SELECT * FROM images WHERE externalId LIKE 'resourse-%' "
-  )) as any[];
+  const prismaService = new PrismaService();
+  const resources = await prismaService.images.findMany({
+    where: {
+      externalId: {
+        contains: "resourse-",
+      },
+    },
+  });
 
   return res.status(200).json({
     data: resources,
@@ -55,10 +61,14 @@ apiRout.post(async (req: any, res: NextApiResponse) => {
   if (video) {
     uploadVideoHandler(video, res);
   }
-
-  const resources = (await pool.query(
-    "SELECT * FROM images WHERE externalId LIKE 'resourse-%' "
-  )) as any[];
+  const prismaService = new PrismaService();
+  const resources = await prismaService.images.findMany({
+    where: {
+      externalId: {
+        contains: "resourse-",
+      },
+    },
+  });
 
   return res.status(200).json({
     message: "File uploaded successfully",
@@ -93,19 +103,25 @@ const uploadFileHandler = async (file: any, res: NextApiResponse) => {
     });
   }
 
-  await pool.query("INSERT INTO images SET ?", {
-    name: file.originalname,
-    url,
-    id_image: uploadedFile.id,
-    externalId: `resourse-${uploadedFile.id}`,
+  const prismaService = new PrismaService();
+  await prismaService.images.create({
+    data: {
+      name: file.originalname,
+      url,
+      id_image: uploadedFile.id,
+      externalId: `resourse-${uploadedFile.id}`,
+    },
   });
 };
 
 const uploadVideoHandler = async (id: string, res: NextApiResponse) => {
-  await pool.query("INSERT INTO images SET ?", {
-    name: id,
-    url: concat_url_idVideo(id),
-    id_image: id,
-    externalId: `resourse-${id}`,
+  const prismaService = new PrismaService();
+  await prismaService.images.create({
+    data: {
+      name: id,
+      url: concat_url_idVideo(id),
+      id_image: id,
+      externalId: `resourse-${id}`,
+    },
   });
 };

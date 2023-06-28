@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import pool from "@/node/config/db";
+import { PrismaService } from "@/node/prisma/prisma.service";
 
 export interface Image {
   id_image: string;
@@ -32,26 +33,37 @@ export default async function handler(
 
 const handlerImageId = async (req: NextApiRequest, res: NextApiResponse) => {
   const { id } = req.query;
-  const result = (await pool.query(
-    "SELECT * FROM images WHERE externalId = ? ",
-    [`user_${id}_disaeses`]
-  )) as Image[];
-  if (result.length === 0) {
+  const prismaService = new PrismaService();
+
+  const images = (await prismaService.images.findMany({
+    where: {
+      externalId: `user_${id}_disaeses`,
+    },
+  })) as any;
+
+  if (!images) {
     return res.status(404).json({
       message: "Imagen no encontrada",
       data: undefined,
     });
   }
-  for (const image of result) {
-    image.comments = (await pool.query(
-      "SELECT * FROM comments INNER JOIN users ON comments.id_user = users.id WHERE id_image = ? ",
-      [image.id_image]
-    )) as Comments[];
+  for (const image of images) {
+    image.comments = await prismaService.comments.findMany({
+      where: {
+        id_image: image.id_image,
+      },
+      include: {
+        user: true,
+      },
+    });
+
     const id_user = image.externalId.split("_")[1];
-    const user = (await pool.query("SELECT * FROM users WHERE id = ? ", [
-      id_user,
-    ])) as any[];
-    image.name_user = user[0].name;
+    const user = await prismaService.user.findFirst({
+      where: {
+        id: id_user,
+      },
+    });
+    image.name_user = user?.name;
 
     image.comments.map(async (comment: any) => {
       if (comment.rol === "DOCENTE") image.isRevised = true;
@@ -67,6 +79,6 @@ const handlerImageId = async (req: NextApiRequest, res: NextApiResponse) => {
   }
   return res.status(200).json({
     message: "Imagen encontrada",
-    data: result as Image[],
+    data: images as Image[],
   });
 };

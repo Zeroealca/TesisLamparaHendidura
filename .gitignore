@@ -10,11 +10,14 @@
 
 
 # upload only folder temp, not all temp files
-/!temp/.gitkeep 
+/!temp/.gitkeep
 
 # next.js
 /.next/
 /out/
+
+#storage
+/storage
 
 # production
 /build

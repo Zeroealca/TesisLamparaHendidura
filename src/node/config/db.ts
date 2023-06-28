@@ -1,5 +1,6 @@
-import serverlessMysql from "serverless-mysql";
-const db = serverlessMysql({
+/* import ServerlessClient  from "serverless-mysql";
+
+const db = ServerlessClient ({
   config: {
     host: "localhost",
     database: "tesiseye",
@@ -8,4 +9,16 @@ const db = serverlessMysql({
     port: 3306,
   },
 });
-export default db;
+export default db; */
+
+import ServerlessClient from "serverless-postgres";
+
+const client = new ServerlessClient({
+  user: "postgres",
+  host: "localhost",
+  database: "tesiseye",
+  password: "root",
+  port: 5432,
+});
+
+export default client;

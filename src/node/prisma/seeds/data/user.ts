@@ -1,0 +1,66 @@
+export const users = [
+  {
+    id: "clg8j6vmg000hu4nc1bo35dsp",
+    name: "Profesor 1",
+    email: "docente1@localhost.com",
+    rol: "DOCENTE",
+    password: "docente1",
+  },
+  {
+    id: "clg8j6vmi000ju4nc2ml38spx",
+    name: "docente2@localhost.com",
+    email: "Profesor 2",
+    rol: "DOCENTE",
+    password: "docente2",
+  },
+  {
+    id: "clg8j6vmi000ku4nc8aavljed",
+    email: "docente3@localhost.com",
+    name: "Profesor 3",
+    rol: "DOCENTE",
+    password: "docente3",
+  },
+  {
+    id: "clg8j6vmi000nu4ncwfi7oa7c",
+    email: "student1@localhost.com",
+    name: "Estudiante 1",
+    password: "student1",
+  },
+  {
+    id: "clg8j6vmi000pu4ncdj9e5f95",
+    email: "student2@localhost.com",
+    name: "Estudiante 2",
+    password: "student2",
+  },
+  {
+    id: "clg8j6vmj000ru4ncobof4ern",
+    email: "student3@localhost.com",
+    name: "Estudiante 3",
+    password: "12345678",
+  },
+  {
+    id: "clg8j6vmj000tu4nczoqvkan0",
+    email: "student4@localhost.com",
+    name: "Estudiante 4",
+    password: "student3",
+  },
+  {
+    id: "clg8j6vmj000vu4ncogd5ifdh",
+    email: "student5@localhost.com",
+    name: "Estudiante 5",
+    password: "student5",
+  },
+  {
+    id: "clg8j6vmj000wu4nc54szw1yc",
+    email: "student6@localhost.com",
+    name: "Estudiante 6",
+    password: "student6",
+  },
+  {
+    id: "clg8j6vqc000zu4nciing890j",
+    email: "admin@localhost.com",
+    name: "admin",
+    rol: "ADMIN",
+    password: "admin2023vista",
+  },
+];

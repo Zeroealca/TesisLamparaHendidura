@@ -30,7 +30,7 @@ export const useGetAllInformation = () => {
 };
 
 export interface INFORMATION {
-  image: string;
+  image: { name: string; url: string };
   Enfermedad: string;
   Tratamiento?: string[];
   Síntoma?: string[];

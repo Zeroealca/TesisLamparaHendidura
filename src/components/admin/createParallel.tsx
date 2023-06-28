@@ -58,35 +58,37 @@ const CreateParallel = ({
     },
     {
       name: "Acciones Docente",
-      cell: (row: Parallel) => (
-        <div className="flex flex-row justify-center items-center gap-2">
-          <button
-            className="bg-red-500 text-white p-1 rounded-md"
-            disabled={row.docente == null}
-            onClick={async () => {
-              const res = await fetch(
-                process.env.API_URL +
-                  `parallel?parallel=${row.id}&user=${row.docente?.id}`,
-                {
-                  method: "DELETE",
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
+      cell: (row: Parallel) => {
+        return (
+          <div className="flex flex-row justify-center items-center gap-2">
+            <button
+              className="bg-red-500 text-white p-1 rounded-md"
+              disabled={row.docente == null}
+              onClick={async () => {
+                const res = await fetch(
+                  process.env.API_URL +
+                    `parallel?parallel=${row.id}&user=${row.docente?.id}`,
+                  {
+                    method: "DELETE",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                  }
+                );
+                const data = await res.json();
+                if (data.data) {
+                  toast.success(data.message);
+                  getParallels();
+                } else {
+                  toast.error(data.message);
                 }
-              );
-              const data = await res.json();
-              if (data.data) {
-                toast.success(data.message);
-                getParallels();
-              } else {
-                toast.error(data.message);
-              }
-            }}
-          >
-            Eliminar
-          </button>
-        </div>
-      ),
+              }}
+            >
+              Eliminar
+            </button>
+          </div>
+        );
+      },
     },
   ];
 
@@ -128,7 +130,7 @@ const CreateParallel = ({
   const handleCreate = async () => {
     if (!parallel.length)
       return toast.error("Ingrese un nombre para el paralelo");
-    const res = await fetch(process.env.API_URL + `parallel/`, {
+    const res = await fetch(process.env.API_URL + `parallel`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -157,7 +159,7 @@ const CreateParallel = ({
       },
       body: JSON.stringify({
         id_parallel: Number(parallel_id),
-        id_user: Number(teacher),
+        id_user: teacher,
       }),
     });
     const data = await res.json();

@@ -15,14 +15,14 @@ const UserProvider = (props: any) => {
     }
   }, [session]);
 
-  const getUser = (id: number) => {
-    fetch(process.env.API_URL + `user/${id}`, {
+  const getUser = async (id: number) => {
+    const res = await fetch(process.env.API_URL + `user/${id}`, {
       method: "GET",
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setUser(data);
-      });
+    });
+    if (res.status === 200) {
+      const data = await res.json();
+      setUser(data);
+    }
   };
 
   const setUser = (user: USER) => {

@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { deleteFile } from "@/node/drive/driveControllers";
 import pool from "@/node/config/db";
+import { PrismaService } from "@/node/prisma/prisma.service";
 
 export default async function handler(
   req: NextApiRequest,
@@ -38,7 +39,12 @@ const handlerDeleteImageId = async (
       message: "Error deleting file",
     });
   }
-  await pool.query("DELETE FROM images WHERE id_image = ?", [id]);
+  const prismaService = new PrismaService();
+  await prismaService.images.delete({
+    where: {
+      id_image: id as string,
+    },
+  });
   return res.status(200).json({
     message: "File deleted successfully",
     data: deletedFile,
@@ -46,9 +52,11 @@ const handlerDeleteImageId = async (
 };
 
 const deleteVideo = async (id: string) => {
-  const deletedFile = await pool.query(
-    "DELETE FROM images WHERE id_image = ?",
-    [id]
-  );
-  return deletedFile;
+  const prismaService = new PrismaService();
+  const video = await prismaService.images.delete({
+    where: {
+      id_image: id,
+    },
+  });
+  return video;
 };

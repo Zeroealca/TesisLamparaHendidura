@@ -48,6 +48,14 @@ const Navbar = () => {
                   {user?.email}
                 </p>
               </Menu.Item>
+              <Menu.Item disabled>
+                <p
+                  className="text-sm font-medium text-gray-900 truncate dark:text-grayprimary"
+                  role="none"
+                >
+                  Eres <span className="dark:text-red-600">{user?.rol}</span>
+                </p>
+              </Menu.Item>
             </Menu.Items>
             <Menu.Items className="py-1">
               {user.rol === "ADMIN" ? (

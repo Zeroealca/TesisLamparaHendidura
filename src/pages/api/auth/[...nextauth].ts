@@ -1,15 +1,12 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import pool from "@/node/config/db";
 import { comparePassword, hashPassword } from "@/node/utils/auth";
 import axios from "axios";
 import https from "https";
-
+import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import { PrismaService } from "@/node/prisma/prisma.service";
 export default NextAuth({
-  // Configure one or more authentication providers
   providers: [
-    // ...add more providers here
-
     Credentials({
       name: "Custom Login",
       credentials: {
@@ -32,16 +29,9 @@ export default NextAuth({
       },
     }),
   ],
-
-  // Custom Pages
   pages: {
     signIn: "/iniciar-sesion",
     newUser: "/registro",
-  },
-
-  // Callbacks
-  jwt: {
-    // secret: process.env.JWT_SECRET_SEED, // deprecated
   },
 
   session: {
@@ -49,7 +39,6 @@ export default NextAuth({
     strategy: "jwt",
     updateAge: 86400, // cada día
   },
-
   callbacks: {
     async jwt({ token, account, user }) {
       if (account) {
@@ -67,6 +56,7 @@ export default NextAuth({
       return session;
     },
   },
+  adapter: PrismaAdapter(PrismaService),
 });
 
 interface IUSERUTM {
@@ -76,10 +66,14 @@ interface IUSERUTM {
 }
 
 const checkUserEmailPassword = async (email: string, password: string) => {
-  const result = (await pool.query("SELECT * FROM users WHERE email = ? ", [
-    email,
-  ])) as any;
-  if (result.length === 0 && email.includes("@utm.edu.ec")) {
+  const prismaService = new PrismaService();
+  const user = await prismaService.user.findFirst({
+    where: {
+      email,
+    },
+  });
+
+  if (!user && email.includes("@utm.edu.ec")) {
     try {
       const res: any = await axios.post(
         process.env.URL_UTM || "",
@@ -107,19 +101,16 @@ const checkUserEmailPassword = async (email: string, password: string) => {
 
         const encryptpassword = await hashPassword(password);
 
-        await pool.query("INSERT INTO users SET ?", {
-          name: nombres,
-          email,
-          password: encryptpassword,
-          rol: isDocente ? "DOCENTE" : "ESTUDIANTE",
+        const result = await prismaService.user.create({
+          data: {
+            name: nombres,
+            email,
+            password: encryptpassword,
+            rol: isDocente ? "DOCENTE" : "ESTUDIANTE",
+          },
         });
 
-        const result = (await pool.query(
-          "SELECT * FROM users WHERE email = ? ",
-          [email]
-        )) as any;
-
-        const { id } = result[0];
+        const { id } = result;
         return {
           id,
         };
@@ -129,12 +120,12 @@ const checkUserEmailPassword = async (email: string, password: string) => {
     }
   }
 
-  if (result.length === 0) return null;
+  if (!user) return null;
 
-  const validPassword = await comparePassword(password, result[0].password);
+  const validPassword = await comparePassword(password, user.password);
   if (!validPassword) return null;
 
-  const { id } = result[0];
+  const { id } = user;
   return {
     id,
   };

@@ -6,8 +6,7 @@ import {
 } from "@/node/drive/driveControllers";
 import nextConnect from "next-connect";
 import multer from "multer";
-import pool from "@/node/config/db";
-import { Usuario } from "../auth/login";
+import { PrismaService } from "@/node/prisma/prisma.service";
 
 const upload = multer({
   storage: multer.diskStorage({
@@ -39,6 +38,9 @@ apiRout.use(upload.single("file"));
 apiRout.post(async (req: any, res: NextApiResponse) => {
   const { file } = req;
   const { id_image, user, details, state } = req.body;
+
+  const prismaService = new PrismaService();
+
   if (!id_image) {
     const uploadedFile = (await uploadFile(file)) as {
       id: string;
@@ -52,32 +54,46 @@ apiRout.post(async (req: any, res: NextApiResponse) => {
       });
     }
     const url = await generatePublicUrl(uploadedFile.id);
+
     if (!url) {
       return res.status(500).json({
         message: "Error generating public url",
       });
     }
-    const result = (await pool.query("SELECT * FROM users WHERE id = ? ", [
-      user,
-    ])) as Usuario[];
-    await pool.query("INSERT INTO images SET ?", {
-      name: file.originalname,
-      url,
-      id_image: uploadedFile.id,
-      externalId: `user_${result[0].id}_disaeses`,
-      details,
-      state,
+
+    const userPrisma = await prismaService.user.findUnique({
+      where: {
+        id: user,
+      },
     });
+
+    await prismaService.images.create({
+      data: {
+        name: file.originalname,
+        url,
+        id_image: uploadedFile.id,
+        externalId: `user_${userPrisma?.id}_disaeses`,
+        details,
+        state,
+      },
+    });
+
     return res.status(200).json({
       message: "File uploaded successfully",
       data: { publicUrl: url, id_image: uploadedFile.id },
     });
   }
-  const result = (await pool.query(
-    "UPDATE images set details = ? WHERE id_image = ? ",
-    [details, id_image]
-  )) as any;
-  if (result.affectedRows === 0) {
+
+  const images = await prismaService.images.update({
+    where: {
+      id_image: id_image,
+    },
+    data: {
+      details,
+    },
+  });
+
+  if (!images) {
     return res.status(404).json({
       message: "Imagen no encontrada",
       data: undefined,

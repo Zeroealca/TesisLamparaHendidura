@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import pool from "@/node/config/db";
 import { hashPassword } from "@/node/utils/auth";
+import { PrismaService } from "@/node/prisma/prisma.service";
 
 interface Usuario {
   name: string;
@@ -23,19 +24,26 @@ export default async function handler(
 
 const handleEnroll = async (req: NextApiRequest, res: NextApiResponse) => {
   const { id_user, id_parallel } = req.body as {
-    id_user: number;
+    id_user: string;
     id_parallel: number;
   };
-  await pool.query(
-    "DELETE FROM parallel_user WHERE id_user = ? and id_parallel = ?",
-    [id_user, id_parallel]
-  );
+  const prismaService = new PrismaService();
 
-  const result = (await pool.query("INSERT INTO parallel_user SET ? ", {
-    id_parallel,
-    id_user,
-  })) as any;
-  if (result.affectedRows === 0) {
+  await prismaService.parallel_user.deleteMany({
+    where: {
+      id_parallel,
+      id_user: id_user,
+    },
+  });
+
+  const parallel_user = await prismaService.parallel_user.create({
+    data: {
+      id_parallel,
+      id_user: id_user,
+    },
+  });
+
+  if (!parallel_user) {
     return res.status(404).json({
       message: "Usuario no encontrado",
       data: undefined,

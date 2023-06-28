@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import pool from "@/node/config/db";
 import { Image } from "./[id]";
+import { PrismaService } from "@/node/prisma/prisma.service";
 
 interface Comments {
   id: number;
@@ -22,36 +23,51 @@ export default async function handler(
 }
 
 const handlerImageId = async (req: NextApiRequest, res: NextApiResponse) => {
-  const students =
-    req.query.rol == "ESTUDIANTE"
-      ? ((await pool.query(
-          "SELECT  users.id as id, users.rol, parallel_user.id_user FROM users inner join parallel_user on users.id = parallel_user.id_user WHERE users.rol = 'DOCENTE' AND parallel_user.id_parallel = ? ",
-          [req.query.parallel_id]
-        )) as any[])
-      : ((await pool.query(
-          "SELECT users.id as id, users.rol, parallel_user.id_user FROM users inner join parallel_user on users.id = parallel_user.id_user WHERE users.rol = 'ESTUDIANTE' AND parallel_user.id_parallel = ? ",
-          [req.query.parallel_id]
-        )) as any[]);
-  const result = [] as Image[];
+  const { parallel_id, rol } = req.query;
+
+  const prismaService = new PrismaService();
+
+  const students = await prismaService.user.findMany({
+    where: {
+      rol: rol === "ESTUDIANTE" ? "DOCENTE" : "ESTUDIANTE",
+      parallel_user: {
+        some: {
+          id_parallel: Number(parallel_id),
+        },
+      },
+    },
+  });
+
+  const result = [] as any;
+
   for (const student of students) {
-    const images = (await pool.query(
-      `SELECT * FROM images WHERE externalId LIKE 'user_${student.id}_disaeses' `
-    )) as Image[];
+    const images = await prismaService.images.findMany({
+      where: {
+        externalId: `{user_${student.id}_disaeses}`,
+      },
+    });
 
     if (images.length > 0) {
       result.push(...images);
     }
   }
   for (const image of result) {
-    image.comments = (await pool.query(
-      "SELECT * FROM comments INNER JOIN users ON comments.id_user = users.id WHERE id_image = ? ",
-      [image.id_image]
-    )) as Comments[];
+    image.comments = await prismaService.comments.findMany({
+      where: {
+        id_image: image.id_image,
+      },
+    });
+
     const id_user = image.externalId.split("_")[1];
-    const user = (await pool.query("SELECT * FROM users WHERE id = ? ", [
-      id_user,
-    ])) as any[];
-    image.name_user = user[0].name;
+
+    const user = await prismaService.user.findUnique({
+      where: {
+        id: id_user,
+      },
+    });
+
+    image.name_user = user?.name;
+
     image.comments.map((comment: any) => {
       if (comment.rol === "DOCENTE") image.isRevised = true;
       return {

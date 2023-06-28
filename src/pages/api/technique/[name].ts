@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { deleteFile } from "@/node/drive/driveControllers";
 import pool from "@/node/config/db";
+import { PrismaService } from "@/node/prisma/prisma.service";
 
 export default async function handler(
   req: NextApiRequest,
@@ -18,11 +19,17 @@ const handlerGetTechnique = async (
   req: NextApiRequest,
   res: NextApiResponse
 ) => {
-  const { name } = req.query;
-  const result = (await pool.query("SELECT * FROM technique WHERE id_technique = ?", [
-    name,
-  ])) as any;
-  if (result.length === 0) {
+  const { name } = req.query as { name: string };
+
+  const prismaService = new PrismaService();
+
+  const result = await prismaService.technique.findUnique({
+    where: {
+      id_technique: Number(name),
+    },
+  });
+
+  if (!result) {
     return res.status(404).json({
       message: "Tecnica no encontrada",
       data: undefined,

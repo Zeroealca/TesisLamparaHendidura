@@ -1,0 +1,145 @@
+export const symptom = [
+  { id_symptom: 1, name: "dolor ocular" },
+  { id_symptom: 2, name: "visión borrosa" },
+  { id_symptom: 3, name: "ojos rojos o llorosos" },
+  { id_symptom: 4, name: "sensibilid_symptomad a la luz" },
+  { id_symptom: 5, name: "baja visión en un ojo" },
+  { id_symptom: 6, name: "dolor de cabeza" },
+  { id_symptom: 7, name: "fatiga ocular" },
+  {
+    id_symptom: 8,
+    name: "problemas de visión en la noche",
+  },
+  { id_symptom: 9, name: "ojos o párpados enrojecid_symptomos" },
+  { id_symptom: 10, name: "con picazón" },
+  { id_symptom: 11, name: "ardor" },
+  {
+    id_symptom: 12,
+    name: "párpados o pestañas con costras",
+  },
+  {
+    id_symptom: 13,
+    name: "contracción de los músculos del párpado que usted no puede controlar",
+  },
+  { id_symptom: 14, name: "nacer sin parte del ojo" },
+  { id_symptom: 15, name: "pérdid_symptoma de visión" },
+  { id_symptom: 16, name: "ojos rosados o rojos" },
+  { id_symptom: 17, name: "picazón o ardor en los ojos" },
+  { id_symptom: 18, name: "ojos llorosos" },
+  {
+    id_symptom: 19,
+    name: "líquid_symptomo inusual que sale de los ojos",
+  },
+  {
+    id_symptom: 20,
+    name: "problemas para ver la diferencia entre los colores",
+  },
+  {
+    id_symptom: 21,
+    name: "pequeñas manchas oscuras o líneas onduladas que flotan a través de su visión",
+  },
+  {
+    id_symptom: 22,
+    name: "destellos de luz en un ojo o en ambos",
+  },
+  {
+    id_symptom: 23,
+    name: "una “cortina” o sombra sobre su campo visual",
+  },
+  { id_symptom: 24, name: "moscas volantes" },
+  {
+    id_symptom: 25,
+    name: "destellos de luz en la visión lateral",
+  },
+  { id_symptom: 26, name: "baja visión" },
+  {
+    id_symptom: 27,
+    name: "problemas al ver cosas como caras u objetos en movimiento",
+  },
+  {
+    id_symptom: 28,
+    name: "especialmente la visión nocturna y la visión periférica (lateral)",
+  },
+  { id_symptom: 29, name: "pérdid_symptoma de la visión central" },
+  { id_symptom: 30, name: "ojos sobresalientes" },
+  { id_symptom: 31, name: "ojos secos" },
+  { id_symptom: 32, name: "visión doble" },
+  { id_symptom: 33, name: "párpados hinchados" },
+  {
+    id_symptom: 34,
+    name: "párpados que se retraen más de lo normal",
+  },
+  {
+    id_symptom: 35,
+    name: "pérdid_symptoma de la visión lateral (periférica)",
+  },
+  { id_symptom: 36, name: "áreas sin visión" },
+  { id_symptom: 37, name: "ceguera" },
+  {
+    id_symptom: 38,
+    name: "dificultad para ver las cosas de cerca",
+  },
+  { id_symptom: 39, name: "fatiga visual" },
+  { id_symptom: 40, name: "puntos ciegos en la visión" },
+  {
+    id_symptom: 41,
+    name: "pérdid_symptoma de la visión periférica (lateral)",
+  },
+  {
+    id_symptom: 42,
+    name: "visión borrosa o doble al mirar las cosas de cerca",
+  },
+  {
+    id_symptom: 43,
+    name: "manchas oscuras pequeñas o filamentos irregulares que flotan a través de su campo visual",
+  },
+  {
+    id_symptom: 44,
+    name: "problemas para ver cosas que están lejos",
+  },
+  {
+    id_symptom: 45,
+    name: "necesid_symptomad de entrecerrar los ojos para ver claramente",
+  },
+  {
+    id_symptom: 46,
+    name: "pérdid_symptoma repentina de la visión",
+  },
+  { id_symptom: 47, name: "visión borrosa u ondulada" },
+  {
+    id_symptom: 48,
+    name: "problemas para ver cosas de cerca",
+  },
+  {
+    id_symptom: 49,
+    name: "pupilas que se ven blancas bajo una luz brillante o con fotos con flash",
+  },
+  { id_symptom: 50, name: "ojos cruzados" },
+  { id_symptom: 51, name: "hinchazón de los ojos" },
+  { id_symptom: 52, name: "dolor en los ojos" },
+  {
+    id_symptom: 53,
+    name: "movimientos inusuales de los ojos",
+  },
+  { id_symptom: 54, name: "pupilas blancas" },
+  { id_symptom: 55, name: "visión con manchas flotantes" },
+  { id_symptom: 56, name: "puntos ciego" },
+  {
+    id_symptom: 57,
+    name: "pérdid_symptoma de la visión nocturna y de la visión lateral (periférica)",
+  },
+  { id_symptom: 58, name: "sensación de ardor" },
+  { id_symptom: 59, name: "resequedad o picazón" },
+  { id_symptom: 60, name: "ojos rojos" },
+  {
+    id_symptom: 61,
+    name: "nacer sin uno o ambos ojos (anoftalmia) o con ojos inusualmente pequeños (microftalmia)",
+  },
+  {
+    id_symptom: 62,
+    name: "no ver lo suficientemente bien para hacer tareas cotid_symptomianas como leer y conducir un auto",
+  },
+  { id_symptom: 63, name: "llagas en la boca" },
+  { id_symptom: 64, name: "llagas en los genitales" },
+  { id_symptom: 65, name: "problemas de la piel" },
+];

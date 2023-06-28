@@ -41,6 +41,8 @@ const OtherImage = ({
   const [imagesFilterd, setImagesFilterd] = useState<Iimage[]>([]);
   const { user } = useContext(UserContext);
 
+  console.log({ user });
+
   useEffect(() => {
     setImagesFilterd(images);
   }, [images]);
@@ -75,7 +77,7 @@ const OtherImage = ({
         {rol === "ESTUDIANTE" ? (
           <span className="text-2xl font-bold text-left">
             {
-              user?.parallel?.find((p) => {
+              user?.parallel_user?.find((p) => {
                 return p.parallel_id.toString() == parallel;
               })?.parallel_name
             }
@@ -87,7 +89,7 @@ const OtherImage = ({
             }}
           >
             <option value=""></option>
-            {user.parallel?.map((parallel) => {
+            {user.parallel_user?.map((parallel) => {
               return (
                 <option value={parallel.parallel_id}>
                   {parallel.parallel_name}

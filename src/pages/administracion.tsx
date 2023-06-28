@@ -33,8 +33,6 @@ const Administracion = () => {
   const [parallels, setParallels] = useState<Parallel[]>([]);
   const [teachers, setTeachers] = useState<Teacher[]>([]);
 
-  if (user.rol !== "ADMIN") return router.back();
-
   const getParallels = async () => {
     await fetch(process.env.API_URL + `parallel`, {
       method: "GET",

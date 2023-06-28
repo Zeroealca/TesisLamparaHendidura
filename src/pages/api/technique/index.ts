@@ -1,7 +1,6 @@
+import { PrismaService } from "@/node/prisma/prisma.service";
 import { NextApiRequest, NextApiResponse } from "next";
 import nextConnect from "next-connect";
-
-import pool from "@/node/config/db";
 
 const apiRout = nextConnect({
   onNoMatch(req: NextApiRequest, res: NextApiResponse) {
@@ -15,16 +14,18 @@ const apiRout = nextConnect({
 });
 
 apiRout.get(async (req: NextApiRequest, res: NextApiResponse) => {
-  const result = (await pool.query("SELECT * FROM technique")) as any;
-  if (result.length === 0) {
+  const prismaService = new PrismaService();
+  const techniques = await prismaService.technique.findMany();
+
+  if (!techniques) {
     return res.status(404).json({
-      message: "Tecnica no encontrada",
+      message: "Tecnicas no encontradas",
       data: undefined,
     });
   }
   return res.status(200).json({
     message: "Tecnica encontrada",
-    data: result,
+    data: techniques,
   });
 });
 

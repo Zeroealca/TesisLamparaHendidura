@@ -10,7 +10,7 @@ const Tecnica = () => {
       method: "GET",
     });
     const data = await res.json();
-    data?.data ? setData(data.data[0]) : router.push("/404");
+    data?.data ? setData(data.data) : router.push("/404");
   };
 
   useEffect(() => {

@@ -1,12 +1,10 @@
-import pool from "@/node/config/db";
+import { PrismaService } from "@/node/prisma/prisma.service";
 import { NextApiRequest, NextApiResponse } from "next";
 
-export interface Disaese {
-  id: number;
-  name: string;
-}
-
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   switch (req.method) {
     case "GET":
       return await handlerAllInformation(req, res);
@@ -15,11 +13,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 }
 
-const handlerAllInformation = async (req: NextApiRequest, res: NextApiResponse) => {
-  const result = await pool.query(
-    "SELECT * FROM disaeses"
-  ) as Disaese[];
-  if (result.length === 0) {
+const handlerAllInformation = async (
+  req: NextApiRequest,
+  res: NextApiResponse
+) => {
+  const prismaService = new PrismaService();
+
+  const disaeses = await prismaService.disaeses.findMany();
+
+  if (!disaeses) {
     return res.status(404).json({
       message: "No existe registro de enfermedades",
       data: undefined,
@@ -27,7 +29,6 @@ const handlerAllInformation = async (req: NextApiRequest, res: NextApiResponse) 
   }
   return res.status(200).json({
     message: "Enfermedades encontradas",
-    data: result,
+    data: disaeses,
   });
 };
-

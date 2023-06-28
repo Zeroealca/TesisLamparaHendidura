@@ -7,7 +7,7 @@ export interface USER {
   rol?: string;
   parallel_name?: string;
   parallel_id?: number;
-  parallel?: {
+  parallel_user?: {
     parallel_name: string;
     parallel_id: number;
   }[];

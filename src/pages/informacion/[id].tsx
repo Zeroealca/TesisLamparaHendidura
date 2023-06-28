@@ -20,7 +20,8 @@ const about = () => {
           {data?.image ? (
             <img
               className="w-full h-full object-cover max-w-[24rem] max-h-[24rem]"
-              src={data?.image}
+              src={data?.image.url}
+              alt={data?.Enfermedad}
             />
           ) : null}
           <span className="font-bold text-4xl w-full py-5 text-center">
@@ -65,7 +66,7 @@ const about = () => {
           ) : null}
         </section>
         <section className="flex justify-between gap-10 w-10/12 mb-10">
-          <SimulatorButton name="Regresar" onClick={() => router.back} />
+          <SimulatorButton name="Regresar" onClick={() => router.back()} />
           <SimulatorButton
             name="Ir al simulador"
             onClick={() => router.push("/simulador")}

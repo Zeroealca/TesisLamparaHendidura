@@ -99,8 +99,8 @@ const MiPerfil = () => {
   useEffect(() => {
     setState({ ...state, ...other });
     if (user.rol === "ESTUDIANTE") {
-      if (user.parallel?.length) {
-        setParallel(user.parallel[0].parallel_id.toString());
+      if (user.parallel_user?.length) {
+        setParallel(user.parallel_user[0].parallel_id.toString());
       }
     }
   }, [user]);
@@ -184,23 +184,20 @@ const MiPerfil = () => {
     email?: string;
     password?: string;
   }) => {
-    fetch(process.env.API_URL + `user/${user.id}`, {
+    const res = await fetch(process.env.API_URL + `user/${user.id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
-    })
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => {
-        setUser(data);
-        setState({ email: "", name: "", password: "", confirmPassword: "" });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    });
+
+    if (res.status === 200) {
+      const aux = { ...user, ...data };
+      setUser(aux);
+      setState({ email: "", name: "", password: "", confirmPassword: "" });
+      setIsChange(false);
+    }
   };
 
   const [students, setStudents] = useState<Student[]>([]);

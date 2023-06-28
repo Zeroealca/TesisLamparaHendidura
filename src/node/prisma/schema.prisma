@@ -1,0 +1,174 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model user {
+    id             String          @id @default(uuid())
+    email          String          @unique
+    name           String?
+    password       String
+    recovery_token String?         @db.Text
+    rol            String          @default("ESTUDIANTE")
+    created_at     DateTime        @default(now())
+    updated_at     DateTime        @updatedAt
+    parallel_user  parallel_user[]
+    comments       comments[]
+}
+
+model parallel {
+    id            Int             @id @default(autoincrement())
+    name          String
+    created_at    DateTime        @default(now())
+    updated_at    DateTime        @updatedAt
+    parallel_user parallel_user[]
+}
+
+model parallel_user {
+    id          Int      @id @default(autoincrement())
+    id_user     String
+    id_parallel Int
+    created_at  DateTime @default(now())
+    updated_at  DateTime @updatedAt
+    parallel    parallel @relation(fields: [id_parallel], references: [id])
+    user        user     @relation(fields: [id_user], references: [id])
+}
+
+model technique {
+    id_technique      Int    @id @default(autoincrement())
+    name              String
+    short_description String
+    description       String @db.Text
+    magnification     String
+    lightingAngle     String
+    imageNormal       String
+    imageTechnique    String
+    assess            String @db.Text
+}
+
+model images {
+    id_image   String     @id @default(uuid())
+    url        String
+    name       String
+    details    String?    @db.Text
+    state      String?
+    externalId String
+    created_at DateTime   @default(now())
+    updated_at DateTime   @updatedAt
+    comments   comments[]
+}
+
+model comments {
+    id_comment Int      @id @default(autoincrement())
+    id_image   String
+    id_user    String
+    comment    String
+    created_at DateTime @default(now())
+    updated_at DateTime @updatedAt
+    images     images   @relation(fields: [id_image], references: [id_image])
+    user       user     @relation(fields: [id_user], references: [id])
+}
+
+model disaeses {
+    id_disease                 Int                          @id @default(autoincrement())
+    name                       String
+    disaeses_symptom           disaeses_symptom[]
+    disaeses_advanced_symptoms disaeses_advanced_symptoms[]
+    disaeses_early_symptoms    disaeses_early_symptoms[]
+    disaeses_treatment         disaeses_treatment[]
+    disaeses_diagnosis         disaeses_diagnosis[]
+}
+
+model symptom {
+    id_symptom       Int                @id @default(autoincrement())
+    name             String
+    disaeses_symptom disaeses_symptom[]
+}
+
+model advanced_symptoms {
+    id_advanced_symptoms       Int                          @id @default(autoincrement())
+    name                       String
+    disaeses_advanced_symptoms disaeses_advanced_symptoms[]
+}
+
+model early_symptoms {
+    id_early_symptoms       Int                       @id @default(autoincrement())
+    name                    String
+    disaeses_early_symptoms disaeses_early_symptoms[]
+}
+
+model treatment {
+    id_treatment       Int                  @id @default(autoincrement())
+    name               String
+    disaeses_treatment disaeses_treatment[]
+}
+
+model diagnosis {
+    id_diagnosis       Int                  @id @default(autoincrement())
+    name               String
+    disaeses_diagnosis disaeses_diagnosis[]
+}
+
+model disaeses_symptom {
+    id_disease Int
+    id_symptom Int
+    created_at DateTime @default(now())
+    updated_at DateTime @updatedAt
+
+    disaeses disaeses @relation(fields: [id_disease], references: [id_disease])
+    symptom  symptom  @relation(fields: [id_symptom], references: [id_symptom])
+
+    @@id([id_disease, id_symptom])
+}
+
+model disaeses_advanced_symptoms {
+    id_disease           Int
+    id_advanced_symptoms Int
+    created_at           DateTime @default(now())
+    updated_at           DateTime @updatedAt
+
+    disaeses          disaeses          @relation(fields: [id_disease], references: [id_disease])
+    advanced_symptoms advanced_symptoms @relation(fields: [id_advanced_symptoms], references: [id_advanced_symptoms])
+
+    @@id([id_disease, id_advanced_symptoms])
+}
+
+model disaeses_early_symptoms {
+    id_disease        Int
+    id_early_symptoms Int
+    created_at        DateTime @default(now())
+    updated_at        DateTime @updatedAt
+
+    disaeses       disaeses       @relation(fields: [id_disease], references: [id_disease])
+    early_symptoms early_symptoms @relation(fields: [id_early_symptoms], references: [id_early_symptoms])
+
+    @@id([id_disease, id_early_symptoms])
+}
+
+model disaeses_treatment {
+    id_disease   Int
+    id_treatment Int
+    created_at   DateTime @default(now())
+    updated_at   DateTime @updatedAt
+
+    disaeses  disaeses  @relation(fields: [id_disease], references: [id_disease])
+    treatment treatment @relation(fields: [id_treatment], references: [id_treatment])
+
+    @@id([id_disease, id_treatment])
+}
+
+model disaeses_diagnosis {
+    id_disease   Int
+    id_diagnosis Int
+    created_at   DateTime @default(now())
+    updated_at   DateTime @updatedAt
+
+    disaeses  disaeses  @relation(fields: [id_disease], references: [id_disease])
+    diagnosis diagnosis @relation(fields: [id_diagnosis], references: [id_diagnosis])
+
+    @@id([id_disease, id_diagnosis])
+}

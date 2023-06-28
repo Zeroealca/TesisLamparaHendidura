@@ -100,12 +100,8 @@ const EnrollStudents = ({
           }}
         >
           <option value=""></option>
-          {user.parallel?.map((parallel) => {
-            return (
-              <option value={parallel.parallel_id}>
-                {parallel.parallel_name}
-              </option>
-            );
+          {user.parallel_user?.map(({ parallel_id, parallel_name }) => {
+            return <option value={parallel_id}>{parallel_name}</option>;
           })}
         </select>
       </div>

@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import pool from "@/node/config/db";
+import { PrismaService } from "@/node/prisma/prisma.service";
 
 interface DataResponse {
   Enfermedad: string;
@@ -8,15 +8,6 @@ interface DataResponse {
   Diagnostico: string[];
   Sintomas_tempranos: string[];
   Sintomas_avanzados: string[];
-}
-
-interface DataResult {
-  Enfermedad: string;
-  Tratamiento?: string;
-  Síntoma?: string;
-  Diagnostico?: string;
-  Sintomas_tempranos?: string;
-  Sintomas_avanzados?: string;
 }
 
 export default async function handler(
@@ -31,23 +22,53 @@ export default async function handler(
   }
 }
 const HandlerDiseasesId = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { id } = req.query;
-  const result = (await pool.query(
-    `select d.name as Enfermedad, t.name as Tratamiento, s.name as Síntoma, d2.name as Diagnostico, es.name as "Sintomas_tempranos", as2.name as "Sintomas_avanzados"
-        from disaeses d
-            left join disaeses_treatment dt ON d.id_disease = dt.id_disease  left join treatment t on dt.id_treatment = t.id_treatment
-            left join disaeses_symptom ds ON d.id_disease = ds.id_disease  left join symptom s on ds.id_symptom = s.id_symptom
-            left join disaeses_diagnosis dd ON d.id_disease  = dd.id_disease  left join diagnosis d2 on dd.id_diagnosis = d2.id_diagnosis
-            left join disaeses_early_symptoms des ON d.id_disease = des.id_disease left join early_symptoms es on des.id_early_symptoms = es.id_early_symptoms
-            left join disaeses_advanced_symptoms das ON d.id_disease = das.id_disease left join advanced_symptoms as2 on das.id_advanced_symptoms = as2.id_advanced_symptoms 
-            where d.id_disease = ? `,
-    [id]
-  )) as DataResult[];
-  const image = (await pool.query(
-    `select url from images where externalId = ?`,
-    [`disaeses_` + id]
-  )) as any;
-  if (result.length === 0) {
+  const { id } = req.query as { id: string };
+
+  const prismaService = new PrismaService();
+
+  const disaeses = await prismaService.disaeses.findFirst({
+    where: { id_disease: Number(id) },
+    include: {
+      disaeses_advanced_symptoms: {
+        include: {
+          advanced_symptoms: true,
+          disaeses: true,
+        },
+      },
+      disaeses_diagnosis: {
+        include: {
+          diagnosis: true,
+          disaeses: true,
+        },
+      },
+      disaeses_early_symptoms: {
+        include: {
+          early_symptoms: true,
+          disaeses: true,
+        },
+      },
+      disaeses_symptom: {
+        include: {
+          symptom: true,
+          disaeses: true,
+        },
+      },
+      disaeses_treatment: {
+        include: {
+          treatment: true,
+          disaeses: true,
+        },
+      },
+    },
+  });
+
+  const image = await prismaService.images.findFirst({
+    where: {
+      externalId: `disaeses_${id}`,
+    },
+  });
+
+  if (!disaeses) {
     return res.status(404).json({
       message: "No existe registro de enfermedades",
       data: undefined,
@@ -56,46 +77,53 @@ const HandlerDiseasesId = async (req: NextApiRequest, res: NextApiResponse) => {
   return res.status(200).json({
     message: "Enfermedades encontradas",
     data: {
-      image: image[0].url,
-      ...transform(result),
+      image,
+      ...transform(disaeses),
     },
   });
 };
 
-const transform = (data: DataResult[]): DataResponse => {
+const transform = (data: any): DataResponse => {
   const result = {
-    Enfermedad: data[0].Enfermedad,
+    Enfermedad: data.name,
     Tratamiento: [],
     Síntoma: [],
     Diagnostico: [],
     Sintomas_tempranos: [],
     Sintomas_avanzados: [],
   } as DataResponse;
-  data.forEach((item) => {
-    if (item.Tratamiento) {
-      if (!result.Tratamiento.includes(item.Tratamiento)) {
-        result.Tratamiento.push(item.Tratamiento);
-      }
-    }
-    if (item.Síntoma) {
-      if (!result.Síntoma.includes(item.Síntoma)) {
-        result.Síntoma.push(item.Síntoma);
-      }
-    }
-    if (item.Diagnostico) {
-      if (!result.Diagnostico.includes(item.Diagnostico)) {
-        result.Diagnostico.push(item.Diagnostico);
-      }
-    }
-    if (item.Sintomas_tempranos) {
-      if (!result.Sintomas_tempranos.includes(item.Sintomas_tempranos)) {
-        result.Sintomas_tempranos.push(item.Sintomas_tempranos);
-      }
-    }
-    if (item.Sintomas_avanzados) {
-      if (!result.Sintomas_avanzados.includes(item.Sintomas_avanzados)) {
-        result.Sintomas_avanzados.push(item.Sintomas_avanzados);
-      }
+
+  Object.entries(data).forEach(([key, value]) => {
+    if (Array.isArray(value)) {
+      value.forEach((item: any) => {
+        if (item.treatment) {
+          if (!result.Tratamiento.includes(item.treatment.name)) {
+            result.Tratamiento.push(item.treatment.name);
+          }
+        }
+        if (item.symptom) {
+          if (!result.Síntoma.includes(item.symptom.name)) {
+            result.Síntoma.push(item.symptom.name);
+          }
+        }
+        if (item.diagnosis) {
+          if (!result.Diagnostico.includes(item.diagnosis.name)) {
+            result.Diagnostico.push(item.diagnosis.name);
+          }
+        }
+        if (item.early_symptoms) {
+          if (!result.Sintomas_tempranos.includes(item.early_symptoms.name)) {
+            result.Sintomas_tempranos.push(item.early_symptoms.name);
+          }
+        }
+        if (item.advanced_symptoms) {
+          if (
+            !result.Sintomas_avanzados.includes(item.advanced_symptoms.name)
+          ) {
+            result.Sintomas_avanzados.push(item.advanced_symptoms.name);
+          }
+        }
+      });
     }
   });
 
