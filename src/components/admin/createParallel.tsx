@@ -203,7 +203,7 @@ const CreateParallel = ({
       </div>
       <div className="flex flex-row justify-between items-center mb-5">
         <div className="flex flex-row justify-between items-center">
-          <div className="flex flex-row justify-between items-center gap-5">
+          <div className="flex justify-between md:flex-row flex-col md:items-center items-start gap-5">
             <label className="mr-2">Asignar:</label>
             <select
               className="border border-gray-400 rounded-md p-1"
@@ -213,8 +213,10 @@ const CreateParallel = ({
               }}
             >
               <option value="">Seleccione un paralelo</option>
-              {selectParallels.map((p) => (
-                <option value={p.id}>{p.name}</option>
+              {selectParallels.map((p, index) => (
+                <option value={p.id} key={index}>
+                  {p.name}
+                </option>
               ))}
             </select>
             <select
@@ -225,12 +227,14 @@ const CreateParallel = ({
               }}
             >
               <option value="">Seleccione un docente</option>
-              {teachers.map((p) => (
-                <option value={p.id}>{p.name}</option>
+              {teachers.map((p, index) => (
+                <option value={p.id} key={index}>
+                  {p.name}
+                </option>
               ))}
             </select>
             <button
-              className="ml-2 border py-1 px-2 rounded-xl"
+              className="ml-2 border py-1 px-2 rounded-xl self-center"
               onClick={handleEnroll}
               disabled={!parallel_id.length || !teacher.length}
             >

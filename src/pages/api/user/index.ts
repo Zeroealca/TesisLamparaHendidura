@@ -18,13 +18,13 @@ const apiRout = nextConnect({
 apiRout.get(async (req: NextApiRequest, res: NextApiResponse) => {
   const prismaService = new PrismaService();
 
-  const resul = await prismaService.user.findMany({
+  const students = await prismaService.user.findMany({
     where: {
       rol: "ESTUDIANTE",
     },
   });
 
-  const result = await prismaService.user.findMany({
+  const studentsParallel = await prismaService.user.findMany({
     where: {
       rol: "ESTUDIANTE",
     },
@@ -34,21 +34,24 @@ apiRout.get(async (req: NextApiRequest, res: NextApiResponse) => {
           parallel: true,
           user: true,
         },
+        orderBy: {
+          created_at: "asc",
+        },
       },
     },
   });
 
-  const resul2 = await prismaService.user.findMany({
+  const teachers = await prismaService.user.findMany({
     where: {
       rol: "DOCENTE",
     },
   });
 
   return res.status(200).json({
-    message: "No hay estudiantes registrados",
-    data: result,
-    data2: resul,
-    data3: resul2,
+    message: "ok",
+    studentsParallel, // data
+    students, // data2
+    teachers, // data3
   });
 });
 

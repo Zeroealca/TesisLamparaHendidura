@@ -11,6 +11,7 @@ import OtherImage from "src/components/profile/otherImages";
 import Resource from "src/components/profile/resources";
 import EnrollStudents from "src/components/profile/enrollStudents";
 import EnrollIcon from "src/components/icons/enroll";
+import { toast } from "react-toastify";
 
 interface OptionsProfileProps {
   options: string;
@@ -41,12 +42,21 @@ export interface Iimage {
   name_user: string;
 }
 
-interface Student {
+export interface Student {
   id: number;
   name: string;
   email: string;
   rol: string;
-  id_parallel: number;
+  parallel_user: {
+    id_parallel: number;
+    id_user: number;
+    created_at: string;
+    updated_at: string;
+    parallel: {
+      id: number;
+      name: string;
+    };
+  }[];
 }
 
 const OptionsProfile = ({
@@ -100,7 +110,7 @@ const MiPerfil = () => {
     setState({ ...state, ...other });
     if (user.rol === "ESTUDIANTE") {
       if (user.parallel_user?.length) {
-        setParallel(user.parallel_user[0].parallel_id.toString());
+        setParallel(user.parallel_user[0].id_parallel.toString());
       }
     }
   }, [user]);
@@ -110,26 +120,32 @@ const MiPerfil = () => {
   }, [params]);
 
   const getImage = async () => {
-    await fetch(process.env.API_URL + `img/user/${user.id}`, {
+    const res = await fetch(process.env.API_URL + `img/user/${user.id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
-    })
-      .then((res) => res.json())
-      .then((data) => setImages(data.data));
+    });
+
+    if (res.status === 200) {
+      const data = await res.json();
+      setImages(data.data);
+    }
 
     if (parallel) {
-      await fetch(process.env.API_URL + `img/user?parallel_id=${parallel}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          setAllImages(data.data);
-        });
+      const res = await fetch(
+        process.env.API_URL + `img/user?parallel_id=${parallel}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (res.status === 200) {
+        const data = await res.json();
+        setAllImages(data.data);
+      }
     }
   };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -193,10 +209,11 @@ const MiPerfil = () => {
     });
 
     if (res.status === 200) {
-      const aux = { ...user, ...data };
-      setUser(aux);
+      const data = await res.json();
+      setUser(data);
       setState({ email: "", name: "", password: "", confirmPassword: "" });
       setIsChange(false);
+      toast.success("Usuario actualizado");
     }
   };
 
@@ -204,27 +221,31 @@ const MiPerfil = () => {
   const [studentsIP, setStudentsIP] = useState<Student[]>([]);
 
   const getStudents = async () => {
-    await fetch(process.env.API_URL + "user", {
+    const res = await fetch(process.env.API_URL + "user", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (parallel) {
-          const aux = data.data?.filter(
-            (student: Student) => student.id_parallel == Number(parallel)
+    });
+    if (res.status === 200) {
+      const data = await res.json();
+      console.log({ data });
+
+      if (parallel) {
+        const aux = data?.studentsParallel?.filter((student: Student) => {
+          if (student.parallel_user.length === 0) return false;
+          return student.parallel_user[0].id_parallel == Number(parallel);
+        });
+        setStudentsIP(aux);
+        const aux2 = data?.students?.filter((student: any) => {
+          return !data?.studentsParallel.find(
+            (student2: any) => student.id === student2.id
           );
-          setStudentsIP(aux);
-          const aux2 = data.data2?.filter((student: any) => {
-            return !data.data.find(
-              (student2: any) => student.id === student2.id
-            );
-          });
-          setStudents(aux2);
-        }
-      });
+        });
+        if (aux2?.length) setStudents(aux2);
+        setStudents(data?.students);
+      }
+    }
   };
 
   useEffect(() => {
@@ -286,89 +307,100 @@ const MiPerfil = () => {
               images?.length > 0 ? "" : "h-[50rem]"
             }`}
           >
-            <form
-              onSubmit={handleSubmit}
-              className={`${tabs === 1 ? "block" : "hidden"} w-full mx-auto`}
-            >
-              <h1 className="text-xl font-bold text-left">Mis datos</h1>
-              <div className="flex flex-col lg:flex-row gap-10 w-full">
-                <InputWithLabel
-                  label="Nombre"
-                  name="name"
-                  type="text"
-                  onChange={(e) => handleChange(e)}
-                  value={state.name || ""}
-                  className="lg:w-1/2"
-                />
-                <InputWithLabel
-                  label="Correo electrónico"
-                  name="email"
-                  type="text"
-                  onChange={(e) => handleChange(e)}
-                  value={state.email || ""}
-                  className="lg:w-1/2"
+            {tabs === 1 ? (
+              <form onSubmit={handleSubmit} className="w-full mx-auto">
+                <h1 className="text-xl font-bold text-left">Mis datos</h1>
+                <div className="flex flex-col lg:flex-row gap-10 w-full">
+                  <InputWithLabel
+                    label="Nombre"
+                    name="name"
+                    type="text"
+                    onChange={(e) => handleChange(e)}
+                    value={state.name || ""}
+                    className="lg:w-1/2"
+                  />
+                  <InputWithLabel
+                    label="Correo electrónico"
+                    name="email"
+                    type="text"
+                    onChange={(e) => handleChange(e)}
+                    value={state.email || ""}
+                    className="lg:w-1/2"
+                  />
+                </div>
+                <div className="flex flex-col lg:flex-row gap-10 w-full">
+                  <InputWithLabel
+                    label="Nueva contraseña"
+                    name="password"
+                    type="password"
+                    onChange={(e) => handleChange(e)}
+                    value={state.password}
+                    className="lg:w-1/2"
+                    isPassword
+                  />
+                  <InputWithLabel
+                    label="Repetir contraseña"
+                    name="confirmPassword"
+                    type="password"
+                    onChange={(e) => handleChange(e)}
+                    value={state.confirmPassword}
+                    className="lg:w-1/2"
+                    isPassword
+                  />
+                </div>
+                <div className="flex justify-center mt-20">
+                  <button
+                    type="submit"
+                    disabled={!isChange}
+                    className={`${
+                      !isChange ? "opacity-50" : "hover:bg-blue-700"
+                    } rounded-md p-2 bg-bluebutton uppercase text-white max-w-[200px] w-full font-bold`}
+                  >
+                    Actualizar datos
+                  </button>
+                </div>
+              </form>
+            ) : null}
+
+            {tabs === 2 ? (
+              <div className="w-full">
+                <ProfileImage
+                  images={images}
+                  setImages={setImages}
+                  rol={user.rol}
                 />
               </div>
-              <div className="flex flex-col lg:flex-row gap-10 w-full">
-                <InputWithLabel
-                  label="Nueva contraseña"
-                  name="password"
-                  type="password"
-                  onChange={(e) => handleChange(e)}
-                  value={state.password}
-                  className="lg:w-1/2"
-                  isPassword
-                />
-                <InputWithLabel
-                  label="Repetir contraseña"
-                  name="confirmPassword"
-                  type="password"
-                  onChange={(e) => handleChange(e)}
-                  value={state.confirmPassword}
-                  className="lg:w-1/2"
-                  isPassword
+            ) : null}
+
+            {tabs === 3 ? (
+              <div className="w-full">
+                <OtherImage
+                  images={AllImages}
+                  setImages={setAllImages}
+                  rol={user.rol}
+                  parallel={parallel}
+                  setParallel={setParallel}
                 />
               </div>
-              <div className="flex justify-center mt-20">
-                <button
-                  type="submit"
-                  disabled={!isChange}
-                  className={`${
-                    !isChange ? "opacity-50" : "hover:bg-blue-700"
-                  } rounded-md p-2 bg-bluebutton uppercase text-white max-w-[200px] w-full font-bold`}
-                >
-                  Actualizar datos
-                </button>
+            ) : null}
+
+            {tabs === 4 ? (
+              <div className="w-full">
+                <Resource />
               </div>
-            </form>
-            <div className={`${tabs === 2 ? "block" : "hidden"} w-full`}>
-              <ProfileImage
-                images={images}
-                setImages={setImages}
-                rol={user.rol}
-              />
-            </div>
-            <div className={`${tabs === 3 ? "block" : "hidden"} w-full`}>
-              <OtherImage
-                images={AllImages}
-                setImages={setAllImages}
-                rol={user.rol}
-                parallel={parallel}
-                setParallel={setParallel}
-              />
-            </div>
-            <div className={`${tabs === 4 ? "block" : "hidden"} w-full`}>
-              <Resource />
-            </div>
-            <div className={`${tabs === 5 ? "block" : "hidden"} w-full`}>
-              <EnrollStudents
-                students={students}
-                getStudents={getStudents}
-                studentsIP={studentsIP}
-                parallel={parallel}
-                setParallel={setParallel}
-              />
-            </div>
+            ) : null}
+
+            {tabs === 5 ? (
+              <div className="w-full">
+                <EnrollStudents
+                  students={students}
+                  getStudents={getStudents}
+                  studentsIP={studentsIP}
+                  parallel={parallel}
+                  setParallel={setParallel}
+                />
+              </div>
+            ) : null}
           </div>
         </section>
       </main>

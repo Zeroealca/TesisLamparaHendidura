@@ -1,16 +1,24 @@
 import { createContext } from "react";
 
 export interface USER {
-  id?: number;
+  id?: string;
   name?: string;
   email?: string;
   rol?: string;
-  parallel_name?: string;
-  parallel_id?: number;
-  parallel_user?: {
-    parallel_name: string;
-    parallel_id: number;
-  }[];
+  parallel_user?: PARALLEL_USER[];
+  parallel?: PARALLEL;
+}
+
+export interface PARALLEL_USER {
+  id: number;
+  id_parallel: number;
+  id_user: number;
+  parallel: PARALLEL;
+}
+
+export interface PARALLEL {
+  id: number;
+  name: string;
 }
 
 export interface IMAGE {

@@ -44,7 +44,10 @@ const Resource = () => {
             {resources.map((item, index) => {
               const isVideo = item.url.includes("youtube");
               return (
-                <div className="flex items-center gap-4 flex-col bg-blacktertiary p-3 rounded h-[336px] justify-between">
+                <div
+                  key={index}
+                  className="flex items-center gap-4 flex-col bg-blacktertiary p-3 rounded h-[336px] justify-between"
+                >
                   {isVideo ? (
                     <iframe
                       src={item.url}

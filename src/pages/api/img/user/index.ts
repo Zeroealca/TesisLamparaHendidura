@@ -43,7 +43,7 @@ const handlerImageId = async (req: NextApiRequest, res: NextApiResponse) => {
   for (const student of students) {
     const images = await prismaService.images.findMany({
       where: {
-        externalId: `{user_${student.id}_disaeses}`,
+        externalId: `user_${student.id}_disaeses`,
       },
     });
 
@@ -55,6 +55,9 @@ const handlerImageId = async (req: NextApiRequest, res: NextApiResponse) => {
     image.comments = await prismaService.comments.findMany({
       where: {
         id_image: image.id_image,
+      },
+      include: {
+        user: true,
       },
     });
 
@@ -69,12 +72,12 @@ const handlerImageId = async (req: NextApiRequest, res: NextApiResponse) => {
     image.name_user = user?.name;
 
     image.comments.map((comment: any) => {
-      if (comment.rol === "DOCENTE") image.isRevised = true;
+      if (comment.user.rol === "DOCENTE") image.isRevised = true;
       return {
         id: comment.id,
         comment: comment.comment,
         id_user: comment.id_user,
-        name: comment.name,
+        name: comment.user.name,
         date: comment.created_at,
       };
     });

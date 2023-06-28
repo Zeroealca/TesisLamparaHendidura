@@ -37,7 +37,22 @@ const handlerGetUser = async (req: NextApiRequest, res: NextApiResponse) => {
       id,
     },
     include: {
-      parallel_user: true,
+      parallel_user: {
+        include: {
+          parallel: true,
+          user: true,
+        },
+      },
+    },
+  });
+
+  const parallel = await prismaService.parallel.findFirst({
+    where: {
+      parallel_user: {
+        some: {
+          id_user: id,
+        },
+      },
     },
   });
 
@@ -56,7 +71,7 @@ const handlerGetUser = async (req: NextApiRequest, res: NextApiResponse) => {
     });
   }
   const { password, ...others } = user;
-  return res.json({ ...others });
+  return res.json({ ...others, parallel });
 };
 
 const handlerUserData = async (req: NextApiRequest, res: NextApiResponse) => {

@@ -34,27 +34,30 @@ const Administracion = () => {
   const [teachers, setTeachers] = useState<Teacher[]>([]);
 
   const getParallels = async () => {
-    await fetch(process.env.API_URL + `parallel`, {
+    const res = await fetch(process.env.API_URL + `parallel/`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setParallels(data.data);
-      });
+    });
+    if (res.status === 200) {
+      const data = await res.json();
+      setParallels(data.data);
+    }
   };
 
   const getUsers = async () => {
-    await fetch(process.env.API_URL + `user`, {
+    const res = await fetch(process.env.API_URL + `user`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
-    })
-      .then((res) => res.json())
-      .then((data) => setTeachers(data.data3));
+    });
+
+    if (res.status === 200) {
+      const data = await res.json();
+      setTeachers(data.teachers);
+    }
   };
 
   useEffect(() => {

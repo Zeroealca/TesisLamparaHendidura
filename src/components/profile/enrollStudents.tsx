@@ -1,17 +1,9 @@
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
-import { Iimage } from "src/pages/mi-perfil";
+import { Iimage, Student } from "src/pages/mi-perfil";
 import { useState, useEffect, useContext } from "react";
 import UserContext from "src/context/context";
 import DataTable, { createTheme } from "react-data-table-component";
-
-interface Student {
-  id: number;
-  name: string;
-  email: string;
-  rol: string;
-  id_parallel: number;
-}
 
 const EnrollStudents = ({
   students,
@@ -76,8 +68,8 @@ const EnrollStudents = ({
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        id_parallel: parseInt(parallel),
-        id_user: parseInt(student),
+        id_parallel: Number(parallel),
+        id_user: student,
       }),
     });
     const data = await res.json();
@@ -93,15 +85,21 @@ const EnrollStudents = ({
   return (
     <>
       <div className="flex items-center mb-10 gap-5">
-        <h1 className="text-2xl font-bold text-left">Estudiantes</h1>
+        <h1 className="text-2xl font-bold text-left">
+          Estudiantes del paralelo:{" "}
+        </h1>
         <select
           onChange={(e) => {
             setParallel(e.target.value);
           }}
         >
           <option value=""></option>
-          {user.parallel_user?.map(({ parallel_id, parallel_name }) => {
-            return <option value={parallel_id}>{parallel_name}</option>;
+          {user.parallel_user?.map(({ parallel }, index) => {
+            return (
+              <option key={index} value={parallel.id}>
+                {parallel.name}
+              </option>
+            );
           })}
         </select>
       </div>
@@ -116,10 +114,11 @@ const EnrollStudents = ({
               }}
             >
               <option value=""></option>
-              {students.map((student) => {
+              {students?.map((student, index) => {
                 return (
                   <option
                     value={student.id}
+                    key={index}
                   >{`${student.name} - ${student.email}`}</option>
                 );
               })}

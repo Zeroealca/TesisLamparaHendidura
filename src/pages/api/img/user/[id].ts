@@ -66,13 +66,13 @@ const handlerImageId = async (req: NextApiRequest, res: NextApiResponse) => {
     image.name_user = user?.name;
 
     image.comments.map(async (comment: any) => {
-      if (comment.rol === "DOCENTE") image.isRevised = true;
+      if (comment.user.rol === "DOCENTE") image.isRevised = true;
 
       return {
         id: comment.id,
         comment: comment.comment,
         id_user: comment.id_user,
-        name: comment.name,
+        name: comment.user.name,
         date: comment.created_at,
       };
     });

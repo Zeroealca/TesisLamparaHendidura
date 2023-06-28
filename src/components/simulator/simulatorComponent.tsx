@@ -18,8 +18,13 @@ interface Comments {
   id: number;
   comment: string;
   id_user: number;
-  name: string;
   created_at: Date;
+  user: {
+    id: string;
+    name: string;
+    email: string;
+    rol: string;
+  };
 }
 
 export interface state_ {
@@ -423,7 +428,7 @@ const simulatorComponent = () => {
                                           <p className="text-grayprimary font-bold">
                                             {c.id_user == data?.user.id
                                               ? "Tú"
-                                              : c.name}
+                                              : c.user.name}
                                           </p>
                                           <p className="text-grayprimary font-bold">
                                             {new Date(
@@ -438,11 +443,22 @@ const simulatorComponent = () => {
                                               c.created_at
                                             ).toLocaleDateString()}
                                           </p>
-                                          <p className="text-grayprimary font-bold">
-                                            {c.id_user == data?.user.id
-                                              ? "Tú"
-                                              : c.name}
-                                          </p>
+                                          <div>
+                                            <p
+                                              className={`font-bold ${
+                                                c.user.rol === "DOCENTE"
+                                                  ? "text-yellow-500"
+                                                  : "text-grayprimary"
+                                              }`}
+                                            >
+                                              {c.id_user == data?.user.id
+                                                ? "Tú"
+                                                : c.user.name}
+                                              {c.user.rol === "DOCENTE"
+                                                ? " 👨‍🏫"
+                                                : ""}
+                                            </p>
+                                          </div>
                                         </div>
                                       )}
                                       <p className="text-white text-sm">

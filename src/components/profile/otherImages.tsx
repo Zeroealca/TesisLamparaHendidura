@@ -41,8 +41,6 @@ const OtherImage = ({
   const [imagesFilterd, setImagesFilterd] = useState<Iimage[]>([]);
   const { user } = useContext(UserContext);
 
-  console.log({ user });
-
   useEffect(() => {
     setImagesFilterd(images);
   }, [images]);
@@ -78,8 +76,8 @@ const OtherImage = ({
           <span className="text-2xl font-bold text-left">
             {
               user?.parallel_user?.find((p) => {
-                return p.parallel_id.toString() == parallel;
-              })?.parallel_name
+                return p.id_parallel.toString() == parallel;
+              })?.parallel.name
             }
           </span>
         ) : (
@@ -89,10 +87,10 @@ const OtherImage = ({
             }}
           >
             <option value=""></option>
-            {user.parallel_user?.map((parallel) => {
+            {user.parallel_user?.map((parallel, index) => {
               return (
-                <option value={parallel.parallel_id}>
-                  {parallel.parallel_name}
+                <option key={index} value={parallel.id_parallel}>
+                  {parallel.parallel.name}
                 </option>
               );
             })}
@@ -166,7 +164,7 @@ const OtherImage = ({
                           query: {
                             ...image,
                             comments: JSON.stringify(image.comments),
-                            isMine: `${Number(user_id) === user?.id}`,
+                            isMine: `${user_id === user?.id}`,
                           },
                         },
                         "simulador"
