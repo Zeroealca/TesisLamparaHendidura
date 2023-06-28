@@ -9,7 +9,7 @@ interface AuthHrefProps {
 const AuthHref = (props: AuthHrefProps) => {
   const { text, href, textAnchor } = props;
   return (
-    <p className="text-center text-sm font-light mt-4">
+    <p className="text-center text-sm font-light mt-4 text-white">
       {text}{" "}
       <a href={href} className="font-bold text-bluebutton">
         {textAnchor}

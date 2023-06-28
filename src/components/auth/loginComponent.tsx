@@ -51,7 +51,7 @@ const loginComponent = () => {
             <div className="flex justify-end items-center">
               <a
                 href="recuperar-contrasena"
-                className="font-light text-sm underline"
+                className="font-light text-sm underline text-white"
               >
                 Olvidé mi contraseña
               </a>

@@ -30,19 +30,16 @@ const Navbar = () => {
               </Icon>
             </div>
           </Menu.Button>
-          <Menu.Items className="absolute z-10 my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-black dark:divide-gray-600 top-12 lg:right-24 right-16 md:right-28">
+          <Menu.Items className="absolute z-10 my-4 text-base list-none divide-y rounded shadow bg-black divide-gray-600 top-12 lg:right-24 right-16 md:right-28">
             <Menu.Items className="px-4 py-3">
               <Menu.Item disabled>
-                <p
-                  className="text-sm text-gray-900 dark:text-white"
-                  role="none"
-                >
+                <p className="text-sm text-white" role="none">
                   Iniciado sesión como
                 </p>
               </Menu.Item>
               <Menu.Item disabled>
                 <p
-                  className="text-sm font-medium text-gray-900 truncate dark:text-grayprimary"
+                  className="text-sm font-medium truncate text-grayprimary"
                   role="none"
                 >
                   {user?.email}
@@ -50,10 +47,10 @@ const Navbar = () => {
               </Menu.Item>
               <Menu.Item disabled>
                 <p
-                  className="text-sm font-medium text-gray-900 truncate dark:text-grayprimary"
+                  className="text-sm font-medium truncate text-grayprimary"
                   role="none"
                 >
-                  Eres <span className="dark:text-red-600">{user?.rol}</span>
+                  Eres <span className="text-red-600">{user?.rol}</span>
                 </p>
               </Menu.Item>
             </Menu.Items>
@@ -62,7 +59,7 @@ const Navbar = () => {
                 <Menu.Item>
                   <Link
                     href="/administracion"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-grayprimary dark:hover:bg-blacksecondary dark:hover:text-white"
+                    className="block px-4 py-2 text-sm text-grayprimary hover:bg-blacksecondary hover:text-white"
                   >
                     Administración
                   </Link>
@@ -71,7 +68,7 @@ const Navbar = () => {
               <Menu.Item>
                 <Link
                   href="/mi-perfil"
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-grayprimary dark:hover:bg-blacksecondary dark:hover:text-white"
+                  className="block px-4 py-2 text-sm text-grayprimary hover:bg-blacksecondary hover:text-white"
                 >
                   Mi perfil
                 </Link>
@@ -79,7 +76,7 @@ const Navbar = () => {
               <Menu.Item>
                 <button
                   onClick={() => signOut()}
-                  className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-grayprimary dark:hover:bg-blacksecondary dark:hover:text-white text-left"
+                  className="block w-full px-4 py-2 text-sm text-grayprimary hover:bg-blacksecondary hover:text-white text-left"
                 >
                   Cerrar sesión
                 </button>

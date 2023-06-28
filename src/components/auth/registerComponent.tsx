@@ -69,7 +69,7 @@ const registerComponent = () => {
                   setState({ ...state, terms: e.target.checked })
                 }
               />
-              <label htmlFor="terms" className="font-light text-sm">
+              <label htmlFor="terms" className="font-light text-sm text-white">
                 Acepto los{" "}
                 <a href="#" className="underline text-bluebutton font-bold">
                   Términos y condiciones

@@ -184,7 +184,7 @@ const CreateParallel = ({
           <div className="flex flex-row justify-between items-center">
             <label className="mr-2">Paralelo:</label>
             <input
-              className="border border-gray-400 rounded-md p-1"
+              className="border border-gray-400 rounded-md p-1 bg-blackInputs"
               type="text"
               value={parallel}
               onChange={(e) => {
@@ -206,7 +206,7 @@ const CreateParallel = ({
           <div className="flex justify-between md:flex-row flex-col md:items-center items-start gap-5">
             <label className="mr-2">Asignar:</label>
             <select
-              className="border border-gray-400 rounded-md p-1"
+              className="border border-gray-400 rounded-md p-1 bg-blackInputs"
               value={parallel_id}
               onChange={(e) => {
                 setParallel_id(e.target.value);
@@ -220,7 +220,7 @@ const CreateParallel = ({
               ))}
             </select>
             <select
-              className="border border-gray-400 rounded-md p-1"
+              className="border border-gray-400 rounded-md p-1 bg-blackInputs"
               value={teacher}
               onChange={(e) => {
                 setTeacher(e.target.value);

@@ -71,7 +71,9 @@ const OtherImage = ({
   return (
     <>
       <div className="flex items-center gap-5 mb-10">
-        <h1 className="text-2xl font-bold text-left">Imágenes del</h1>
+        <h1 className="text-2xl font-bold text-left text-white">
+          Imágenes del
+        </h1>
         {rol === "ESTUDIANTE" ? (
           <span className="text-2xl font-bold text-left">
             {
@@ -82,6 +84,7 @@ const OtherImage = ({
           </span>
         ) : (
           <select
+            className="bg-blackInputs rounded text-white"
             onChange={(e) => {
               setParallel(e.target.value);
             }}
@@ -101,12 +104,12 @@ const OtherImage = ({
       <div className="mb-4 w-full flex items-center justify-end">
         <input
           placeholder="Busca por nombre"
-          className="px-4 py-2 rounded w-full"
+          className="px-4 py-2 rounded w-full bg-blackInputs text-white"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
         <select
-          className="ml-4 px-3 py-2"
+          className="ml-4 px-3 py-2 bg-blackInputs rounded text-white"
           onChange={(e) => setFilter(e.target.value)}
         >
           <option value="all">Todas</option>

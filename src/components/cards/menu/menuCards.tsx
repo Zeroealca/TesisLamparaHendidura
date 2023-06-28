@@ -22,8 +22,10 @@ const MenuCards = ({ title, description, image, to }: MenuCardsProps) => {
         </section>
         <section className="invisible opacity-0 px-10 group-hover:visible group-hover:opacity-100 group-hover:mt-10 transition-all ease-in-out duration-300 group-hover:transition-all group-hover:ease-out group-hover:delay-200">
           <div className="text-center">
-            <h2 className="text-2xl font-semibold uppercase">{title}</h2>
-            <p className="text-sm text-center">{description}</p>
+            <h2 className="text-2xl font-semibold uppercase text-white">
+              {title}
+            </h2>
+            <p className="text-sm text-center text-gray-300">{description}</p>
           </div>
         </section>
       </a>

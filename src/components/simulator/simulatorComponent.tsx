@@ -391,7 +391,7 @@ const simulatorComponent = () => {
                                 INTENSIDAD
                               </label>
                               <input
-                                className="w-1/2 h-10 rounded-md "
+                                className="w-1/2 h-10 rounded-md bg-blackInputs"
                                 type="color"
                                 id="color"
                                 name="color"
@@ -482,7 +482,7 @@ const simulatorComponent = () => {
                                 type="text"
                                 placeholder="Escribe una observación"
                                 disabled={!isReadyToComment}
-                                className={`w-full h-10 rounded-md px-2 ${
+                                className={`w-full h-10 rounded-md px-2 bg-blackInputs ${
                                   isReadyToComment
                                     ? ""
                                     : "opacity-50 cursor-not-allowed focus:outline-none focus:border-0"

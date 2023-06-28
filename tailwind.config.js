@@ -12,6 +12,8 @@ module.exports = {
         blacktertiary: "#3D3D3D",
         grayprimary: "#AAAAAA",
         bluebutton: "#006EB8",
+        blackOriginal: "#121212",
+        blackInputs: "#3B3B3B",
       },
       fontFamily: {
         sans: ["Inter", "sans-serif"],

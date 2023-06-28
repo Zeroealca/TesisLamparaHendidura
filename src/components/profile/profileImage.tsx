@@ -59,11 +59,13 @@ const ProfileImage = ({
 
   return (
     <>
-      <h1 className="text-2xl font-bold text-left mb-10">Mis imágenes</h1>
+      <h1 className="text-2xl font-bold text-left mb-10 text-white">
+        Mis imágenes
+      </h1>
 
       <div className="mb-4 w-full flex items-center justify-end">
         <select
-          className="ml-4 px-3 py-2"
+          className="ml-4 px-3 py-2 bg-blackInputs"
           onChange={(e) => setFilter(e.target.value)}
         >
           <option value="all">Todas</option>
@@ -137,7 +139,7 @@ const ProfileImage = ({
             );
           })
         ) : (
-          <h1>No hay imagenes</h1>
+          <h1 className="text-white">No hay imagenes</h1>
         )}
       </div>
     </>

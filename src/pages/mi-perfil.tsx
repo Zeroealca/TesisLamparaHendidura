@@ -309,7 +309,9 @@ const MiPerfil = () => {
           >
             {tabs === 1 ? (
               <form onSubmit={handleSubmit} className="w-full mx-auto">
-                <h1 className="text-xl font-bold text-left">Mis datos</h1>
+                <h1 className="text-xl font-bold text-left text-white">
+                  Mis datos
+                </h1>
                 <div className="flex flex-col lg:flex-row gap-10 w-full">
                   <InputWithLabel
                     label="Nombre"
